@@ -1,0 +1,37 @@
+# dependencies
+/node_modules/
+
+# Next.js
+/.next/
+/out/
+
+# test output
+/coverage/
+/playwright-report/
+/test-results/
+
+# generated data and exports
+/data/raw/
+/data/reports/
+/exports/*.xlsx
+
+# Prisma generated client
+/src/generated/prisma/
+
+# local environment files
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# editors and operating systems
+.DS_Store
+*.swp
+
+# logs
+*.log
+npm-debug.log*
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts

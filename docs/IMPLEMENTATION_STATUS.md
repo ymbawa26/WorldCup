@@ -2,27 +2,27 @@
 
 **Last updated:** 2026-06-24
 
-**Current phase:** Phase 0 complete
+**Current phase:** Phase 1 complete
 
-**Next eligible phase:** Phase 1 — Project foundation
+**Next eligible phase:** Phase 2 — Tournament data model
 
-**Overall product status:** Planning only; no application or simulation features exist
+**Overall product status:** Tested application foundation; tournament and simulation features are not yet implemented
 
 ## Phase summary
 
-| Phase | Status | Gate |
-|---|---|---|
-| 0. Repository audit and plan | Complete | Documentation and baseline audit complete |
-| 1. Project foundation | Not started | Awaiting implementation |
-| 2. Tournament data model | Not started | Blocked by Phase 1 |
-| 3. Data-ingestion pipeline | Not started | Blocked by Phase 2 and source-license approval |
-| 4. Ratings engine | Not started | Blocked by Phase 3 |
-| 5. Headless match engine | Not started | Blocked by Phase 4 |
-| 6. Probability and calibration | Not started | Blocked by Phase 5 |
-| 7. Core game flow | Not started | Blocked by Phase 6 |
-| 8. Match-center UI | Not started | Blocked by Phase 7 |
-| 9. Visual polish | Not started | Blocked by Phase 8 |
-| 10. Deployment and final QA | Not started | Blocked by Phase 9 |
+| Phase                          | Status      | Gate                                           |
+| ------------------------------ | ----------- | ---------------------------------------------- |
+| 0. Repository audit and plan   | Complete    | Documentation and baseline audit complete      |
+| 1. Project foundation          | Complete    | Full quality, build, browser, and visual gate  |
+| 2. Tournament data model       | Not started | Awaiting implementation                        |
+| 3. Data-ingestion pipeline     | Not started | Blocked by Phase 2 and source-license approval |
+| 4. Ratings engine              | Not started | Blocked by Phase 3                             |
+| 5. Headless match engine       | Not started | Blocked by Phase 4                             |
+| 6. Probability and calibration | Not started | Blocked by Phase 5                             |
+| 7. Core game flow              | Not started | Blocked by Phase 6                             |
+| 8. Match-center UI             | Not started | Blocked by Phase 7                             |
+| 9. Visual polish               | Not started | Blocked by Phase 8                             |
+| 10. Deployment and final QA    | Not started | Blocked by Phase 9                             |
 
 ## Phase 0 — Repository audit and plan
 
@@ -36,21 +36,21 @@
 
 ### Repository audit
 
-| Area | Finding |
-|---|---|
-| Repository | `/Users/bvega/Documents/WorldCup` exists and contains only `.git/` before Phase 0 documentation |
-| Git | At audit start, branch `main` had no commits; Phase 0 documentation is committed only after validation; no configured remote detected |
-| Working tree | Initially empty apart from `.git/`; Phase 0 adds only the two required documentation files |
-| Package manager | No `package.json` or lockfile. npm 10.8.2 is installed; pnpm, Yarn, and Bun were not detected |
-| Runtime | Node.js v20.20.2 is installed |
-| Database tooling | Docker is installed; `psql` was not detected |
-| Environment | No `.env`, `.env.local`, or `.env.example` files exist |
-| Application | No Next.js/React source, routes, components, styles, or runnable server exist |
-| Data | No tournament, squad, player, fixture, source, CSV, JSON, Excel, or seed data exist |
-| Database | No Prisma schema, migrations, seed, or database configuration exists |
-| Tests | No test configuration or test files exist |
-| CI/deployment | No GitHub Actions, Vercel configuration, or deployment instructions exist |
-| Documentation | No documentation existed before this Phase 0 change |
+| Area             | Finding                                                                                                                               |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Repository       | `/Users/bvega/Documents/WorldCup` exists and contains only `.git/` before Phase 0 documentation                                       |
+| Git              | At audit start, branch `main` had no commits; Phase 0 documentation is committed only after validation; no configured remote detected |
+| Working tree     | Initially empty apart from `.git/`; Phase 0 adds only the two required documentation files                                            |
+| Package manager  | No `package.json` or lockfile. npm 10.8.2 is installed; pnpm, Yarn, and Bun were not detected                                         |
+| Runtime          | Node.js v20.20.2 is installed                                                                                                         |
+| Database tooling | Docker is installed; `psql` was not detected                                                                                          |
+| Environment      | No `.env`, `.env.local`, or `.env.example` files exist                                                                                |
+| Application      | No Next.js/React source, routes, components, styles, or runnable server exist                                                         |
+| Data             | No tournament, squad, player, fixture, source, CSV, JSON, Excel, or seed data exist                                                   |
+| Database         | No Prisma schema, migrations, seed, or database configuration exists                                                                  |
+| Tests            | No test configuration or test files exist                                                                                             |
+| CI/deployment    | No GitHub Actions, Vercel configuration, or deployment instructions exist                                                             |
+| Documentation    | No documentation existed before this Phase 0 change                                                                                   |
 
 ### Official-source findings
 
@@ -77,20 +77,20 @@ No product code, package configuration, data, tests, dependencies, or generated 
 
 ### Tests and validation performed
 
-| Check | Command/evidence | Result |
-|---|---|---|
-| File inventory | `ls -la`; `rg --files -g '!node_modules' -g '!.next' -g '!dist'` | Passed; repository was empty apart from `.git/` |
-| Git state | `git status --short --branch`; `git log -5 --oneline --decorate`; `git remote -v` | Confirmed `main`, no commits, and no remote; `git log` correctly reported that the branch has no commits |
-| Environment templates | `find . -maxdepth 1 -name '.env*' -print` | No environment files found |
-| Runtime availability | `node --version`; `npm --version`; package-manager/tool discovery | Node v20.20.2 and npm 10.8.2 available; Docker available; pnpm/Yarn/Bun/psql not detected |
-| TypeScript check | Test discovery | Not runnable: no package manifest, TypeScript config, or source exists |
-| Lint | Test discovery | Not runnable: no package manifest or lint configuration exists |
-| Unit tests | Test discovery | Not runnable: no test runner or test files exist |
-| Integration tests | Test discovery | Not runnable: no application, database, test runner, or test files exist |
-| End-to-end tests | Test discovery | Not runnable: no application or Playwright configuration exists |
-| Production build | Application discovery | Not runnable: no application or build script exists |
-| Manual interface inspection | Application discovery | Not possible: no interface or runnable application exists |
-| Documentation scope | `git diff --check`; required-section searches; working-tree review | Passed; no whitespace errors, both required documents exist, and all requested Phase 0 sections are present |
+| Check                       | Command/evidence                                                                  | Result                                                                                                      |
+| --------------------------- | --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| File inventory              | `ls -la`; `rg --files -g '!node_modules' -g '!.next' -g '!dist'`                  | Passed; repository was empty apart from `.git/`                                                             |
+| Git state                   | `git status --short --branch`; `git log -5 --oneline --decorate`; `git remote -v` | Confirmed `main`, no commits, and no remote; `git log` correctly reported that the branch has no commits    |
+| Environment templates       | `find . -maxdepth 1 -name '.env*' -print`                                         | No environment files found                                                                                  |
+| Runtime availability        | `node --version`; `npm --version`; package-manager/tool discovery                 | Node v20.20.2 and npm 10.8.2 available; Docker available; pnpm/Yarn/Bun/psql not detected                   |
+| TypeScript check            | Test discovery                                                                    | Not runnable: no package manifest, TypeScript config, or source exists                                      |
+| Lint                        | Test discovery                                                                    | Not runnable: no package manifest or lint configuration exists                                              |
+| Unit tests                  | Test discovery                                                                    | Not runnable: no test runner or test files exist                                                            |
+| Integration tests           | Test discovery                                                                    | Not runnable: no application, database, test runner, or test files exist                                    |
+| End-to-end tests            | Test discovery                                                                    | Not runnable: no application or Playwright configuration exists                                             |
+| Production build            | Application discovery                                                             | Not runnable: no application or build script exists                                                         |
+| Manual interface inspection | Application discovery                                                             | Not possible: no interface or runnable application exists                                                   |
+| Documentation scope         | `git diff --check`; required-section searches; working-tree review                | Passed; no whitespace errors, both required documents exist, and all requested Phase 0 sections are present |
 
 No existing test failed because no tests or executable project exist. “Not runnable” is a baseline absence, not a passing test claim.
 
@@ -108,3 +108,70 @@ No existing test failed because no tests or executable project exist. “Not run
 ### Next phase
 
 Phase 1 may begin only after this Phase 0 documentation review is green. It will initialize the application foundation, configure the toolchain and CI, add the initial accessible UI shell, and establish executable validation scripts. It must not begin tournament data or simulation implementation.
+
+## Phase 1 — Project foundation
+
+### What was implemented
+
+- Initialized Next.js 16.2.9 App Router with React 19.2.4, strict TypeScript, Tailwind CSS 4, and npm lockfile reproducibility.
+- Added an original responsive sports-game interface with landing, How It Works, Methodology, Settings, and not-found routes.
+- Added shadcn-style accessible button primitives, keyboard skip navigation, responsive disclosure navigation, visible focus treatment, semantic landmarks, and reduced-motion handling.
+- Added a motion-enhanced tactical pitch illustration that is explicitly presentation rather than simulation.
+- Established TanStack Query, Zustand, Zod environment validation, English `next-intl` message boundaries, Recharts, Lucide, and Framer Motion dependencies.
+- Configured Prisma 7 for PostgreSQL using the current driver-adapter-era configuration, without adding premature domain models or requiring a live database.
+- Added Vitest, React Testing Library, fast-check, Playwright, ESLint, Prettier, a partial-dataset guard, and GitHub Actions.
+- Added narrow dependency overrides for patched PostCSS and Hono releases after npm's advisory report incorrectly suggested major downgrades.
+- Added setup, architecture, testing, deployment, and known-limitations documentation.
+- Did not add teams, fixtures, tournament rules, squads, ratings, saves, or simulation behavior.
+
+### Files added or modified
+
+- Application: `src/app/**`, `src/components/**`, `src/lib/**`, `src/stores/**`, `src/i18n/**`
+- Tooling: `package.json`, `package-lock.json`, `tsconfig.json`, `next.config.ts`, `eslint.config.mjs`, `prettier.config.mjs`, `postcss.config.mjs`
+- Database: `prisma/schema.prisma`, `prisma.config.ts`, `.env.example`
+- Validation: `vitest.config.ts`, `playwright.config.ts`, `tests/**`, `e2e/**`, `scripts/validate-data.ts`
+- Automation: `.github/workflows/ci.yml`, `.gitignore`
+- Documentation: `README.md`, `docs/ARCHITECTURE.md`, `docs/TESTING.md`, `docs/DEPLOYMENT.md`, `docs/KNOWN_LIMITATIONS.md`, and this status file
+- Phase 0 documents were mechanically formatted by the newly established Prettier configuration; their meaning did not change.
+
+### Tests performed and results
+
+| Check                       | Command                                              | Result                                                                                                                   |
+| --------------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| TypeScript                  | `npm run typecheck`                                  | Passed in strict mode                                                                                                    |
+| ESLint                      | `npm run lint`                                       | Passed with zero warnings allowed                                                                                        |
+| Formatting                  | `npm run format:check`                               | Passed                                                                                                                   |
+| Unit tests                  | `npm run test:unit`                                  | 1 file, 2 tests passed                                                                                                   |
+| Integration tests           | `npm run test:integration`                           | 2 files, 2 tests passed                                                                                                  |
+| Property tests              | `npm run test:property`                              | 1 file, 1 property passed                                                                                                |
+| Data guard                  | `npm run validate:data`                              | Passed; confirmed Phase 2 datasets are intentionally absent rather than partial                                          |
+| Prisma                      | `npm run db:validate`                                | PostgreSQL schema/configuration valid                                                                                    |
+| Production build            | `npm run build`                                      | Passed with Next.js 16.2.9 Turbopack; 5 application routes statically generated plus not-found                           |
+| End-to-end                  | `npm run test:e2e`                                   | 2 Chromium tests passed: responsive navigation and keyboard skip link                                                    |
+| Dependency audit            | `npm audit --json`                                   | 0 known vulnerabilities after patched transitive overrides                                                               |
+| Manual interface inspection | Local development server plus Playwright screenshots | Passed at 1440×1200 and 390×844; layout, hierarchy, pitch, cards, responsive stacking, and footer were visually reviewed |
+
+The final combined gate `npm run check && npm run test:e2e` passed. The UI was run at `http://127.0.0.1:3000` and returned HTTP 200 during visual inspection.
+
+### Failures found and fixed
+
+- Corrected a brittle accessible-heading test that assumed whitespace between block-styled text nodes.
+- Replaced the `tsx` CLI invocation with Node's loader form because the managed sandbox blocked the CLI's local IPC socket; then removed top-level await for CommonJS-compatible execution.
+- Pinned Turbopack's root to this repository after Next.js detected an unrelated parent lockfile.
+- Re-ran the production build outside the managed sandbox after its CSS worker was prevented from binding a local IPC port; the build passed.
+- Aligned the Next.js development origin and made the mobile-navigation E2E test wait for hydrated disclosure state.
+- Cleared six moderate npm reports by overriding the two affected transitive packages to patched versions; audit now reports zero vulnerabilities.
+- Re-ran the complete gate after formatting caught a one-word unformatted UI change.
+
+### Remaining limitations
+
+- This is a foundation shell, not a playable tournament. New Tournament and Continue remain intentionally disabled.
+- PostgreSQL is configured but has no domain models, migrations, seed, or live connection.
+- Tournament data, the corrected official bracket, tie-break rules, and the third-place allocation matrix begin in Phase 2.
+- The installed Prisma dependency tree emits an engine warning for optional `@prisma/streams-local`, which advertises Node 22; the supported Prisma CLI paths used here pass on Node 20.20.2. This must be rechecked on dependency upgrades.
+- CI configuration exists but cannot be observed on GitHub until a remote is configured and changes are pushed.
+- No deployment has been performed.
+
+### Next phase
+
+Phase 2 will create the source-verified pre-opening tournament snapshot, all 48 teams and official fixtures, isolated standings and tie-break modules, exhaustive third-place allocation, and the corrected data-driven knockout bracket. It must prove exactly 32 unique Round-of-32 entrants before Phase 3 can begin.
