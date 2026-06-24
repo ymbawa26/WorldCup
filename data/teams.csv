@@ -1,0 +1,49 @@
+id,name,short_name,fifa_code,flag_code,confederation,group,group_position,fifa_rank,previous_fifa_rank,fifa_points,source_external_id
+mexico,Mexico,Mexico,MEX,MX,CONCACAF,A,1,14,15,1687.481759,43911
+south-africa,South Africa,South Africa,RSA,ZA,CAF,A,2,60,60,1428.379282,43883
+korea-republic,Korea Republic,Korea Rep.,KOR,KR,AFC,A,3,25,25,1591.630886,43822
+czechia,Czechia,Czechia,CZE,CZ,UEFA,A,4,40,41,1505.737856,43995
+canada,Canada,Canada,CAN,CA,CONCACAF,B,1,30,30,1559.479301,43899
+bosnia-and-herzegovina,Bosnia and Herzegovina,Bosnia & Herz.,BIH,BA,UEFA,B,2,64,65,1387.215771,44037
+qatar,Qatar,Qatar,QAT,QA,AFC,B,3,56,55,1450.307729,43834
+switzerland,Switzerland,Switzerland,SUI,CH,UEFA,B,4,19,19,1650.064179,43971
+brazil,Brazil,Brazil,BRA,BR,CONMEBOL,C,1,6,6,1765.856297,43924
+morocco,Morocco,Morocco,MAR,MA,CAF,C,2,7,8,1755.100232,43872
+haiti,Haiti,Haiti,HAI,HT,CONCACAF,C,3,83,83,1293.096585,43908
+scotland,Scotland,Scotland,SCO,GB-SCT,UEFA,C,4,42,43,1503.34027,43967
+united-states,United States,USA,USA,US,CONCACAF,D,1,17,16,1671.2341,43921
+paraguay,Paraguay,Paraguay,PAR,PY,CONMEBOL,D,2,41,40,1505.349689,43928
+australia,Australia,Australia,AUS,AU,AFC,D,3,27,27,1579.34264,43976
+turkiye,Türkiye,Türkiye,TUR,TR,UEFA,D,4,22,22,1605.730921,43972
+germany,Germany,Germany,GER,DE,UEFA,E,1,10,10,1735.771984,43948
+curacao,Curaçao,Curaçao,CUW,CW,CONCACAF,E,2,82,82,1294.76909,1895293
+cote-divoire,Côte d’Ivoire,Côte d’Ivoire,CIV,CI,CAF,E,3,33,34,1540.869533,43854
+ecuador,Ecuador,Ecuador,ECU,EC,CONMEBOL,E,4,23,23,1598.51582,43927
+netherlands,Netherlands,Netherlands,NED,NL,UEFA,F,1,8,7,1753.571899,43960
+japan,Japan,Japan,JPN,JP,AFC,F,2,18,18,1661.576187,43819
+sweden,Sweden,Sweden,SWE,SE,UEFA,F,3,38,38,1509.785392,43970
+tunisia,Tunisia,Tunisia,TUN,TN,CAF,F,4,45,44,1476.405088,43888
+belgium,Belgium,Belgium,BEL,BE,UEFA,G,1,9,9,1742.235945,43935
+egypt,Egypt,Egypt,EGY,EG,CAF,G,2,29,29,1562.367246,43855
+iran,IR Iran,IR Iran,IRN,IR,AFC,G,3,20,21,1619.58163,43817
+new-zealand,New Zealand,New Zealand,NZL,NZ,OFC,G,4,85,85,1275.581062,43978
+spain,Spain,Spain,ESP,ES,UEFA,H,1,2,2,1874.710778,43969
+cabo-verde,Cabo Verde,Cabo Verde,CPV,CV,CAF,H,2,67,69,1371.10798,43850
+saudi-arabia,Saudi Arabia,Saudi Arabia,KSA,SA,AFC,H,3,61,61,1423.881229,43835
+uruguay,Uruguay,Uruguay,URU,UY,CONMEBOL,H,4,16,17,1673.068603,43930
+france,France,France,FRA,FR,UEFA,I,1,3,1,1870.696162,43946
+senegal,Senegal,Senegal,SEN,SN,CAF,I,2,15,14,1684.069879,43879
+iraq,Iraq,Iraq,IRQ,IQ,AFC,I,3,57,57,1446.279605,43818
+norway,Norway,Norway,NOR,NO,UEFA,I,4,31,31,1557.437664,43961
+argentina,Argentina,Argentina,ARG,AR,CONMEBOL,J,1,1,3,1877.266571,43922
+algeria,Algeria,Algeria,ALG,DZ,CAF,J,2,28,28,1571.033293,43843
+austria,Austria,Austria,AUT,AT,UEFA,J,3,24,24,1597.404087,43934
+jordan,Jordan,Jordan,JOR,JO,AFC,J,4,63,63,1387.738222,43820
+portugal,Portugal,Portugal,POR,PT,UEFA,K,1,5,5,1767.849031,43963
+congo-dr,Congo DR,Congo DR,COD,CD,CAF,K,2,46,46,1474.427761,20014
+uzbekistan,Uzbekistan,Uzbekistan,UZB,UZ,AFC,K,3,50,50,1458.734068,44005
+colombia,Colombia,Colombia,COL,CO,CONMEBOL,K,4,13,13,1698.351858,43926
+england,England,England,ENG,GB-ENG,UEFA,L,1,4,4,1828.021903,43942
+croatia,Croatia,Croatia,CRO,HR,UEFA,L,2,11,11,1714.865572,43938
+ghana,Ghana,Ghana,GHA,GH,CAF,L,3,73,74,1346.881205,43860
+panama,Panama,Panama,PAN,PA,CONCACAF,L,4,34,33,1539.155509,43914

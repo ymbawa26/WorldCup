@@ -1,0 +1,1820 @@
+{
+  "schemaVersion": 1,
+  "dataVersion": "2026.06.11-pre-opening-v1",
+  "stateAt": "2026-06-11T00:00:00-05:00",
+  "resultsIncluded": false,
+  "sourceIds": [
+    "fifa-regulations-2026-05",
+    "fifa-schedule-2026",
+    "fifa-host-cities-2026",
+    "fifa-ranking-2026-06-11"
+  ],
+  "groups": [
+    {
+      "id": "A",
+      "teamIds": ["mexico", "south-africa", "korea-republic", "czechia"]
+    },
+    {
+      "id": "B",
+      "teamIds": ["canada", "bosnia-and-herzegovina", "qatar", "switzerland"]
+    },
+    {
+      "id": "C",
+      "teamIds": ["brazil", "morocco", "haiti", "scotland"]
+    },
+    {
+      "id": "D",
+      "teamIds": ["united-states", "paraguay", "australia", "turkiye"]
+    },
+    {
+      "id": "E",
+      "teamIds": ["germany", "curacao", "cote-divoire", "ecuador"]
+    },
+    {
+      "id": "F",
+      "teamIds": ["netherlands", "japan", "sweden", "tunisia"]
+    },
+    {
+      "id": "G",
+      "teamIds": ["belgium", "egypt", "iran", "new-zealand"]
+    },
+    {
+      "id": "H",
+      "teamIds": ["spain", "cabo-verde", "saudi-arabia", "uruguay"]
+    },
+    {
+      "id": "I",
+      "teamIds": ["france", "senegal", "iraq", "norway"]
+    },
+    {
+      "id": "J",
+      "teamIds": ["argentina", "algeria", "austria", "jordan"]
+    },
+    {
+      "id": "K",
+      "teamIds": ["portugal", "congo-dr", "uzbekistan", "colombia"]
+    },
+    {
+      "id": "L",
+      "teamIds": ["england", "croatia", "ghana", "panama"]
+    }
+  ],
+  "teams": [
+    {
+      "id": "mexico",
+      "name": "Mexico",
+      "shortName": "Mexico",
+      "fifaCode": "MEX",
+      "flagCode": "MX",
+      "confederation": "CONCACAF",
+      "group": "A",
+      "groupPosition": 1,
+      "fifaRanking": {
+        "rank": 14,
+        "previousRank": 15,
+        "points": 1687.481759,
+        "previousPoints": 1681.028247,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43911"
+    },
+    {
+      "id": "south-africa",
+      "name": "South Africa",
+      "shortName": "South Africa",
+      "fifaCode": "RSA",
+      "flagCode": "ZA",
+      "confederation": "CAF",
+      "group": "A",
+      "groupPosition": 2,
+      "fifaRanking": {
+        "rank": 60,
+        "previousRank": 60,
+        "points": 1428.379282,
+        "previousPoints": 1429.728396,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43883"
+    },
+    {
+      "id": "korea-republic",
+      "name": "Korea Republic",
+      "shortName": "Korea Rep.",
+      "fifaCode": "KOR",
+      "flagCode": "KR",
+      "confederation": "AFC",
+      "group": "A",
+      "groupPosition": 3,
+      "fifaRanking": {
+        "rank": 25,
+        "previousRank": 25,
+        "points": 1591.630886,
+        "previousPoints": 1588.663904,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43822"
+    },
+    {
+      "id": "czechia",
+      "name": "Czechia",
+      "shortName": "Czechia",
+      "fifaCode": "CZE",
+      "flagCode": "CZ",
+      "confederation": "UEFA",
+      "group": "A",
+      "groupPosition": 4,
+      "fifaRanking": {
+        "rank": 40,
+        "previousRank": 41,
+        "points": 1505.737856,
+        "previousPoints": 1501.3824,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43995"
+    },
+    {
+      "id": "canada",
+      "name": "Canada",
+      "shortName": "Canada",
+      "fifaCode": "CAN",
+      "flagCode": "CA",
+      "confederation": "CONCACAF",
+      "group": "B",
+      "groupPosition": 1,
+      "fifaRanking": {
+        "rank": 30,
+        "previousRank": 30,
+        "points": 1559.479301,
+        "previousPoints": 1556.482247,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43899"
+    },
+    {
+      "id": "bosnia-and-herzegovina",
+      "name": "Bosnia and Herzegovina",
+      "shortName": "Bosnia & Herz.",
+      "fifaCode": "BIH",
+      "flagCode": "BA",
+      "confederation": "UEFA",
+      "group": "B",
+      "groupPosition": 2,
+      "fifaRanking": {
+        "rank": 64,
+        "previousRank": 65,
+        "points": 1387.215771,
+        "previousPoints": 1385.838723,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "44037"
+    },
+    {
+      "id": "qatar",
+      "name": "Qatar",
+      "shortName": "Qatar",
+      "fifaCode": "QAT",
+      "flagCode": "QA",
+      "confederation": "AFC",
+      "group": "B",
+      "groupPosition": 3,
+      "fifaRanking": {
+        "rank": 56,
+        "previousRank": 55,
+        "points": 1450.307729,
+        "previousPoints": 1454.958587,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43834"
+    },
+    {
+      "id": "switzerland",
+      "name": "Switzerland",
+      "shortName": "Switzerland",
+      "fifaCode": "SUI",
+      "flagCode": "CH",
+      "confederation": "UEFA",
+      "group": "B",
+      "groupPosition": 4,
+      "fifaRanking": {
+        "rank": 19,
+        "previousRank": 19,
+        "points": 1650.064179,
+        "previousPoints": 1649.39683,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43971"
+    },
+    {
+      "id": "brazil",
+      "name": "Brazil",
+      "shortName": "Brazil",
+      "fifaCode": "BRA",
+      "flagCode": "BR",
+      "confederation": "CONMEBOL",
+      "group": "C",
+      "groupPosition": 1,
+      "fifaRanking": {
+        "rank": 6,
+        "previousRank": 6,
+        "points": 1765.856297,
+        "previousPoints": 1761.16093,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43924"
+    },
+    {
+      "id": "morocco",
+      "name": "Morocco",
+      "shortName": "Morocco",
+      "fifaCode": "MAR",
+      "flagCode": "MA",
+      "confederation": "CAF",
+      "group": "C",
+      "groupPosition": 2,
+      "fifaRanking": {
+        "rank": 7,
+        "previousRank": 8,
+        "points": 1755.100232,
+        "previousPoints": 1755.86841,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43872"
+    },
+    {
+      "id": "haiti",
+      "name": "Haiti",
+      "shortName": "Haiti",
+      "fifaCode": "HAI",
+      "flagCode": "HT",
+      "confederation": "CONCACAF",
+      "group": "C",
+      "groupPosition": 3,
+      "fifaRanking": {
+        "rank": 83,
+        "previousRank": 83,
+        "points": 1293.096585,
+        "previousPoints": 1291.711814,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43908"
+    },
+    {
+      "id": "scotland",
+      "name": "Scotland",
+      "shortName": "Scotland",
+      "fifaCode": "SCO",
+      "flagCode": "GB-SCT",
+      "confederation": "UEFA",
+      "group": "C",
+      "groupPosition": 4,
+      "fifaRanking": {
+        "rank": 42,
+        "previousRank": 43,
+        "points": 1503.34027,
+        "previousPoints": 1498.350389,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43967"
+    },
+    {
+      "id": "united-states",
+      "name": "United States",
+      "shortName": "USA",
+      "fifaCode": "USA",
+      "flagCode": "US",
+      "confederation": "CONCACAF",
+      "group": "D",
+      "groupPosition": 1,
+      "fifaRanking": {
+        "rank": 17,
+        "previousRank": 16,
+        "points": 1671.2341,
+        "previousPoints": 1673.126608,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43921"
+    },
+    {
+      "id": "paraguay",
+      "name": "Paraguay",
+      "shortName": "Paraguay",
+      "fifaCode": "PAR",
+      "flagCode": "PY",
+      "confederation": "CONMEBOL",
+      "group": "D",
+      "groupPosition": 2,
+      "fifaRanking": {
+        "rank": 41,
+        "previousRank": 40,
+        "points": 1505.349689,
+        "previousPoints": 1503.503339,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43928"
+    },
+    {
+      "id": "australia",
+      "name": "Australia",
+      "shortName": "Australia",
+      "fifaCode": "AUS",
+      "flagCode": "AU",
+      "confederation": "AFC",
+      "group": "D",
+      "groupPosition": 3,
+      "fifaRanking": {
+        "rank": 27,
+        "previousRank": 27,
+        "points": 1579.34264,
+        "previousPoints": 1580.674774,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43976"
+    },
+    {
+      "id": "turkiye",
+      "name": "Türkiye",
+      "shortName": "Türkiye",
+      "fifaCode": "TUR",
+      "flagCode": "TR",
+      "confederation": "UEFA",
+      "group": "D",
+      "groupPosition": 4,
+      "fifaRanking": {
+        "rank": 22,
+        "previousRank": 22,
+        "points": 1605.730921,
+        "previousPoints": 1599.03767,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43972"
+    },
+    {
+      "id": "germany",
+      "name": "Germany",
+      "shortName": "Germany",
+      "fifaCode": "GER",
+      "flagCode": "DE",
+      "confederation": "UEFA",
+      "group": "E",
+      "groupPosition": 1,
+      "fifaRanking": {
+        "rank": 10,
+        "previousRank": 10,
+        "points": 1735.771984,
+        "previousPoints": 1730.37136,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43948"
+    },
+    {
+      "id": "curacao",
+      "name": "Curaçao",
+      "shortName": "Curaçao",
+      "fifaCode": "CUW",
+      "flagCode": "CW",
+      "confederation": "CONCACAF",
+      "group": "E",
+      "groupPosition": 2,
+      "fifaRanking": {
+        "rank": 82,
+        "previousRank": 82,
+        "points": 1294.76909,
+        "previousPoints": 1294.652918,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "1895293"
+    },
+    {
+      "id": "cote-divoire",
+      "name": "Côte d’Ivoire",
+      "shortName": "Côte d’Ivoire",
+      "fifaCode": "CIV",
+      "flagCode": "CI",
+      "confederation": "CAF",
+      "group": "E",
+      "groupPosition": 3,
+      "fifaRanking": {
+        "rank": 33,
+        "previousRank": 34,
+        "points": 1540.869533,
+        "previousPoints": 1532.975251,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43854"
+    },
+    {
+      "id": "ecuador",
+      "name": "Ecuador",
+      "shortName": "Ecuador",
+      "fifaCode": "ECU",
+      "flagCode": "EC",
+      "confederation": "CONMEBOL",
+      "group": "E",
+      "groupPosition": 4,
+      "fifaRanking": {
+        "rank": 23,
+        "previousRank": 23,
+        "points": 1598.51582,
+        "previousPoints": 1594.78386,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43927"
+    },
+    {
+      "id": "netherlands",
+      "name": "Netherlands",
+      "shortName": "Netherlands",
+      "fifaCode": "NED",
+      "flagCode": "NL",
+      "confederation": "UEFA",
+      "group": "F",
+      "groupPosition": 1,
+      "fifaRanking": {
+        "rank": 8,
+        "previousRank": 7,
+        "points": 1753.571899,
+        "previousPoints": 1757.874428,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43960"
+    },
+    {
+      "id": "japan",
+      "name": "Japan",
+      "shortName": "Japan",
+      "fifaCode": "JPN",
+      "flagCode": "JP",
+      "confederation": "AFC",
+      "group": "F",
+      "groupPosition": 2,
+      "fifaRanking": {
+        "rank": 18,
+        "previousRank": 18,
+        "points": 1661.576187,
+        "previousPoints": 1660.427891,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43819"
+    },
+    {
+      "id": "sweden",
+      "name": "Sweden",
+      "shortName": "Sweden",
+      "fifaCode": "SWE",
+      "flagCode": "SE",
+      "confederation": "UEFA",
+      "group": "F",
+      "groupPosition": 3,
+      "fifaRanking": {
+        "rank": 38,
+        "previousRank": 38,
+        "points": 1509.785392,
+        "previousPoints": 1514.767421,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43970"
+    },
+    {
+      "id": "tunisia",
+      "name": "Tunisia",
+      "shortName": "Tunisia",
+      "fifaCode": "TUN",
+      "flagCode": "TN",
+      "confederation": "CAF",
+      "group": "F",
+      "groupPosition": 4,
+      "fifaRanking": {
+        "rank": 45,
+        "previousRank": 44,
+        "points": 1476.405088,
+        "previousPoints": 1483.051871,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43888"
+    },
+    {
+      "id": "belgium",
+      "name": "Belgium",
+      "shortName": "Belgium",
+      "fifaCode": "BEL",
+      "flagCode": "BE",
+      "confederation": "UEFA",
+      "group": "G",
+      "groupPosition": 1,
+      "fifaRanking": {
+        "rank": 9,
+        "previousRank": 9,
+        "points": 1742.235945,
+        "previousPoints": 1734.714832,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43935"
+    },
+    {
+      "id": "egypt",
+      "name": "Egypt",
+      "shortName": "Egypt",
+      "fifaCode": "EGY",
+      "flagCode": "EG",
+      "confederation": "CAF",
+      "group": "G",
+      "groupPosition": 2,
+      "fifaRanking": {
+        "rank": 29,
+        "previousRank": 29,
+        "points": 1562.367246,
+        "previousPoints": 1563.241764,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43855"
+    },
+    {
+      "id": "iran",
+      "name": "IR Iran",
+      "shortName": "IR Iran",
+      "fifaCode": "IRN",
+      "flagCode": "IR",
+      "confederation": "AFC",
+      "group": "G",
+      "groupPosition": 3,
+      "fifaRanking": {
+        "rank": 20,
+        "previousRank": 21,
+        "points": 1619.58163,
+        "previousPoints": 1615.300338,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43817"
+    },
+    {
+      "id": "new-zealand",
+      "name": "New Zealand",
+      "shortName": "New Zealand",
+      "fifaCode": "NZL",
+      "flagCode": "NZ",
+      "confederation": "OFC",
+      "group": "G",
+      "groupPosition": 4,
+      "fifaRanking": {
+        "rank": 85,
+        "previousRank": 85,
+        "points": 1275.581062,
+        "previousPoints": 1281.566939,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43978"
+    },
+    {
+      "id": "spain",
+      "name": "Spain",
+      "shortName": "Spain",
+      "fifaCode": "ESP",
+      "flagCode": "ES",
+      "confederation": "UEFA",
+      "group": "H",
+      "groupPosition": 1,
+      "fifaRanking": {
+        "rank": 2,
+        "previousRank": 2,
+        "points": 1874.710778,
+        "previousPoints": 1876.395199,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43969"
+    },
+    {
+      "id": "cabo-verde",
+      "name": "Cabo Verde",
+      "shortName": "Cabo Verde",
+      "fifaCode": "CPV",
+      "flagCode": "CV",
+      "confederation": "CAF",
+      "group": "H",
+      "groupPosition": 2,
+      "fifaRanking": {
+        "rank": 67,
+        "previousRank": 69,
+        "points": 1371.10798,
+        "previousPoints": 1366.125478,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43850"
+    },
+    {
+      "id": "saudi-arabia",
+      "name": "Saudi Arabia",
+      "shortName": "Saudi Arabia",
+      "fifaCode": "KSA",
+      "flagCode": "SA",
+      "confederation": "AFC",
+      "group": "H",
+      "groupPosition": 3,
+      "fifaRanking": {
+        "rank": 61,
+        "previousRank": 61,
+        "points": 1423.881229,
+        "previousPoints": 1421.427596,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43835"
+    },
+    {
+      "id": "uruguay",
+      "name": "Uruguay",
+      "shortName": "Uruguay",
+      "fifaCode": "URU",
+      "flagCode": "UY",
+      "confederation": "CONMEBOL",
+      "group": "H",
+      "groupPosition": 4,
+      "fifaRanking": {
+        "rank": 16,
+        "previousRank": 17,
+        "points": 1673.068603,
+        "previousPoints": 1673.068603,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43930"
+    },
+    {
+      "id": "france",
+      "name": "France",
+      "shortName": "France",
+      "fifaCode": "FRA",
+      "flagCode": "FR",
+      "confederation": "UEFA",
+      "group": "I",
+      "groupPosition": 1,
+      "fifaRanking": {
+        "rank": 3,
+        "previousRank": 1,
+        "points": 1870.696162,
+        "previousPoints": 1877.322731,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43946"
+    },
+    {
+      "id": "senegal",
+      "name": "Senegal",
+      "shortName": "Senegal",
+      "fifaCode": "SEN",
+      "flagCode": "SN",
+      "confederation": "CAF",
+      "group": "I",
+      "groupPosition": 2,
+      "fifaRanking": {
+        "rank": 15,
+        "previousRank": 14,
+        "points": 1684.069879,
+        "previousPoints": 1688.988837,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43879"
+    },
+    {
+      "id": "iraq",
+      "name": "Iraq",
+      "shortName": "Iraq",
+      "fifaCode": "IRQ",
+      "flagCode": "IQ",
+      "confederation": "AFC",
+      "group": "I",
+      "groupPosition": 3,
+      "fifaRanking": {
+        "rank": 57,
+        "previousRank": 57,
+        "points": 1446.279605,
+        "previousPoints": 1447.135319,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43818"
+    },
+    {
+      "id": "norway",
+      "name": "Norway",
+      "shortName": "Norway",
+      "fifaCode": "NOR",
+      "flagCode": "NO",
+      "confederation": "UEFA",
+      "group": "I",
+      "groupPosition": 4,
+      "fifaRanking": {
+        "rank": 31,
+        "previousRank": 31,
+        "points": 1557.437664,
+        "previousPoints": 1550.943159,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43961"
+    },
+    {
+      "id": "argentina",
+      "name": "Argentina",
+      "shortName": "Argentina",
+      "fifaCode": "ARG",
+      "flagCode": "AR",
+      "confederation": "CONMEBOL",
+      "group": "J",
+      "groupPosition": 1,
+      "fifaRanking": {
+        "rank": 1,
+        "previousRank": 3,
+        "points": 1877.266571,
+        "previousPoints": 1874.814835,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43922"
+    },
+    {
+      "id": "algeria",
+      "name": "Algeria",
+      "shortName": "Algeria",
+      "fifaCode": "ALG",
+      "flagCode": "DZ",
+      "confederation": "CAF",
+      "group": "J",
+      "groupPosition": 2,
+      "fifaRanking": {
+        "rank": 28,
+        "previousRank": 28,
+        "points": 1571.033293,
+        "previousPoints": 1564.2567,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43843"
+    },
+    {
+      "id": "austria",
+      "name": "Austria",
+      "shortName": "Austria",
+      "fifaCode": "AUT",
+      "flagCode": "AT",
+      "confederation": "UEFA",
+      "group": "J",
+      "groupPosition": 3,
+      "fifaRanking": {
+        "rank": 24,
+        "previousRank": 24,
+        "points": 1597.404087,
+        "previousPoints": 1593.447673,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43934"
+    },
+    {
+      "id": "jordan",
+      "name": "Jordan",
+      "shortName": "Jordan",
+      "fifaCode": "JOR",
+      "flagCode": "JO",
+      "confederation": "AFC",
+      "group": "J",
+      "groupPosition": 4,
+      "fifaRanking": {
+        "rank": 63,
+        "previousRank": 63,
+        "points": 1387.738222,
+        "previousPoints": 1391.4544,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43820"
+    },
+    {
+      "id": "portugal",
+      "name": "Portugal",
+      "shortName": "Portugal",
+      "fifaCode": "POR",
+      "flagCode": "PT",
+      "confederation": "UEFA",
+      "group": "K",
+      "groupPosition": 1,
+      "fifaRanking": {
+        "rank": 5,
+        "previousRank": 5,
+        "points": 1767.849031,
+        "previousPoints": 1763.834406,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43963"
+    },
+    {
+      "id": "congo-dr",
+      "name": "Congo DR",
+      "shortName": "Congo DR",
+      "fifaCode": "COD",
+      "flagCode": "CD",
+      "confederation": "CAF",
+      "group": "K",
+      "groupPosition": 2,
+      "fifaRanking": {
+        "rank": 46,
+        "previousRank": 46,
+        "points": 1474.427761,
+        "previousPoints": 1478.350424,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "20014"
+    },
+    {
+      "id": "uzbekistan",
+      "name": "Uzbekistan",
+      "shortName": "Uzbekistan",
+      "fifaCode": "UZB",
+      "flagCode": "UZ",
+      "confederation": "AFC",
+      "group": "K",
+      "groupPosition": 3,
+      "fifaRanking": {
+        "rank": 50,
+        "previousRank": 50,
+        "points": 1458.734068,
+        "previousPoints": 1465.342534,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "44005"
+    },
+    {
+      "id": "colombia",
+      "name": "Colombia",
+      "shortName": "Colombia",
+      "fifaCode": "COL",
+      "flagCode": "CO",
+      "confederation": "CONMEBOL",
+      "group": "K",
+      "groupPosition": 4,
+      "fifaRanking": {
+        "rank": 13,
+        "previousRank": 13,
+        "points": 1698.351858,
+        "previousPoints": 1693.089319,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43926"
+    },
+    {
+      "id": "england",
+      "name": "England",
+      "shortName": "England",
+      "fifaCode": "ENG",
+      "flagCode": "GB-ENG",
+      "confederation": "UEFA",
+      "group": "L",
+      "groupPosition": 1,
+      "fifaRanking": {
+        "rank": 4,
+        "previousRank": 4,
+        "points": 1828.021903,
+        "previousPoints": 1825.965482,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43942"
+    },
+    {
+      "id": "croatia",
+      "name": "Croatia",
+      "shortName": "Croatia",
+      "fifaCode": "CRO",
+      "flagCode": "HR",
+      "confederation": "UEFA",
+      "group": "L",
+      "groupPosition": 2,
+      "fifaRanking": {
+        "rank": 11,
+        "previousRank": 11,
+        "points": 1714.865572,
+        "previousPoints": 1717.066402,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43938"
+    },
+    {
+      "id": "ghana",
+      "name": "Ghana",
+      "shortName": "Ghana",
+      "fifaCode": "GHA",
+      "flagCode": "GH",
+      "confederation": "CAF",
+      "group": "L",
+      "groupPosition": 3,
+      "fifaRanking": {
+        "rank": 73,
+        "previousRank": 74,
+        "points": 1346.881205,
+        "previousPoints": 1346.311722,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43860"
+    },
+    {
+      "id": "panama",
+      "name": "Panama",
+      "shortName": "Panama",
+      "fifaCode": "PAN",
+      "flagCode": "PA",
+      "confederation": "CONCACAF",
+      "group": "L",
+      "groupPosition": 4,
+      "fifaRanking": {
+        "rank": 34,
+        "previousRank": 33,
+        "points": 1539.155509,
+        "previousPoints": 1540.644228,
+        "asOf": "2026-06-11"
+      },
+      "sourceExternalId": "43914"
+    }
+  ],
+  "venues": [
+    {
+      "id": "atlanta",
+      "name": "Atlanta Stadium",
+      "city": "Atlanta",
+      "country": "USA"
+    },
+    {
+      "id": "boston",
+      "name": "Boston Stadium",
+      "city": "Boston",
+      "country": "USA"
+    },
+    {
+      "id": "dallas",
+      "name": "Dallas Stadium",
+      "city": "Dallas",
+      "country": "USA"
+    },
+    {
+      "id": "guadalajara",
+      "name": "Guadalajara Stadium",
+      "city": "Guadalajara",
+      "country": "Mexico"
+    },
+    {
+      "id": "houston",
+      "name": "Houston Stadium",
+      "city": "Houston",
+      "country": "USA"
+    },
+    {
+      "id": "kansas-city",
+      "name": "Kansas City Stadium",
+      "city": "Kansas City",
+      "country": "USA"
+    },
+    {
+      "id": "los-angeles",
+      "name": "Los Angeles Stadium",
+      "city": "Los Angeles",
+      "country": "USA"
+    },
+    {
+      "id": "mexico-city",
+      "name": "Mexico City Stadium",
+      "city": "Mexico City",
+      "country": "Mexico"
+    },
+    {
+      "id": "miami",
+      "name": "Miami Stadium",
+      "city": "Miami",
+      "country": "USA"
+    },
+    {
+      "id": "monterrey",
+      "name": "Monterrey Stadium",
+      "city": "Monterrey",
+      "country": "Mexico"
+    },
+    {
+      "id": "new-york-new-jersey",
+      "name": "New York New Jersey Stadium",
+      "city": "New York New Jersey",
+      "country": "USA"
+    },
+    {
+      "id": "philadelphia",
+      "name": "Philadelphia Stadium",
+      "city": "Philadelphia",
+      "country": "USA"
+    },
+    {
+      "id": "san-francisco-bay-area",
+      "name": "San Francisco Bay Area Stadium",
+      "city": "San Francisco Bay Area",
+      "country": "USA"
+    },
+    {
+      "id": "seattle",
+      "name": "Seattle Stadium",
+      "city": "Seattle",
+      "country": "USA"
+    },
+    {
+      "id": "toronto",
+      "name": "Toronto Stadium",
+      "city": "Toronto",
+      "country": "Canada"
+    },
+    {
+      "id": "vancouver",
+      "name": "BC Place Vancouver",
+      "city": "Vancouver",
+      "country": "Canada"
+    }
+  ],
+  "fixtures": [
+    {
+      "matchNumber": 1,
+      "stage": "GROUP",
+      "group": "A",
+      "matchday": 1,
+      "date": "2026-06-11",
+      "venueId": "mexico-city",
+      "homeTeamId": "mexico",
+      "awayTeamId": "south-africa",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 2,
+      "stage": "GROUP",
+      "group": "A",
+      "matchday": 1,
+      "date": "2026-06-11",
+      "venueId": "guadalajara",
+      "homeTeamId": "korea-republic",
+      "awayTeamId": "czechia",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 3,
+      "stage": "GROUP",
+      "group": "B",
+      "matchday": 1,
+      "date": "2026-06-12",
+      "venueId": "toronto",
+      "homeTeamId": "canada",
+      "awayTeamId": "bosnia-and-herzegovina",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 4,
+      "stage": "GROUP",
+      "group": "D",
+      "matchday": 1,
+      "date": "2026-06-12",
+      "venueId": "los-angeles",
+      "homeTeamId": "united-states",
+      "awayTeamId": "paraguay",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 5,
+      "stage": "GROUP",
+      "group": "C",
+      "matchday": 1,
+      "date": "2026-06-13",
+      "venueId": "boston",
+      "homeTeamId": "haiti",
+      "awayTeamId": "scotland",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 6,
+      "stage": "GROUP",
+      "group": "D",
+      "matchday": 1,
+      "date": "2026-06-13",
+      "venueId": "vancouver",
+      "homeTeamId": "australia",
+      "awayTeamId": "turkiye",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 7,
+      "stage": "GROUP",
+      "group": "C",
+      "matchday": 1,
+      "date": "2026-06-13",
+      "venueId": "new-york-new-jersey",
+      "homeTeamId": "brazil",
+      "awayTeamId": "morocco",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 8,
+      "stage": "GROUP",
+      "group": "B",
+      "matchday": 1,
+      "date": "2026-06-13",
+      "venueId": "san-francisco-bay-area",
+      "homeTeamId": "qatar",
+      "awayTeamId": "switzerland",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 9,
+      "stage": "GROUP",
+      "group": "E",
+      "matchday": 1,
+      "date": "2026-06-14",
+      "venueId": "philadelphia",
+      "homeTeamId": "cote-divoire",
+      "awayTeamId": "ecuador",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 10,
+      "stage": "GROUP",
+      "group": "E",
+      "matchday": 1,
+      "date": "2026-06-14",
+      "venueId": "houston",
+      "homeTeamId": "germany",
+      "awayTeamId": "curacao",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 11,
+      "stage": "GROUP",
+      "group": "F",
+      "matchday": 1,
+      "date": "2026-06-14",
+      "venueId": "dallas",
+      "homeTeamId": "netherlands",
+      "awayTeamId": "japan",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 12,
+      "stage": "GROUP",
+      "group": "F",
+      "matchday": 1,
+      "date": "2026-06-14",
+      "venueId": "monterrey",
+      "homeTeamId": "sweden",
+      "awayTeamId": "tunisia",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 13,
+      "stage": "GROUP",
+      "group": "H",
+      "matchday": 1,
+      "date": "2026-06-15",
+      "venueId": "miami",
+      "homeTeamId": "saudi-arabia",
+      "awayTeamId": "uruguay",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 14,
+      "stage": "GROUP",
+      "group": "H",
+      "matchday": 1,
+      "date": "2026-06-15",
+      "venueId": "atlanta",
+      "homeTeamId": "spain",
+      "awayTeamId": "cabo-verde",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 15,
+      "stage": "GROUP",
+      "group": "G",
+      "matchday": 1,
+      "date": "2026-06-15",
+      "venueId": "los-angeles",
+      "homeTeamId": "iran",
+      "awayTeamId": "new-zealand",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 16,
+      "stage": "GROUP",
+      "group": "G",
+      "matchday": 1,
+      "date": "2026-06-15",
+      "venueId": "seattle",
+      "homeTeamId": "belgium",
+      "awayTeamId": "egypt",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 17,
+      "stage": "GROUP",
+      "group": "I",
+      "matchday": 1,
+      "date": "2026-06-16",
+      "venueId": "new-york-new-jersey",
+      "homeTeamId": "france",
+      "awayTeamId": "senegal",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 18,
+      "stage": "GROUP",
+      "group": "I",
+      "matchday": 1,
+      "date": "2026-06-16",
+      "venueId": "boston",
+      "homeTeamId": "iraq",
+      "awayTeamId": "norway",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 19,
+      "stage": "GROUP",
+      "group": "J",
+      "matchday": 1,
+      "date": "2026-06-16",
+      "venueId": "kansas-city",
+      "homeTeamId": "argentina",
+      "awayTeamId": "algeria",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 20,
+      "stage": "GROUP",
+      "group": "J",
+      "matchday": 1,
+      "date": "2026-06-16",
+      "venueId": "san-francisco-bay-area",
+      "homeTeamId": "austria",
+      "awayTeamId": "jordan",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 21,
+      "stage": "GROUP",
+      "group": "L",
+      "matchday": 1,
+      "date": "2026-06-17",
+      "venueId": "toronto",
+      "homeTeamId": "ghana",
+      "awayTeamId": "panama",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 22,
+      "stage": "GROUP",
+      "group": "L",
+      "matchday": 1,
+      "date": "2026-06-17",
+      "venueId": "dallas",
+      "homeTeamId": "england",
+      "awayTeamId": "croatia",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 23,
+      "stage": "GROUP",
+      "group": "K",
+      "matchday": 1,
+      "date": "2026-06-17",
+      "venueId": "houston",
+      "homeTeamId": "portugal",
+      "awayTeamId": "congo-dr",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 24,
+      "stage": "GROUP",
+      "group": "K",
+      "matchday": 1,
+      "date": "2026-06-17",
+      "venueId": "mexico-city",
+      "homeTeamId": "uzbekistan",
+      "awayTeamId": "colombia",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 25,
+      "stage": "GROUP",
+      "group": "A",
+      "matchday": 2,
+      "date": "2026-06-18",
+      "venueId": "atlanta",
+      "homeTeamId": "czechia",
+      "awayTeamId": "south-africa",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 26,
+      "stage": "GROUP",
+      "group": "B",
+      "matchday": 2,
+      "date": "2026-06-18",
+      "venueId": "los-angeles",
+      "homeTeamId": "switzerland",
+      "awayTeamId": "bosnia-and-herzegovina",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 27,
+      "stage": "GROUP",
+      "group": "B",
+      "matchday": 2,
+      "date": "2026-06-18",
+      "venueId": "vancouver",
+      "homeTeamId": "canada",
+      "awayTeamId": "qatar",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 28,
+      "stage": "GROUP",
+      "group": "A",
+      "matchday": 2,
+      "date": "2026-06-18",
+      "venueId": "guadalajara",
+      "homeTeamId": "mexico",
+      "awayTeamId": "korea-republic",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 29,
+      "stage": "GROUP",
+      "group": "C",
+      "matchday": 2,
+      "date": "2026-06-19",
+      "venueId": "philadelphia",
+      "homeTeamId": "brazil",
+      "awayTeamId": "haiti",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 30,
+      "stage": "GROUP",
+      "group": "C",
+      "matchday": 2,
+      "date": "2026-06-19",
+      "venueId": "boston",
+      "homeTeamId": "scotland",
+      "awayTeamId": "morocco",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 31,
+      "stage": "GROUP",
+      "group": "D",
+      "matchday": 2,
+      "date": "2026-06-19",
+      "venueId": "san-francisco-bay-area",
+      "homeTeamId": "turkiye",
+      "awayTeamId": "paraguay",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 32,
+      "stage": "GROUP",
+      "group": "D",
+      "matchday": 2,
+      "date": "2026-06-19",
+      "venueId": "seattle",
+      "homeTeamId": "united-states",
+      "awayTeamId": "australia",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 33,
+      "stage": "GROUP",
+      "group": "E",
+      "matchday": 2,
+      "date": "2026-06-20",
+      "venueId": "toronto",
+      "homeTeamId": "germany",
+      "awayTeamId": "cote-divoire",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 34,
+      "stage": "GROUP",
+      "group": "E",
+      "matchday": 2,
+      "date": "2026-06-20",
+      "venueId": "kansas-city",
+      "homeTeamId": "ecuador",
+      "awayTeamId": "curacao",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 35,
+      "stage": "GROUP",
+      "group": "F",
+      "matchday": 2,
+      "date": "2026-06-20",
+      "venueId": "houston",
+      "homeTeamId": "netherlands",
+      "awayTeamId": "sweden",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 36,
+      "stage": "GROUP",
+      "group": "F",
+      "matchday": 2,
+      "date": "2026-06-20",
+      "venueId": "monterrey",
+      "homeTeamId": "tunisia",
+      "awayTeamId": "japan",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 37,
+      "stage": "GROUP",
+      "group": "H",
+      "matchday": 2,
+      "date": "2026-06-21",
+      "venueId": "miami",
+      "homeTeamId": "uruguay",
+      "awayTeamId": "cabo-verde",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 38,
+      "stage": "GROUP",
+      "group": "H",
+      "matchday": 2,
+      "date": "2026-06-21",
+      "venueId": "atlanta",
+      "homeTeamId": "spain",
+      "awayTeamId": "saudi-arabia",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 39,
+      "stage": "GROUP",
+      "group": "G",
+      "matchday": 2,
+      "date": "2026-06-21",
+      "venueId": "los-angeles",
+      "homeTeamId": "belgium",
+      "awayTeamId": "iran",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 40,
+      "stage": "GROUP",
+      "group": "G",
+      "matchday": 2,
+      "date": "2026-06-21",
+      "venueId": "vancouver",
+      "homeTeamId": "new-zealand",
+      "awayTeamId": "egypt",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 41,
+      "stage": "GROUP",
+      "group": "I",
+      "matchday": 2,
+      "date": "2026-06-22",
+      "venueId": "new-york-new-jersey",
+      "homeTeamId": "norway",
+      "awayTeamId": "senegal",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 42,
+      "stage": "GROUP",
+      "group": "I",
+      "matchday": 2,
+      "date": "2026-06-22",
+      "venueId": "philadelphia",
+      "homeTeamId": "france",
+      "awayTeamId": "iraq",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 43,
+      "stage": "GROUP",
+      "group": "J",
+      "matchday": 2,
+      "date": "2026-06-22",
+      "venueId": "dallas",
+      "homeTeamId": "argentina",
+      "awayTeamId": "austria",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 44,
+      "stage": "GROUP",
+      "group": "J",
+      "matchday": 2,
+      "date": "2026-06-22",
+      "venueId": "san-francisco-bay-area",
+      "homeTeamId": "jordan",
+      "awayTeamId": "algeria",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 45,
+      "stage": "GROUP",
+      "group": "L",
+      "matchday": 2,
+      "date": "2026-06-23",
+      "venueId": "boston",
+      "homeTeamId": "england",
+      "awayTeamId": "ghana",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 46,
+      "stage": "GROUP",
+      "group": "L",
+      "matchday": 2,
+      "date": "2026-06-23",
+      "venueId": "toronto",
+      "homeTeamId": "panama",
+      "awayTeamId": "croatia",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 47,
+      "stage": "GROUP",
+      "group": "K",
+      "matchday": 2,
+      "date": "2026-06-23",
+      "venueId": "houston",
+      "homeTeamId": "portugal",
+      "awayTeamId": "uzbekistan",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 48,
+      "stage": "GROUP",
+      "group": "K",
+      "matchday": 2,
+      "date": "2026-06-23",
+      "venueId": "guadalajara",
+      "homeTeamId": "colombia",
+      "awayTeamId": "congo-dr",
+      "simultaneousKey": null
+    },
+    {
+      "matchNumber": 49,
+      "stage": "GROUP",
+      "group": "C",
+      "matchday": 3,
+      "date": "2026-06-24",
+      "venueId": "miami",
+      "homeTeamId": "scotland",
+      "awayTeamId": "brazil",
+      "simultaneousKey": "GROUP_C_FINAL"
+    },
+    {
+      "matchNumber": 50,
+      "stage": "GROUP",
+      "group": "C",
+      "matchday": 3,
+      "date": "2026-06-24",
+      "venueId": "atlanta",
+      "homeTeamId": "morocco",
+      "awayTeamId": "haiti",
+      "simultaneousKey": "GROUP_C_FINAL"
+    },
+    {
+      "matchNumber": 51,
+      "stage": "GROUP",
+      "group": "B",
+      "matchday": 3,
+      "date": "2026-06-24",
+      "venueId": "vancouver",
+      "homeTeamId": "switzerland",
+      "awayTeamId": "canada",
+      "simultaneousKey": "GROUP_B_FINAL"
+    },
+    {
+      "matchNumber": 52,
+      "stage": "GROUP",
+      "group": "B",
+      "matchday": 3,
+      "date": "2026-06-24",
+      "venueId": "seattle",
+      "homeTeamId": "bosnia-and-herzegovina",
+      "awayTeamId": "qatar",
+      "simultaneousKey": "GROUP_B_FINAL"
+    },
+    {
+      "matchNumber": 53,
+      "stage": "GROUP",
+      "group": "A",
+      "matchday": 3,
+      "date": "2026-06-24",
+      "venueId": "mexico-city",
+      "homeTeamId": "czechia",
+      "awayTeamId": "mexico",
+      "simultaneousKey": "GROUP_A_FINAL"
+    },
+    {
+      "matchNumber": 54,
+      "stage": "GROUP",
+      "group": "A",
+      "matchday": 3,
+      "date": "2026-06-24",
+      "venueId": "monterrey",
+      "homeTeamId": "south-africa",
+      "awayTeamId": "korea-republic",
+      "simultaneousKey": "GROUP_A_FINAL"
+    },
+    {
+      "matchNumber": 55,
+      "stage": "GROUP",
+      "group": "E",
+      "matchday": 3,
+      "date": "2026-06-25",
+      "venueId": "philadelphia",
+      "homeTeamId": "curacao",
+      "awayTeamId": "cote-divoire",
+      "simultaneousKey": "GROUP_E_FINAL"
+    },
+    {
+      "matchNumber": 56,
+      "stage": "GROUP",
+      "group": "E",
+      "matchday": 3,
+      "date": "2026-06-25",
+      "venueId": "new-york-new-jersey",
+      "homeTeamId": "ecuador",
+      "awayTeamId": "germany",
+      "simultaneousKey": "GROUP_E_FINAL"
+    },
+    {
+      "matchNumber": 57,
+      "stage": "GROUP",
+      "group": "F",
+      "matchday": 3,
+      "date": "2026-06-25",
+      "venueId": "dallas",
+      "homeTeamId": "japan",
+      "awayTeamId": "sweden",
+      "simultaneousKey": "GROUP_F_FINAL"
+    },
+    {
+      "matchNumber": 58,
+      "stage": "GROUP",
+      "group": "F",
+      "matchday": 3,
+      "date": "2026-06-25",
+      "venueId": "kansas-city",
+      "homeTeamId": "tunisia",
+      "awayTeamId": "netherlands",
+      "simultaneousKey": "GROUP_F_FINAL"
+    },
+    {
+      "matchNumber": 59,
+      "stage": "GROUP",
+      "group": "D",
+      "matchday": 3,
+      "date": "2026-06-25",
+      "venueId": "los-angeles",
+      "homeTeamId": "turkiye",
+      "awayTeamId": "united-states",
+      "simultaneousKey": "GROUP_D_FINAL"
+    },
+    {
+      "matchNumber": 60,
+      "stage": "GROUP",
+      "group": "D",
+      "matchday": 3,
+      "date": "2026-06-25",
+      "venueId": "san-francisco-bay-area",
+      "homeTeamId": "paraguay",
+      "awayTeamId": "australia",
+      "simultaneousKey": "GROUP_D_FINAL"
+    },
+    {
+      "matchNumber": 61,
+      "stage": "GROUP",
+      "group": "I",
+      "matchday": 3,
+      "date": "2026-06-26",
+      "venueId": "boston",
+      "homeTeamId": "norway",
+      "awayTeamId": "france",
+      "simultaneousKey": "GROUP_I_FINAL"
+    },
+    {
+      "matchNumber": 62,
+      "stage": "GROUP",
+      "group": "I",
+      "matchday": 3,
+      "date": "2026-06-26",
+      "venueId": "toronto",
+      "homeTeamId": "senegal",
+      "awayTeamId": "iraq",
+      "simultaneousKey": "GROUP_I_FINAL"
+    },
+    {
+      "matchNumber": 63,
+      "stage": "GROUP",
+      "group": "G",
+      "matchday": 3,
+      "date": "2026-06-26",
+      "venueId": "seattle",
+      "homeTeamId": "egypt",
+      "awayTeamId": "iran",
+      "simultaneousKey": "GROUP_G_FINAL"
+    },
+    {
+      "matchNumber": 64,
+      "stage": "GROUP",
+      "group": "G",
+      "matchday": 3,
+      "date": "2026-06-26",
+      "venueId": "vancouver",
+      "homeTeamId": "new-zealand",
+      "awayTeamId": "belgium",
+      "simultaneousKey": "GROUP_G_FINAL"
+    },
+    {
+      "matchNumber": 65,
+      "stage": "GROUP",
+      "group": "H",
+      "matchday": 3,
+      "date": "2026-06-26",
+      "venueId": "houston",
+      "homeTeamId": "cabo-verde",
+      "awayTeamId": "saudi-arabia",
+      "simultaneousKey": "GROUP_H_FINAL"
+    },
+    {
+      "matchNumber": 66,
+      "stage": "GROUP",
+      "group": "H",
+      "matchday": 3,
+      "date": "2026-06-26",
+      "venueId": "guadalajara",
+      "homeTeamId": "uruguay",
+      "awayTeamId": "spain",
+      "simultaneousKey": "GROUP_H_FINAL"
+    },
+    {
+      "matchNumber": 67,
+      "stage": "GROUP",
+      "group": "L",
+      "matchday": 3,
+      "date": "2026-06-27",
+      "venueId": "new-york-new-jersey",
+      "homeTeamId": "panama",
+      "awayTeamId": "england",
+      "simultaneousKey": "GROUP_L_FINAL"
+    },
+    {
+      "matchNumber": 68,
+      "stage": "GROUP",
+      "group": "L",
+      "matchday": 3,
+      "date": "2026-06-27",
+      "venueId": "philadelphia",
+      "homeTeamId": "croatia",
+      "awayTeamId": "ghana",
+      "simultaneousKey": "GROUP_L_FINAL"
+    },
+    {
+      "matchNumber": 69,
+      "stage": "GROUP",
+      "group": "J",
+      "matchday": 3,
+      "date": "2026-06-27",
+      "venueId": "kansas-city",
+      "homeTeamId": "algeria",
+      "awayTeamId": "austria",
+      "simultaneousKey": "GROUP_J_FINAL"
+    },
+    {
+      "matchNumber": 70,
+      "stage": "GROUP",
+      "group": "J",
+      "matchday": 3,
+      "date": "2026-06-27",
+      "venueId": "dallas",
+      "homeTeamId": "jordan",
+      "awayTeamId": "argentina",
+      "simultaneousKey": "GROUP_J_FINAL"
+    },
+    {
+      "matchNumber": 71,
+      "stage": "GROUP",
+      "group": "K",
+      "matchday": 3,
+      "date": "2026-06-27",
+      "venueId": "miami",
+      "homeTeamId": "colombia",
+      "awayTeamId": "portugal",
+      "simultaneousKey": "GROUP_K_FINAL"
+    },
+    {
+      "matchNumber": 72,
+      "stage": "GROUP",
+      "group": "K",
+      "matchday": 3,
+      "date": "2026-06-27",
+      "venueId": "atlanta",
+      "homeTeamId": "congo-dr",
+      "awayTeamId": "uzbekistan",
+      "simultaneousKey": "GROUP_K_FINAL"
+    }
+  ]
+}

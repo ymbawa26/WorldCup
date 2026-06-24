@@ -6,3 +6,138 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum TournamentStage {
+  GROUP
+  ROUND_OF_32
+  ROUND_OF_16
+  QUARTER_FINAL
+  SEMI_FINAL
+  THIRD_PLACE
+  FINAL
+}
+
+model DataSource {
+  id                String             @id
+  name              String
+  url               String
+  retrievedAt       DateTime
+  publishedAt       String?
+  sha256            String?
+  licenseNote       String
+  tournamentSources TournamentSource[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+}
+
+model Tournament {
+  id              String             @id @default(uuid()) @db.Uuid
+  slug            String             @unique
+  name            String
+  dataVersion     String             @unique
+  startsAt        DateTime
+  resultsIncluded Boolean            @default(false)
+  teams           TournamentTeam[]
+  groups          TournamentGroup[]
+  fixtures        Fixture[]
+  sources         TournamentSource[]
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+}
+
+model TournamentSource {
+  tournamentId String     @db.Uuid
+  sourceId     String
+  tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  source       DataSource @relation(fields: [sourceId], references: [id], onDelete: Restrict)
+
+  @@id([tournamentId, sourceId])
+}
+
+model Team {
+  id               String           @id @default(uuid()) @db.Uuid
+  slug             String           @unique
+  name             String
+  shortName        String
+  fifaCode         String           @unique @db.Char(3)
+  flagCode         String
+  confederation    String
+  sourceExternalId String?          @unique
+  tournamentTeams  TournamentTeam[]
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+}
+
+model TournamentTeam {
+  id               String            @id @default(uuid()) @db.Uuid
+  tournamentId     String            @db.Uuid
+  teamId           String            @db.Uuid
+  fifaRank         Int
+  previousFifaRank Int
+  fifaPoints       Decimal           @db.Decimal(10, 6)
+  tournament       Tournament        @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  team             Team              @relation(fields: [teamId], references: [id], onDelete: Restrict)
+  memberships      GroupMembership[]
+  homeFixtures     Fixture[]         @relation("HomeTournamentTeam")
+  awayFixtures     Fixture[]         @relation("AwayTournamentTeam")
+
+  @@unique([tournamentId, teamId])
+}
+
+model TournamentGroup {
+  id           String            @id @default(uuid()) @db.Uuid
+  tournamentId String            @db.Uuid
+  code         String            @db.Char(1)
+  tournament   Tournament        @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  memberships  GroupMembership[]
+  fixtures     Fixture[]
+
+  @@unique([tournamentId, code])
+}
+
+model GroupMembership {
+  id               String          @id @default(uuid()) @db.Uuid
+  groupId          String          @db.Uuid
+  tournamentTeamId String          @db.Uuid
+  drawPosition     Int
+  group            TournamentGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  tournamentTeam   TournamentTeam  @relation(fields: [tournamentTeamId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, drawPosition])
+  @@unique([groupId, tournamentTeamId])
+}
+
+model Stadium {
+  id        String    @id @default(uuid()) @db.Uuid
+  slug      String    @unique
+  name      String
+  city      String
+  country   String
+  fixtures  Fixture[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Fixture {
+  id                   String           @id @default(uuid()) @db.Uuid
+  tournamentId         String           @db.Uuid
+  matchNumber          Int
+  stage                TournamentStage
+  scheduledDate        DateTime
+  simultaneousKey      String?
+  groupId              String?          @db.Uuid
+  stadiumId            String           @db.Uuid
+  homeTournamentTeamId String?          @db.Uuid
+  awayTournamentTeamId String?          @db.Uuid
+  homeSlot             String?
+  awaySlot             String?
+  tournament           Tournament       @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  group                TournamentGroup? @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  stadium              Stadium          @relation(fields: [stadiumId], references: [id], onDelete: Restrict)
+  homeTournamentTeam   TournamentTeam?  @relation("HomeTournamentTeam", fields: [homeTournamentTeamId], references: [id], onDelete: Restrict)
+  awayTournamentTeam   TournamentTeam?  @relation("AwayTournamentTeam", fields: [awayTournamentTeamId], references: [id], onDelete: Restrict)
+
+  @@unique([tournamentId, matchNumber])
+  @@index([groupId])
+  @@index([stadiumId])
+}

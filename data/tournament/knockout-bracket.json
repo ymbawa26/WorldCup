@@ -1,0 +1,262 @@
+{
+  "schemaVersion": 1,
+  "sourceId": "fifa-regulations-2026-05",
+  "matches": [
+    {
+      "matchNumber": 73,
+      "stage": "ROUND_OF_32",
+      "date": "2026-06-28",
+      "venueId": "los-angeles",
+      "homeSlot": "2A",
+      "awaySlot": "2B"
+    },
+    {
+      "matchNumber": 74,
+      "stage": "ROUND_OF_32",
+      "date": "2026-06-29",
+      "venueId": "boston",
+      "homeSlot": "1E",
+      "awaySlot": "3:ABCDF"
+    },
+    {
+      "matchNumber": 75,
+      "stage": "ROUND_OF_32",
+      "date": "2026-06-29",
+      "venueId": "monterrey",
+      "homeSlot": "1F",
+      "awaySlot": "2C"
+    },
+    {
+      "matchNumber": 76,
+      "stage": "ROUND_OF_32",
+      "date": "2026-06-29",
+      "venueId": "houston",
+      "homeSlot": "1C",
+      "awaySlot": "2F"
+    },
+    {
+      "matchNumber": 77,
+      "stage": "ROUND_OF_32",
+      "date": "2026-06-30",
+      "venueId": "new-york-new-jersey",
+      "homeSlot": "1I",
+      "awaySlot": "3:CDFGH"
+    },
+    {
+      "matchNumber": 78,
+      "stage": "ROUND_OF_32",
+      "date": "2026-06-30",
+      "venueId": "dallas",
+      "homeSlot": "2E",
+      "awaySlot": "2I"
+    },
+    {
+      "matchNumber": 79,
+      "stage": "ROUND_OF_32",
+      "date": "2026-06-30",
+      "venueId": "mexico-city",
+      "homeSlot": "1A",
+      "awaySlot": "3:CEFHI"
+    },
+    {
+      "matchNumber": 80,
+      "stage": "ROUND_OF_32",
+      "date": "2026-07-01",
+      "venueId": "atlanta",
+      "homeSlot": "1L",
+      "awaySlot": "3:EHIJK"
+    },
+    {
+      "matchNumber": 81,
+      "stage": "ROUND_OF_32",
+      "date": "2026-07-01",
+      "venueId": "san-francisco-bay-area",
+      "homeSlot": "1D",
+      "awaySlot": "3:BEFIJ"
+    },
+    {
+      "matchNumber": 82,
+      "stage": "ROUND_OF_32",
+      "date": "2026-07-01",
+      "venueId": "seattle",
+      "homeSlot": "1G",
+      "awaySlot": "3:AEHIJ"
+    },
+    {
+      "matchNumber": 83,
+      "stage": "ROUND_OF_32",
+      "date": "2026-07-02",
+      "venueId": "toronto",
+      "homeSlot": "2K",
+      "awaySlot": "2L"
+    },
+    {
+      "matchNumber": 84,
+      "stage": "ROUND_OF_32",
+      "date": "2026-07-02",
+      "venueId": "los-angeles",
+      "homeSlot": "1H",
+      "awaySlot": "2J"
+    },
+    {
+      "matchNumber": 85,
+      "stage": "ROUND_OF_32",
+      "date": "2026-07-02",
+      "venueId": "vancouver",
+      "homeSlot": "1B",
+      "awaySlot": "3:EFGIJ"
+    },
+    {
+      "matchNumber": 86,
+      "stage": "ROUND_OF_32",
+      "date": "2026-07-03",
+      "venueId": "miami",
+      "homeSlot": "1J",
+      "awaySlot": "2H"
+    },
+    {
+      "matchNumber": 87,
+      "stage": "ROUND_OF_32",
+      "date": "2026-07-03",
+      "venueId": "kansas-city",
+      "homeSlot": "1K",
+      "awaySlot": "3:DEIJL"
+    },
+    {
+      "matchNumber": 88,
+      "stage": "ROUND_OF_32",
+      "date": "2026-07-03",
+      "venueId": "dallas",
+      "homeSlot": "2D",
+      "awaySlot": "2G"
+    },
+    {
+      "matchNumber": 89,
+      "stage": "ROUND_OF_16",
+      "date": "2026-07-04",
+      "venueId": "philadelphia",
+      "homeSlot": "W74",
+      "awaySlot": "W77"
+    },
+    {
+      "matchNumber": 90,
+      "stage": "ROUND_OF_16",
+      "date": "2026-07-04",
+      "venueId": "houston",
+      "homeSlot": "W73",
+      "awaySlot": "W75"
+    },
+    {
+      "matchNumber": 91,
+      "stage": "ROUND_OF_16",
+      "date": "2026-07-05",
+      "venueId": "new-york-new-jersey",
+      "homeSlot": "W76",
+      "awaySlot": "W78"
+    },
+    {
+      "matchNumber": 92,
+      "stage": "ROUND_OF_16",
+      "date": "2026-07-05",
+      "venueId": "mexico-city",
+      "homeSlot": "W79",
+      "awaySlot": "W80"
+    },
+    {
+      "matchNumber": 93,
+      "stage": "ROUND_OF_16",
+      "date": "2026-07-06",
+      "venueId": "dallas",
+      "homeSlot": "W83",
+      "awaySlot": "W84"
+    },
+    {
+      "matchNumber": 94,
+      "stage": "ROUND_OF_16",
+      "date": "2026-07-06",
+      "venueId": "seattle",
+      "homeSlot": "W81",
+      "awaySlot": "W82"
+    },
+    {
+      "matchNumber": 95,
+      "stage": "ROUND_OF_16",
+      "date": "2026-07-07",
+      "venueId": "atlanta",
+      "homeSlot": "W86",
+      "awaySlot": "W88"
+    },
+    {
+      "matchNumber": 96,
+      "stage": "ROUND_OF_16",
+      "date": "2026-07-07",
+      "venueId": "vancouver",
+      "homeSlot": "W85",
+      "awaySlot": "W87"
+    },
+    {
+      "matchNumber": 97,
+      "stage": "QUARTER_FINAL",
+      "date": "2026-07-09",
+      "venueId": "boston",
+      "homeSlot": "W89",
+      "awaySlot": "W90"
+    },
+    {
+      "matchNumber": 98,
+      "stage": "QUARTER_FINAL",
+      "date": "2026-07-10",
+      "venueId": "los-angeles",
+      "homeSlot": "W93",
+      "awaySlot": "W94"
+    },
+    {
+      "matchNumber": 99,
+      "stage": "QUARTER_FINAL",
+      "date": "2026-07-11",
+      "venueId": "miami",
+      "homeSlot": "W91",
+      "awaySlot": "W92"
+    },
+    {
+      "matchNumber": 100,
+      "stage": "QUARTER_FINAL",
+      "date": "2026-07-11",
+      "venueId": "kansas-city",
+      "homeSlot": "W95",
+      "awaySlot": "W96"
+    },
+    {
+      "matchNumber": 101,
+      "stage": "SEMI_FINAL",
+      "date": "2026-07-14",
+      "venueId": "dallas",
+      "homeSlot": "W97",
+      "awaySlot": "W98"
+    },
+    {
+      "matchNumber": 102,
+      "stage": "SEMI_FINAL",
+      "date": "2026-07-15",
+      "venueId": "atlanta",
+      "homeSlot": "W99",
+      "awaySlot": "W100"
+    },
+    {
+      "matchNumber": 103,
+      "stage": "THIRD_PLACE",
+      "date": "2026-07-18",
+      "venueId": "miami",
+      "homeSlot": "L101",
+      "awaySlot": "L102"
+    },
+    {
+      "matchNumber": 104,
+      "stage": "FINAL",
+      "date": "2026-07-19",
+      "venueId": "new-york-new-jersey",
+      "homeSlot": "W101",
+      "awaySlot": "W102"
+    }
+  ]
+}

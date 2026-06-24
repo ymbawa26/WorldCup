@@ -1,0 +1,6444 @@
+{
+  "schemaVersion": 1,
+  "sourceId": "fifa-regulations-2026-05",
+  "sourcePages": "80-96",
+  "winnerOrder": ["A", "B", "D", "E", "G", "I", "K", "L"],
+  "keyFormat": "Eight qualifying group letters sorted alphabetically",
+  "combinations": {
+    "ABCDEFGH": {
+      "option": 495,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "D",
+        "L": "E"
+      }
+    },
+    "ABCDEFGI": {
+      "option": 494,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "E",
+        "L": "I"
+      }
+    },
+    "ABCDEFGJ": {
+      "option": 493,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "E",
+        "L": "J"
+      }
+    },
+    "ABCDEFGK": {
+      "option": 492,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "E",
+        "L": "K"
+      }
+    },
+    "ABCDEFGL": {
+      "option": 491,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "ABCDEFHI": {
+      "option": 490,
+      "assignments": {
+        "A": "H",
+        "B": "E",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "D",
+        "L": "I"
+      }
+    },
+    "ABCDEFHJ": {
+      "option": 489,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "D",
+        "L": "E"
+      }
+    },
+    "ABCDEFHK": {
+      "option": 488,
+      "assignments": {
+        "A": "H",
+        "B": "E",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "D",
+        "L": "K"
+      }
+    },
+    "ABCDEFHL": {
+      "option": 487,
+      "assignments": {
+        "A": "H",
+        "B": "F",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "ABCDEFIJ": {
+      "option": 486,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "E",
+        "L": "I"
+      }
+    },
+    "ABCDEFIK": {
+      "option": 485,
+      "assignments": {
+        "A": "C",
+        "B": "E",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABCDEFIL": {
+      "option": 484,
+      "assignments": {
+        "A": "C",
+        "B": "E",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABCDEFJK": {
+      "option": 483,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "E",
+        "L": "K"
+      }
+    },
+    "ABCDEFJL": {
+      "option": 482,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "ABCDEFKL": {
+      "option": 481,
+      "assignments": {
+        "A": "C",
+        "B": "E",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCDEGHI": {
+      "option": 480,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "E",
+        "L": "I"
+      }
+    },
+    "ABCDEGHJ": {
+      "option": 479,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "E",
+        "L": "J"
+      }
+    },
+    "ABCDEGHK": {
+      "option": 478,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "E",
+        "L": "K"
+      }
+    },
+    "ABCDEGHL": {
+      "option": 477,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "ABCDEGIJ": {
+      "option": 476,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "I",
+        "L": "J"
+      }
+    },
+    "ABCDEGIK": {
+      "option": 475,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABCDEGIL": {
+      "option": 474,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABCDEGJK": {
+      "option": 473,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "J",
+        "L": "K"
+      }
+    },
+    "ABCDEGJL": {
+      "option": 472,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "J"
+      }
+    },
+    "ABCDEGKL": {
+      "option": 471,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCDEHIJ": {
+      "option": 470,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "E",
+        "L": "I"
+      }
+    },
+    "ABCDEHIK": {
+      "option": 469,
+      "assignments": {
+        "A": "H",
+        "B": "E",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABCDEHIL": {
+      "option": 468,
+      "assignments": {
+        "A": "H",
+        "B": "E",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABCDEHJK": {
+      "option": 467,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "E",
+        "L": "K"
+      }
+    },
+    "ABCDEHJL": {
+      "option": 466,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "ABCDEHKL": {
+      "option": 465,
+      "assignments": {
+        "A": "H",
+        "B": "E",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCDEIJK": {
+      "option": 464,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABCDEIJL": {
+      "option": 463,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABCDEIKL": {
+      "option": 462,
+      "assignments": {
+        "A": "E",
+        "B": "I",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCDEJKL": {
+      "option": 461,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCDFGHI": {
+      "option": 460,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "D",
+        "L": "I"
+      }
+    },
+    "ABCDFGHJ": {
+      "option": 459,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "D",
+        "L": "J"
+      }
+    },
+    "ABCDFGHK": {
+      "option": 458,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "D",
+        "L": "K"
+      }
+    },
+    "ABCDFGHL": {
+      "option": 457,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "H"
+      }
+    },
+    "ABCDFGIJ": {
+      "option": 456,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "J"
+      }
+    },
+    "ABCDFGIK": {
+      "option": 455,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABCDFGIL": {
+      "option": 454,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABCDFGJK": {
+      "option": 453,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "J",
+        "L": "K"
+      }
+    },
+    "ABCDFGJL": {
+      "option": 452,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "J"
+      }
+    },
+    "ABCDFGKL": {
+      "option": 451,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCDFHIJ": {
+      "option": 450,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "D",
+        "L": "I"
+      }
+    },
+    "ABCDFHIK": {
+      "option": 449,
+      "assignments": {
+        "A": "H",
+        "B": "F",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABCDFHIL": {
+      "option": 448,
+      "assignments": {
+        "A": "H",
+        "B": "F",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABCDFHJK": {
+      "option": 447,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "D",
+        "L": "K"
+      }
+    },
+    "ABCDFHJL": {
+      "option": 446,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "H"
+      }
+    },
+    "ABCDFHKL": {
+      "option": 445,
+      "assignments": {
+        "A": "H",
+        "B": "F",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCDFIJK": {
+      "option": 444,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABCDFIJL": {
+      "option": 443,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABCDFIKL": {
+      "option": 442,
+      "assignments": {
+        "A": "C",
+        "B": "I",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCDFJKL": {
+      "option": 441,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCDGHIJ": {
+      "option": 440,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "I",
+        "L": "J"
+      }
+    },
+    "ABCDGHIK": {
+      "option": 439,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABCDGHIL": {
+      "option": 438,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABCDGHJK": {
+      "option": 437,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "J",
+        "L": "K"
+      }
+    },
+    "ABCDGHJL": {
+      "option": 436,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "J"
+      }
+    },
+    "ABCDGHKL": {
+      "option": 435,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCDGIJK": {
+      "option": 434,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "G",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABCDGIJL": {
+      "option": 433,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABCDGIKL": {
+      "option": 432,
+      "assignments": {
+        "A": "I",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCDGJKL": {
+      "option": 431,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCDHIJK": {
+      "option": 430,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABCDHIJL": {
+      "option": 429,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABCDHIKL": {
+      "option": 428,
+      "assignments": {
+        "A": "H",
+        "B": "I",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCDHJKL": {
+      "option": 427,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCDIJKL": {
+      "option": 426,
+      "assignments": {
+        "A": "I",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCEFGHI": {
+      "option": 425,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "E",
+        "L": "I"
+      }
+    },
+    "ABCEFGHJ": {
+      "option": 424,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "E",
+        "L": "J"
+      }
+    },
+    "ABCEFGHK": {
+      "option": 423,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "E",
+        "L": "K"
+      }
+    },
+    "ABCEFGHL": {
+      "option": 422,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "ABCEFGIJ": {
+      "option": 421,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "J"
+      }
+    },
+    "ABCEFGIK": {
+      "option": 420,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABCEFGIL": {
+      "option": 419,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABCEFGJK": {
+      "option": 418,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "J",
+        "L": "K"
+      }
+    },
+    "ABCEFGJL": {
+      "option": 417,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "J"
+      }
+    },
+    "ABCEFGKL": {
+      "option": 416,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCEFHIJ": {
+      "option": 415,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "E",
+        "L": "I"
+      }
+    },
+    "ABCEFHIK": {
+      "option": 414,
+      "assignments": {
+        "A": "H",
+        "B": "E",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABCEFHIL": {
+      "option": 413,
+      "assignments": {
+        "A": "H",
+        "B": "E",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABCEFHJK": {
+      "option": 412,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "E",
+        "L": "K"
+      }
+    },
+    "ABCEFHJL": {
+      "option": 411,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "ABCEFHKL": {
+      "option": 410,
+      "assignments": {
+        "A": "H",
+        "B": "E",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCEFIJK": {
+      "option": 409,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABCEFIJL": {
+      "option": 408,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABCEFIKL": {
+      "option": 407,
+      "assignments": {
+        "A": "E",
+        "B": "I",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCEFJKL": {
+      "option": 406,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCEGHIJ": {
+      "option": 405,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "G",
+        "K": "E",
+        "L": "I"
+      }
+    },
+    "ABCEGHIK": {
+      "option": 404,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "H",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABCEGHIL": {
+      "option": 403,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABCEGHJK": {
+      "option": 402,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "G",
+        "K": "E",
+        "L": "K"
+      }
+    },
+    "ABCEGHJL": {
+      "option": 401,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "ABCEGHKL": {
+      "option": 400,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCEGIJK": {
+      "option": 399,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "G",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABCEGIJL": {
+      "option": 398,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABCEGIKL": {
+      "option": 397,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "A",
+        "G": "I",
+        "I": "C",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCEGJKL": {
+      "option": 396,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCEHIJK": {
+      "option": 395,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "H",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABCEHIJL": {
+      "option": 394,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABCEHIKL": {
+      "option": 393,
+      "assignments": {
+        "A": "E",
+        "B": "I",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCEHJKL": {
+      "option": 392,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCEIJKL": {
+      "option": 391,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "A",
+        "G": "I",
+        "I": "C",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCFGHIJ": {
+      "option": 390,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "J"
+      }
+    },
+    "ABCFGHIK": {
+      "option": 389,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABCFGHIL": {
+      "option": 388,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABCFGHJK": {
+      "option": 387,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "J",
+        "L": "K"
+      }
+    },
+    "ABCFGHJL": {
+      "option": 386,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "J"
+      }
+    },
+    "ABCFGHKL": {
+      "option": 385,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCFGIJK": {
+      "option": 384,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "F",
+        "G": "A",
+        "I": "G",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABCFGIJL": {
+      "option": 383,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "F",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABCFGIKL": {
+      "option": 382,
+      "assignments": {
+        "A": "I",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCFGJKL": {
+      "option": 381,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "F",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCFHIJK": {
+      "option": 380,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABCFHIJL": {
+      "option": 379,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABCFHIKL": {
+      "option": 378,
+      "assignments": {
+        "A": "H",
+        "B": "I",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCFHJKL": {
+      "option": 377,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCFIJKL": {
+      "option": 376,
+      "assignments": {
+        "A": "I",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCGHIJK": {
+      "option": 375,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "G",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABCGHIJL": {
+      "option": 374,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABCGHIKL": {
+      "option": 373,
+      "assignments": {
+        "A": "I",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCGHJKL": {
+      "option": 372,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCGIJKL": {
+      "option": 371,
+      "assignments": {
+        "A": "I",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABCHIJKL": {
+      "option": 370,
+      "assignments": {
+        "A": "I",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABDEFGHI": {
+      "option": 369,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "E",
+        "L": "I"
+      }
+    },
+    "ABDEFGHJ": {
+      "option": 368,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "E",
+        "L": "J"
+      }
+    },
+    "ABDEFGHK": {
+      "option": 367,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "E",
+        "L": "K"
+      }
+    },
+    "ABDEFGHL": {
+      "option": 366,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "ABDEFGIJ": {
+      "option": 365,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "J"
+      }
+    },
+    "ABDEFGIK": {
+      "option": 364,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABDEFGIL": {
+      "option": 363,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABDEFGJK": {
+      "option": 362,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "J",
+        "L": "K"
+      }
+    },
+    "ABDEFGJL": {
+      "option": 361,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "J"
+      }
+    },
+    "ABDEFGKL": {
+      "option": 360,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABDEFHIJ": {
+      "option": 359,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "E",
+        "L": "I"
+      }
+    },
+    "ABDEFHIK": {
+      "option": 358,
+      "assignments": {
+        "A": "H",
+        "B": "E",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABDEFHIL": {
+      "option": 357,
+      "assignments": {
+        "A": "H",
+        "B": "E",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABDEFHJK": {
+      "option": 356,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "E",
+        "L": "K"
+      }
+    },
+    "ABDEFHJL": {
+      "option": 355,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "ABDEFHKL": {
+      "option": 354,
+      "assignments": {
+        "A": "H",
+        "B": "E",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABDEFIJK": {
+      "option": 353,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABDEFIJL": {
+      "option": 352,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABDEFIKL": {
+      "option": 351,
+      "assignments": {
+        "A": "E",
+        "B": "I",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABDEFJKL": {
+      "option": 350,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABDEGHIJ": {
+      "option": 349,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "G",
+        "K": "E",
+        "L": "I"
+      }
+    },
+    "ABDEGHIK": {
+      "option": 348,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "H",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABDEGHIL": {
+      "option": 347,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABDEGHJK": {
+      "option": 346,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "G",
+        "K": "E",
+        "L": "K"
+      }
+    },
+    "ABDEGHJL": {
+      "option": 345,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "ABDEGHKL": {
+      "option": 344,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABDEGIJK": {
+      "option": 343,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "G",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABDEGIJL": {
+      "option": 342,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABDEGIKL": {
+      "option": 341,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "A",
+        "G": "I",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABDEGJKL": {
+      "option": 340,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABDEHIJK": {
+      "option": 339,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "H",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABDEHIJL": {
+      "option": 338,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABDEHIKL": {
+      "option": 337,
+      "assignments": {
+        "A": "E",
+        "B": "I",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABDEHJKL": {
+      "option": 336,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABDEIJKL": {
+      "option": 335,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "A",
+        "G": "I",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABDFGHIJ": {
+      "option": 334,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "J"
+      }
+    },
+    "ABDFGHIK": {
+      "option": 333,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABDFGHIL": {
+      "option": 332,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABDFGHJK": {
+      "option": 331,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "J",
+        "L": "K"
+      }
+    },
+    "ABDFGHJL": {
+      "option": 330,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "J"
+      }
+    },
+    "ABDFGHKL": {
+      "option": 329,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABDFGIJK": {
+      "option": 328,
+      "assignments": {
+        "A": "F",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "G",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABDFGIJL": {
+      "option": 327,
+      "assignments": {
+        "A": "F",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABDFGIKL": {
+      "option": 326,
+      "assignments": {
+        "A": "I",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABDFGJKL": {
+      "option": 325,
+      "assignments": {
+        "A": "F",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABDFHIJK": {
+      "option": 324,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABDFHIJL": {
+      "option": 323,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABDFHIKL": {
+      "option": 322,
+      "assignments": {
+        "A": "H",
+        "B": "I",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABDFHJKL": {
+      "option": 321,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABDFIJKL": {
+      "option": 320,
+      "assignments": {
+        "A": "I",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABDGHIJK": {
+      "option": 319,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "G",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABDGHIJL": {
+      "option": 318,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABDGHIKL": {
+      "option": 317,
+      "assignments": {
+        "A": "I",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABDGHJKL": {
+      "option": 316,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABDGIJKL": {
+      "option": 315,
+      "assignments": {
+        "A": "I",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABDHIJKL": {
+      "option": 314,
+      "assignments": {
+        "A": "I",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABEFGHIJ": {
+      "option": 313,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "F",
+        "G": "A",
+        "I": "G",
+        "K": "E",
+        "L": "I"
+      }
+    },
+    "ABEFGHIK": {
+      "option": 312,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "F",
+        "G": "A",
+        "I": "H",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABEFGHIL": {
+      "option": 311,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "F",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABEFGHJK": {
+      "option": 310,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "F",
+        "G": "A",
+        "I": "G",
+        "K": "E",
+        "L": "K"
+      }
+    },
+    "ABEFGHJL": {
+      "option": 309,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "F",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "ABEFGHKL": {
+      "option": 308,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "F",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABEFGIJK": {
+      "option": 307,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "F",
+        "G": "A",
+        "I": "G",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABEFGIJL": {
+      "option": 306,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "F",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABEFGIKL": {
+      "option": 305,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "A",
+        "G": "I",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABEFGJKL": {
+      "option": 304,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "F",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABEFHIJK": {
+      "option": 303,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "F",
+        "G": "A",
+        "I": "H",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABEFHIJL": {
+      "option": 302,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "F",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABEFHIKL": {
+      "option": 301,
+      "assignments": {
+        "A": "E",
+        "B": "I",
+        "D": "B",
+        "E": "F",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABEFHJKL": {
+      "option": 300,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "F",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABEFIJKL": {
+      "option": 299,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "A",
+        "G": "I",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABEGHIJK": {
+      "option": 298,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "A",
+        "G": "H",
+        "I": "G",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABEGHIJL": {
+      "option": 297,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "A",
+        "G": "H",
+        "I": "G",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABEGHIKL": {
+      "option": 296,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "A",
+        "G": "I",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABEGHJKL": {
+      "option": 295,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "A",
+        "G": "H",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABEGIJKL": {
+      "option": 294,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "A",
+        "G": "I",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABEHIJKL": {
+      "option": 293,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "A",
+        "G": "I",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABFGHIJK": {
+      "option": 292,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "F",
+        "G": "A",
+        "I": "G",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ABFGHIJL": {
+      "option": 291,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "F",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ABFGHIKL": {
+      "option": 290,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "A",
+        "G": "I",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABFGHJKL": {
+      "option": 289,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "F",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABFGIJKL": {
+      "option": 288,
+      "assignments": {
+        "A": "I",
+        "B": "J",
+        "D": "B",
+        "E": "F",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABFHIJKL": {
+      "option": 287,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "A",
+        "G": "I",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ABGHIJKL": {
+      "option": 286,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "A",
+        "G": "I",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACDEFGHI": {
+      "option": 285,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "E",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "D",
+        "L": "I"
+      }
+    },
+    "ACDEFGHJ": {
+      "option": 284,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "D",
+        "L": "E"
+      }
+    },
+    "ACDEFGHK": {
+      "option": 283,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "E",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "D",
+        "L": "K"
+      }
+    },
+    "ACDEFGHL": {
+      "option": 282,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "F",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "ACDEFGIJ": {
+      "option": 281,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "E",
+        "L": "I"
+      }
+    },
+    "ACDEFGIK": {
+      "option": 280,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "E",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ACDEFGIL": {
+      "option": 279,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "E",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ACDEFGJK": {
+      "option": 278,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "E",
+        "L": "K"
+      }
+    },
+    "ACDEFGJL": {
+      "option": 277,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "ACDEFGKL": {
+      "option": 276,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "E",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACDEFHIJ": {
+      "option": 275,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "E",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "D",
+        "L": "I"
+      }
+    },
+    "ACDEFHIK": {
+      "option": 274,
+      "assignments": {
+        "A": "H",
+        "B": "E",
+        "D": "F",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ACDEFHIL": {
+      "option": 273,
+      "assignments": {
+        "A": "H",
+        "B": "E",
+        "D": "F",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ACDEFHJK": {
+      "option": 272,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "E",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "D",
+        "L": "K"
+      }
+    },
+    "ACDEFHJL": {
+      "option": 271,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "F",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "ACDEFHKL": {
+      "option": 270,
+      "assignments": {
+        "A": "H",
+        "B": "E",
+        "D": "F",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACDEFIJK": {
+      "option": 269,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "E",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ACDEFIJL": {
+      "option": 268,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "E",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ACDEFIKL": {
+      "option": 267,
+      "assignments": {
+        "A": "C",
+        "B": "E",
+        "D": "I",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACDEFJKL": {
+      "option": 266,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "E",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACDEGHIJ": {
+      "option": 265,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "E",
+        "L": "I"
+      }
+    },
+    "ACDEGHIK": {
+      "option": 264,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "E",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ACDEGHIL": {
+      "option": 263,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "E",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ACDEGHJK": {
+      "option": 262,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "E",
+        "L": "K"
+      }
+    },
+    "ACDEGHJL": {
+      "option": 261,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "ACDEGHKL": {
+      "option": 260,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "E",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACDEGIJK": {
+      "option": 259,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ACDEGIJL": {
+      "option": 258,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ACDEGIKL": {
+      "option": 257,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "I",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACDEGJKL": {
+      "option": 256,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACDEHIJK": {
+      "option": 255,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "E",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ACDEHIJL": {
+      "option": 254,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "E",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ACDEHIKL": {
+      "option": 253,
+      "assignments": {
+        "A": "H",
+        "B": "E",
+        "D": "I",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACDEHJKL": {
+      "option": 252,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "E",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACDEIJKL": {
+      "option": 251,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "I",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACDFGHIJ": {
+      "option": 250,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "D",
+        "L": "I"
+      }
+    },
+    "ACDFGHIK": {
+      "option": 249,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "F",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ACDFGHIL": {
+      "option": 248,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "F",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ACDFGHJK": {
+      "option": 247,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "D",
+        "L": "K"
+      }
+    },
+    "ACDFGHJL": {
+      "option": 246,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "H"
+      }
+    },
+    "ACDFGHKL": {
+      "option": 245,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "F",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACDFGIJK": {
+      "option": 244,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ACDFGIJL": {
+      "option": 243,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ACDFGIKL": {
+      "option": 242,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "I",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACDFGJKL": {
+      "option": 241,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACDFHIJK": {
+      "option": 240,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "F",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ACDFHIJL": {
+      "option": 239,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "F",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ACDFHIKL": {
+      "option": 238,
+      "assignments": {
+        "A": "H",
+        "B": "F",
+        "D": "I",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACDFHJKL": {
+      "option": 237,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "F",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACDFIJKL": {
+      "option": 236,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "I",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACDGHIJK": {
+      "option": 235,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ACDGHIJL": {
+      "option": 234,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ACDGHIKL": {
+      "option": 233,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "I",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACDGHJKL": {
+      "option": 232,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACDGIJKL": {
+      "option": 231,
+      "assignments": {
+        "A": "I",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACDHIJKL": {
+      "option": 230,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "I",
+        "E": "C",
+        "G": "A",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACEFGHIJ": {
+      "option": 229,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "E",
+        "L": "I"
+      }
+    },
+    "ACEFGHIK": {
+      "option": 228,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "E",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ACEFGHIL": {
+      "option": 227,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "E",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ACEFGHJK": {
+      "option": 226,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "E",
+        "L": "K"
+      }
+    },
+    "ACEFGHJL": {
+      "option": 225,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "ACEFGHKL": {
+      "option": 224,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "E",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACEFGIJK": {
+      "option": 223,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ACEFGIJL": {
+      "option": 222,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ACEFGIKL": {
+      "option": 221,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "I",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACEFGJKL": {
+      "option": 220,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACEFHIJK": {
+      "option": 219,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "E",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ACEFHIJL": {
+      "option": 218,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "E",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ACEFHIKL": {
+      "option": 217,
+      "assignments": {
+        "A": "H",
+        "B": "E",
+        "D": "I",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACEFHJKL": {
+      "option": 216,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "E",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACEFIJKL": {
+      "option": 215,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "I",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACEGHIJK": {
+      "option": 214,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "H",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ACEGHIJL": {
+      "option": 213,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ACEGHIKL": {
+      "option": 212,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "I",
+        "E": "C",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACEGHJKL": {
+      "option": 211,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACEGIJKL": {
+      "option": 210,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "I",
+        "E": "C",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACEHIJKL": {
+      "option": 209,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "I",
+        "E": "C",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACFGHIJK": {
+      "option": 208,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ACFGHIJL": {
+      "option": 207,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ACFGHIKL": {
+      "option": 206,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "I",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACFGHJKL": {
+      "option": 205,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACFGIJKL": {
+      "option": 204,
+      "assignments": {
+        "A": "I",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACFHIJKL": {
+      "option": 203,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "I",
+        "E": "C",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ACGHIJKL": {
+      "option": 202,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "I",
+        "E": "C",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ADEFGHIJ": {
+      "option": 201,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "E",
+        "L": "I"
+      }
+    },
+    "ADEFGHIK": {
+      "option": 200,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "E",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ADEFGHIL": {
+      "option": 199,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "E",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ADEFGHJK": {
+      "option": 198,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "E",
+        "L": "K"
+      }
+    },
+    "ADEFGHJL": {
+      "option": 197,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "ADEFGHKL": {
+      "option": 196,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "E",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ADEFGIJK": {
+      "option": 195,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ADEFGIJL": {
+      "option": 194,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ADEFGIKL": {
+      "option": 193,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "I",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ADEFGJKL": {
+      "option": 192,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ADEFHIJK": {
+      "option": 191,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "E",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ADEFHIJL": {
+      "option": 190,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "E",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ADEFHIKL": {
+      "option": 189,
+      "assignments": {
+        "A": "H",
+        "B": "E",
+        "D": "I",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ADEFHJKL": {
+      "option": 188,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "E",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ADEFIJKL": {
+      "option": 187,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "I",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ADEGHIJK": {
+      "option": 186,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "A",
+        "I": "H",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ADEGHIJL": {
+      "option": 185,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ADEGHIKL": {
+      "option": 184,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "I",
+        "E": "D",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ADEGHJKL": {
+      "option": 183,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ADEGIJKL": {
+      "option": 182,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "I",
+        "E": "D",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ADEHIJKL": {
+      "option": 181,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "I",
+        "E": "D",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ADFGHIJK": {
+      "option": 180,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "ADFGHIJL": {
+      "option": 179,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "ADFGHIKL": {
+      "option": 178,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "I",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ADFGHJKL": {
+      "option": 177,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ADFGIJKL": {
+      "option": 176,
+      "assignments": {
+        "A": "I",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ADFHIJKL": {
+      "option": 175,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "I",
+        "E": "D",
+        "G": "A",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "ADGHIJKL": {
+      "option": 174,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "I",
+        "E": "D",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "AEFGHIJK": {
+      "option": 173,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "F",
+        "G": "A",
+        "I": "H",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "AEFGHIJL": {
+      "option": 172,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "F",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "AEFGHIKL": {
+      "option": 171,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "I",
+        "E": "F",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "AEFGHJKL": {
+      "option": 170,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "F",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "AEFGIJKL": {
+      "option": 169,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "I",
+        "E": "F",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "AEFHIJKL": {
+      "option": 168,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "I",
+        "E": "F",
+        "G": "A",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "AEGHIJKL": {
+      "option": 167,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "I",
+        "E": "A",
+        "G": "H",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "AFGHIJKL": {
+      "option": 166,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "I",
+        "E": "F",
+        "G": "A",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCDEFGHI": {
+      "option": 165,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "E",
+        "L": "I"
+      }
+    },
+    "BCDEFGHJ": {
+      "option": 164,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "F",
+        "K": "D",
+        "L": "E"
+      }
+    },
+    "BCDEFGHK": {
+      "option": 163,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "E",
+        "L": "K"
+      }
+    },
+    "BCDEFGHL": {
+      "option": 162,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "BCDEFGIJ": {
+      "option": 161,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "J",
+        "I": "F",
+        "K": "E",
+        "L": "I"
+      }
+    },
+    "BCDEFGIK": {
+      "option": 160,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "E",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "BCDEFGIL": {
+      "option": 159,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "E",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "BCDEFGJK": {
+      "option": 158,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "J",
+        "I": "F",
+        "K": "E",
+        "L": "K"
+      }
+    },
+    "BCDEFGJL": {
+      "option": 157,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "J",
+        "I": "F",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "BCDEFGKL": {
+      "option": 156,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "E",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCDEFHIJ": {
+      "option": 155,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "E",
+        "L": "I"
+      }
+    },
+    "BCDEFHIK": {
+      "option": 154,
+      "assignments": {
+        "A": "C",
+        "B": "E",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "BCDEFHIL": {
+      "option": 153,
+      "assignments": {
+        "A": "C",
+        "B": "E",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "BCDEFHJK": {
+      "option": 152,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "E",
+        "L": "K"
+      }
+    },
+    "BCDEFHJL": {
+      "option": 151,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "BCDEFHKL": {
+      "option": 150,
+      "assignments": {
+        "A": "C",
+        "B": "E",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCDEFIJK": {
+      "option": 149,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "E",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "BCDEFIJL": {
+      "option": 148,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "E",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "BCDEFIKL": {
+      "option": 147,
+      "assignments": {
+        "A": "C",
+        "B": "E",
+        "D": "B",
+        "E": "D",
+        "G": "I",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCDEFJKL": {
+      "option": 146,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "E",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCDEGHIJ": {
+      "option": 145,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "D",
+        "K": "E",
+        "L": "I"
+      }
+    },
+    "BCDEGHIK": {
+      "option": 144,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "H",
+        "I": "D",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "BCDEGHIL": {
+      "option": 143,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "H",
+        "I": "D",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "BCDEGHJK": {
+      "option": 142,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "D",
+        "K": "E",
+        "L": "K"
+      }
+    },
+    "BCDEGHJL": {
+      "option": 141,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "D",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "BCDEGHKL": {
+      "option": 140,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "H",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCDEGIJK": {
+      "option": 139,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "D",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "BCDEGIJL": {
+      "option": 138,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "D",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "BCDEGIKL": {
+      "option": 137,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "I",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCDEGJKL": {
+      "option": 136,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCDEHIJK": {
+      "option": 135,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "H",
+        "I": "D",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "BCDEHIJL": {
+      "option": 134,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "H",
+        "I": "D",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "BCDEHIKL": {
+      "option": 133,
+      "assignments": {
+        "A": "E",
+        "B": "I",
+        "D": "B",
+        "E": "C",
+        "G": "H",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCDEHJKL": {
+      "option": 132,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "H",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCDEIJKL": {
+      "option": 131,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "I",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCDFGHIJ": {
+      "option": 130,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "F",
+        "K": "D",
+        "L": "I"
+      }
+    },
+    "BCDFGHIK": {
+      "option": 129,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "BCDFGHIL": {
+      "option": 128,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "BCDFGHJK": {
+      "option": 127,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "F",
+        "K": "D",
+        "L": "K"
+      }
+    },
+    "BCDFGHJL": {
+      "option": 126,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "J"
+      }
+    },
+    "BCDFGHKL": {
+      "option": 125,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCDFGIJK": {
+      "option": 124,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "J",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "BCDFGIJL": {
+      "option": 123,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "J",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "BCDFGIKL": {
+      "option": 122,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "I",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCDFGJKL": {
+      "option": 121,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "J",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCDFHIJK": {
+      "option": 120,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "BCDFHIJL": {
+      "option": 119,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "BCDFHIKL": {
+      "option": 118,
+      "assignments": {
+        "A": "C",
+        "B": "I",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCDFHJKL": {
+      "option": 117,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCDFIJKL": {
+      "option": 116,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "I",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCDGHIJK": {
+      "option": 115,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "D",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "BCDGHIJL": {
+      "option": 114,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "D",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "BCDGHIKL": {
+      "option": 113,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "I",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCDGHJKL": {
+      "option": 112,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCDGIJKL": {
+      "option": 111,
+      "assignments": {
+        "A": "I",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCDHIJKL": {
+      "option": 110,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "I",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCEFGHIJ": {
+      "option": 109,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "F",
+        "K": "E",
+        "L": "I"
+      }
+    },
+    "BCEFGHIK": {
+      "option": 108,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "H",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "BCEFGHIL": {
+      "option": 107,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "BCEFGHJK": {
+      "option": 106,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "F",
+        "K": "E",
+        "L": "K"
+      }
+    },
+    "BCEFGHJL": {
+      "option": 105,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "F",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "BCEFGHKL": {
+      "option": 104,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCEFGIJK": {
+      "option": 103,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "BCEFGIJL": {
+      "option": 102,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "BCEFGIKL": {
+      "option": 101,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "I",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCEFGJKL": {
+      "option": 100,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCEFHIJK": {
+      "option": 99,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "H",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "BCEFHIJL": {
+      "option": 98,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "BCEFHIKL": {
+      "option": 97,
+      "assignments": {
+        "A": "E",
+        "B": "I",
+        "D": "B",
+        "E": "C",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCEFHJKL": {
+      "option": 96,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCEFIJKL": {
+      "option": 95,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "I",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCEGHIJK": {
+      "option": 94,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "H",
+        "I": "G",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "BCEGHIJL": {
+      "option": 93,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "H",
+        "I": "G",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "BCEGHIKL": {
+      "option": 92,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "I",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCEGHJKL": {
+      "option": 91,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "H",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCEGIJKL": {
+      "option": 90,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "I",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCEHIJKL": {
+      "option": 89,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "I",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCFGHIJK": {
+      "option": 88,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "BCFGHIJL": {
+      "option": 87,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "BCFGHIKL": {
+      "option": 86,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "I",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCFGHJKL": {
+      "option": 85,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCFGIJKL": {
+      "option": 84,
+      "assignments": {
+        "A": "I",
+        "B": "G",
+        "D": "B",
+        "E": "C",
+        "G": "J",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCFHIJKL": {
+      "option": 83,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "I",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BCGHIJKL": {
+      "option": 82,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "C",
+        "G": "I",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BDEFGHIJ": {
+      "option": 81,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "J",
+        "I": "F",
+        "K": "E",
+        "L": "I"
+      }
+    },
+    "BDEFGHIK": {
+      "option": 80,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "BDEFGHIL": {
+      "option": 79,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "BDEFGHJK": {
+      "option": 78,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "J",
+        "I": "F",
+        "K": "E",
+        "L": "K"
+      }
+    },
+    "BDEFGHJL": {
+      "option": 77,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "J",
+        "I": "F",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "BDEFGHKL": {
+      "option": 76,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BDEFGIJK": {
+      "option": 75,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "J",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "BDEFGIJL": {
+      "option": 74,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "J",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "BDEFGIKL": {
+      "option": 73,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "I",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BDEFGJKL": {
+      "option": 72,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "J",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BDEFHIJK": {
+      "option": 71,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "BDEFHIJL": {
+      "option": 70,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "BDEFHIKL": {
+      "option": 69,
+      "assignments": {
+        "A": "E",
+        "B": "I",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BDEFHJKL": {
+      "option": 68,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BDEFIJKL": {
+      "option": 67,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "I",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BDEGHIJK": {
+      "option": 66,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "G",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "BDEGHIJL": {
+      "option": 65,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "G",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "BDEGHIKL": {
+      "option": 64,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "I",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BDEGHJKL": {
+      "option": 63,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "H",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BDEGIJKL": {
+      "option": 62,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "I",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BDEHIJKL": {
+      "option": 61,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "I",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BDFGHIJK": {
+      "option": 60,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "J",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "BDFGHIJL": {
+      "option": 59,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "J",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "BDFGHIKL": {
+      "option": 58,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "I",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BDFGHJKL": {
+      "option": 57,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "J",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BDFGIJKL": {
+      "option": 56,
+      "assignments": {
+        "A": "I",
+        "B": "G",
+        "D": "B",
+        "E": "D",
+        "G": "J",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BDFHIJKL": {
+      "option": 55,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "I",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BDGHIJKL": {
+      "option": 54,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "D",
+        "G": "I",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BEFGHIJK": {
+      "option": 53,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "F",
+        "G": "H",
+        "I": "G",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "BEFGHIJL": {
+      "option": 52,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "F",
+        "G": "H",
+        "I": "G",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "BEFGHIKL": {
+      "option": 51,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "B",
+        "E": "F",
+        "G": "I",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BEFGHJKL": {
+      "option": 50,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "F",
+        "G": "H",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BEFGIJKL": {
+      "option": 49,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "F",
+        "G": "I",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BEFHIJKL": {
+      "option": 48,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "B",
+        "E": "F",
+        "G": "I",
+        "I": "H",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BEGHIJKL": {
+      "option": 47,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "I",
+        "E": "B",
+        "G": "H",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "BFGHIJKL": {
+      "option": 46,
+      "assignments": {
+        "A": "H",
+        "B": "J",
+        "D": "B",
+        "E": "F",
+        "G": "I",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "CDEFGHIJ": {
+      "option": 45,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "E",
+        "L": "I"
+      }
+    },
+    "CDEFGHIK": {
+      "option": 44,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "E",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "CDEFGHIL": {
+      "option": 43,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "E",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "CDEFGHJK": {
+      "option": 42,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "E",
+        "L": "K"
+      }
+    },
+    "CDEFGHJL": {
+      "option": 41,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "E"
+      }
+    },
+    "CDEFGHKL": {
+      "option": 40,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "E",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "CDEFGIJK": {
+      "option": 39,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "E",
+        "E": "D",
+        "G": "J",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "CDEFGIJL": {
+      "option": 38,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "E",
+        "E": "D",
+        "G": "J",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "CDEFGIKL": {
+      "option": 37,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "E",
+        "E": "D",
+        "G": "I",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "CDEFGJKL": {
+      "option": 36,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "E",
+        "E": "D",
+        "G": "J",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "CDEFHIJK": {
+      "option": 35,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "E",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "CDEFHIJL": {
+      "option": 34,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "E",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "CDEFHIKL": {
+      "option": 33,
+      "assignments": {
+        "A": "C",
+        "B": "E",
+        "D": "I",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "CDEFHJKL": {
+      "option": 32,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "E",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "CDEFIJKL": {
+      "option": 31,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "E",
+        "E": "D",
+        "G": "I",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "CDEGHIJK": {
+      "option": 30,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "H",
+        "I": "D",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "CDEGHIJL": {
+      "option": 29,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "H",
+        "I": "D",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "CDEGHIKL": {
+      "option": 28,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "I",
+        "E": "C",
+        "G": "H",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "CDEGHJKL": {
+      "option": 27,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "H",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "CDEGIJKL": {
+      "option": 26,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "I",
+        "E": "C",
+        "G": "J",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "CDEHIJKL": {
+      "option": 25,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "I",
+        "E": "C",
+        "G": "H",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "CDFGHIJK": {
+      "option": 24,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "CDFGHIJL": {
+      "option": 23,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "CDFGHIKL": {
+      "option": 22,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "I",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "CDFGHJKL": {
+      "option": 21,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "CDFGIJKL": {
+      "option": 20,
+      "assignments": {
+        "A": "C",
+        "B": "G",
+        "D": "I",
+        "E": "D",
+        "G": "J",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "CDFHIJKL": {
+      "option": 19,
+      "assignments": {
+        "A": "C",
+        "B": "J",
+        "D": "I",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "CDGHIJKL": {
+      "option": 18,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "I",
+        "E": "C",
+        "G": "J",
+        "I": "D",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "CEFGHIJK": {
+      "option": 17,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "H",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "CEFGHIJL": {
+      "option": 16,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "CEFGHIKL": {
+      "option": 15,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "I",
+        "E": "C",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "CEFGHJKL": {
+      "option": 14,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "C",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "CEFGIJKL": {
+      "option": 13,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "I",
+        "E": "C",
+        "G": "J",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "CEFHIJKL": {
+      "option": 12,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "I",
+        "E": "C",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "CEGHIJKL": {
+      "option": 11,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "I",
+        "E": "C",
+        "G": "H",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "CFGHIJKL": {
+      "option": 10,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "I",
+        "E": "C",
+        "G": "J",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "DEFGHIJK": {
+      "option": 9,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "I",
+        "L": "K"
+      }
+    },
+    "DEFGHIJL": {
+      "option": 8,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "I"
+      }
+    },
+    "DEFGHIKL": {
+      "option": 7,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "I",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "DEFGHJKL": {
+      "option": 6,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "J",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "DEFGIJKL": {
+      "option": 5,
+      "assignments": {
+        "A": "E",
+        "B": "G",
+        "D": "I",
+        "E": "D",
+        "G": "J",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "DEFHIJKL": {
+      "option": 4,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "I",
+        "E": "D",
+        "G": "H",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "DEGHIJKL": {
+      "option": 3,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "I",
+        "E": "D",
+        "G": "H",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "DFGHIJKL": {
+      "option": 2,
+      "assignments": {
+        "A": "H",
+        "B": "G",
+        "D": "I",
+        "E": "D",
+        "G": "J",
+        "I": "F",
+        "K": "L",
+        "L": "K"
+      }
+    },
+    "EFGHIJKL": {
+      "option": 1,
+      "assignments": {
+        "A": "E",
+        "B": "J",
+        "D": "I",
+        "E": "F",
+        "G": "H",
+        "I": "G",
+        "K": "L",
+        "L": "K"
+      }
+    }
+  }
+}

@@ -2,27 +2,27 @@
 
 **Last updated:** 2026-06-24
 
-**Current phase:** Phase 1 complete
+**Current phase:** Phase 2 complete
 
-**Next eligible phase:** Phase 2 — Tournament data model
+**Next eligible phase:** Phase 3 — Data-ingestion pipeline
 
-**Overall product status:** Tested application foundation; tournament and simulation features are not yet implemented
+**Overall product status:** Tested application foundation and official tournament model; simulation features are not yet implemented
 
 ## Phase summary
 
-| Phase                          | Status      | Gate                                           |
-| ------------------------------ | ----------- | ---------------------------------------------- |
-| 0. Repository audit and plan   | Complete    | Documentation and baseline audit complete      |
-| 1. Project foundation          | Complete    | Full quality, build, browser, and visual gate  |
-| 2. Tournament data model       | Not started | Awaiting implementation                        |
-| 3. Data-ingestion pipeline     | Not started | Blocked by Phase 2 and source-license approval |
-| 4. Ratings engine              | Not started | Blocked by Phase 3                             |
-| 5. Headless match engine       | Not started | Blocked by Phase 4                             |
-| 6. Probability and calibration | Not started | Blocked by Phase 5                             |
-| 7. Core game flow              | Not started | Blocked by Phase 6                             |
-| 8. Match-center UI             | Not started | Blocked by Phase 7                             |
-| 9. Visual polish               | Not started | Blocked by Phase 8                             |
-| 10. Deployment and final QA    | Not started | Blocked by Phase 9                             |
+| Phase                          | Status      | Gate                                          |
+| ------------------------------ | ----------- | --------------------------------------------- |
+| 0. Repository audit and plan   | Complete    | Documentation and baseline audit complete     |
+| 1. Project foundation          | Complete    | Full quality, build, browser, and visual gate |
+| 2. Tournament data model       | Complete    | Data, rules, bracket, and qualification green |
+| 3. Data-ingestion pipeline     | Not started | Awaiting implementation and license approval  |
+| 4. Ratings engine              | Not started | Blocked by Phase 3                            |
+| 5. Headless match engine       | Not started | Blocked by Phase 4                            |
+| 6. Probability and calibration | Not started | Blocked by Phase 5                            |
+| 7. Core game flow              | Not started | Blocked by Phase 6                            |
+| 8. Match-center UI             | Not started | Blocked by Phase 7                            |
+| 9. Visual polish               | Not started | Blocked by Phase 8                            |
+| 10. Deployment and final QA    | Not started | Blocked by Phase 9                            |
 
 ## Phase 0 — Repository audit and plan
 
@@ -175,3 +175,76 @@ The final combined gate `npm run check && npm run test:e2e` passed. The UI was r
 ### Next phase
 
 Phase 2 will create the source-verified pre-opening tournament snapshot, all 48 teams and official fixtures, isolated standings and tie-break modules, exhaustive third-place allocation, and the corrected data-driven knockout bracket. It must prove exactly 32 unique Round-of-32 entrants before Phase 3 can begin.
+
+## Phase 2 — Tournament data model
+
+### What was implemented
+
+- Added a source-pinned, result-free `2026.06.11-pre-opening-v1` snapshot with
+  48 teams, 12 groups, 16 venues, and all 72 group fixtures.
+- Added the corrected official matches 73–104 as a data-driven knockout graph.
+- Extracted all 495 official Annex C third-place allocation options and added
+  structural checks for complete coverage, valid opponents, and one-to-one use.
+- Implemented framework-independent standings with recursive head-to-head
+  reapplication, overall criteria, conduct score, and FIFA ranking history.
+- Implemented best-third ranking, qualification, Round-of-32 construction, and
+  complete knockout progression with unique-participant invariants.
+- Added Prisma models for sources, tournaments, teams, memberships, stadiums,
+  and fixtures while retaining stable external keys and UUID internal IDs.
+- Added a responsive `/tournament-model` diagnostic route exposing all groups,
+  ranking context, official entry slots, snapshot version, and integrity state.
+- Added the tournament-rules guide, data dictionary, provenance metadata, and
+  updated architecture and limitations documentation.
+
+### Data and licensing controls
+
+- The snapshot contains no scores, winners, or real-world result fields.
+- FIFA's regulations PDF is not redistributed; only factual rule constants and
+  table mappings required to implement the competition are stored.
+- `data/tournament/sources.json` records official URLs, retrieval dates,
+  effective dates, integrity hashes where applicable, and license notes.
+- CSV files are transparent inspection exports; validated JSON remains the
+  runtime source of truth.
+
+### Failures found and fixed
+
+- Zod's enum-keyed record required every group letter in each Annex C mapping;
+  the parser now accepts the eight actual keys and domain validation enforces
+  their exact structure.
+- Initial test expectations assumed lexicographic Annex C numbering and missed
+  recursive mini-table reapplication. Both were corrected against the official
+  extracted matrix and rules behavior.
+
+### Tests performed and results
+
+| Check                          | Result                                                                                           |
+| ------------------------------ | ------------------------------------------------------------------------------------------------ |
+| TypeScript, ESLint, formatting | Passed in strict mode with zero lint warnings                                                    |
+| Unit tests                     | 3 files, 9 tests passed                                                                          |
+| Integration tests              | 3 files, 4 tests passed; all 495 Annex C options exercised                                       |
+| Property tests                 | 2 files, 2 properties passed; complete knockout progression covered                              |
+| Tournament data validation     | Passed: 48 teams, 12 groups, 72 group fixtures, 16 venues, 32 knockout matches, 495 combinations |
+| Prisma validation              | Passed with the PostgreSQL tournament schema                                                     |
+| Production build               | Passed; six application routes statically generated plus not-found                               |
+| End-to-end                     | 3 Chromium tests passed, including desktop/mobile tournament-model coverage                      |
+| Dependency audit               | 0 known vulnerabilities                                                                          |
+| Visual inspection              | Passed at desktop and 390×844 mobile widths; subdivision-flag rendering issue found and fixed    |
+
+The sandboxed build initially failed because Turbopack's CSS worker could not
+bind its local IPC port. The unchanged build passed outside that restriction,
+matching the known Phase 1 environment behavior.
+
+### Remaining limitations
+
+- This is still not a playable simulation; tournament creation remains disabled.
+- Kickoff times, squads, players, ratings, ingestion jobs, and match results are absent.
+- Only the current FIFA ranking edition is populated; a tie unresolved by that
+  edition fails explicitly until Phase 3 supplies historical ranking editions.
+- Prisma models are validated but no migration, seed, or live database operation exists.
+- No deployment or hosted CI run has occurred.
+
+### Next phase
+
+Phase 3 may build licensed, reproducible player and squad ingestion behind the
+validated tournament identities. It must not bypass source provenance or import
+live 2026 tournament results into a new-game snapshot.

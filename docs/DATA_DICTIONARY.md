@@ -1,0 +1,43 @@
+# Data Dictionary
+
+## Versioning contract
+
+Tournament data is an immutable, source-pinned pre-opening snapshot. Every
+consumer must retain `schemaVersion` and `dataVersion`; later corrections create
+a new version rather than silently rewriting a saved tournament.
+
+## Snapshot files
+
+| File                                          | Purpose                                             | Primary keys                                     |
+| --------------------------------------------- | --------------------------------------------------- | ------------------------------------------------ |
+| `data/tournament/snapshot.json`               | Teams, groups, venues, and 72 group fixtures        | team `id`, group `id`, venue `id`, `matchNumber` |
+| `data/tournament/knockout-bracket.json`       | Matches 73–104 and progression slots                | `matchNumber`                                    |
+| `data/tournament/third-place-allocation.json` | All Annex C allocations                             | sorted eight-group key                           |
+| `data/tournament/rules.json`                  | Ordered rule identifiers and discipline constants   | `schemaVersion`                                  |
+| `data/tournament/sources.json`                | Provenance, retrieval, integrity, and license notes | source `id`                                      |
+
+CSV exports mirror the snapshot's team, group-membership, and group-fixture
+facts for inspection. JSON is the runtime source of truth.
+
+## Core fields
+
+| Entity         | Field                  | Meaning                                                     |
+| -------------- | ---------------------- | ----------------------------------------------------------- |
+| Snapshot       | `stateAt`              | Instant represented by the frozen data                      |
+| Snapshot       | `resultsIncluded`      | Must be `false` for a new-game dataset                      |
+| Team           | `id`                   | Stable lowercase slug, independent of display name          |
+| Team           | `fifaCode`             | Three-character FIFA association code                       |
+| Team           | `groupPosition`        | Official draw position from 1–4                             |
+| Team           | `fifaRanking`          | Rank, prior rank, points, prior points, and effective date  |
+| Fixture        | `matchNumber`          | Official number from 1–104                                  |
+| Fixture        | `simultaneousKey`      | Shared key for a group's two final fixtures; otherwise null |
+| Knockout match | `homeSlot`, `awaySlot` | Group finish or preceding-match progression reference       |
+| Allocation     | `option`               | Annex C row number from the regulations                     |
+| Allocation     | `assignments`          | Group winner to qualifying third-place group map            |
+
+## Database identities
+
+Prisma uses UUID primary keys for internal records and stable unique external
+keys (`slug`, `code`, `matchNumber`, and source external IDs) for import and
+save compatibility. Tournament membership and group membership are explicit
+join models so a future edition can reuse a team without rewriting identity.

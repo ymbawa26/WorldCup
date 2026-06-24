@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "sourceId": "fifa-regulations-2026-05",
+  "points": {
+    "win": 3,
+    "draw": 1,
+    "loss": 0
+  },
+  "groupTieBreak": [
+    "HEAD_TO_HEAD_POINTS",
+    "HEAD_TO_HEAD_GOAL_DIFFERENCE",
+    "HEAD_TO_HEAD_GOALS_FOR",
+    "REAPPLY_HEAD_TO_HEAD_TO_REMAINING_TEAMS",
+    "OVERALL_GOAL_DIFFERENCE",
+    "OVERALL_GOALS_FOR",
+    "TEAM_CONDUCT_SCORE",
+    "MOST_RECENT_FIFA_RANKING",
+    "PRECEDING_FIFA_RANKINGS_UNTIL_DECIDED"
+  ],
+  "thirdPlaceTieBreak": [
+    "POINTS",
+    "GOAL_DIFFERENCE",
+    "GOALS_FOR",
+    "TEAM_CONDUCT_SCORE",
+    "MOST_RECENT_FIFA_RANKING",
+    "PRECEDING_FIFA_RANKINGS_UNTIL_DECIDED"
+  ],
+  "teamConductDeductions": {
+    "yellowCard": -1,
+    "indirectRedCard": -3,
+    "directRedCard": -4,
+    "yellowAndDirectRedCard": -5
+  },
+  "qualification": {
+    "groupWinners": 12,
+    "groupRunnersUp": 12,
+    "thirdPlacedTeams": 8,
+    "roundOf32Teams": 32
+  },
+  "discipline": {
+    "yellowCardSuspensionThreshold": 2,
+    "singleYellowCardsResetAfter": ["GROUP_STAGE", "QUARTER_FINALS"],
+    "redCardAutomaticSuspensionMatches": 1
+  },
+  "knockout": {
+    "extraTimePeriods": 2,
+    "extraTimePeriodMinutes": 15,
+    "penaltyShootoutIfStillLevel": true
+  }
+}

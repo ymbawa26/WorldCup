@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
 const navigation = [
+  { href: "/tournament-model", label: "Tournament model" },
   { href: "/how-it-works", label: "How it works" },
   { href: "/methodology", label: "Methodology" },
   { href: "/settings", label: "Settings" },
@@ -50,7 +51,7 @@ export function SiteHeader() {
         <div className="hidden items-center gap-3 sm:flex">
           <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.14em] text-emerald-300 uppercase">
             <span className="size-2 rounded-full bg-emerald-300 shadow-[0_0_10px_rgba(110,231,183,0.7)]" />
-            Foundation online
+            Model verified
           </span>
           <Button
             aria-label="Tournament data status"

@@ -1,6 +1,6 @@
 # Architecture
 
-**Current scope:** Phase 1 foundation
+**Current scope:** Phase 2 tournament model
 
 **Last updated:** 2026-06-24
 
@@ -19,7 +19,32 @@ flowchart LR
     SAVE --> IDB["IndexedDB guest saves"]
 ```
 
-Only the UI shell and infrastructure seams exist in Phase 1. Tournament, rating, match, probability, and save domains are reserved for their owning phases.
+The UI shell and tournament domain now exist. Rating, match, probability, and save domains remain reserved for their owning phases.
+
+## Tournament domain
+
+`src/domain/tournament` is framework-independent. Zod parses the immutable JSON
+snapshot at the boundary; standings, qualification, allocation, and bracket
+modules consume typed values and make no React, network, or database calls.
+
+```mermaid
+erDiagram
+    DATA_SOURCE ||--o{ TOURNAMENT_SOURCE : referenced_by
+    TOURNAMENT ||--o{ TOURNAMENT_SOURCE : supported_by
+    TOURNAMENT ||--o{ TOURNAMENT_TEAM : contains
+    TEAM ||--o{ TOURNAMENT_TEAM : enters
+    TOURNAMENT ||--o{ TOURNAMENT_GROUP : defines
+    TOURNAMENT_GROUP ||--o{ GROUP_MEMBERSHIP : contains
+    TOURNAMENT_TEAM ||--|| GROUP_MEMBERSHIP : assigned
+    TOURNAMENT ||--o{ FIXTURE : schedules
+    STADIUM ||--o{ FIXTURE : hosts
+    TEAM ||--o{ FIXTURE : home_team
+    TEAM ||--o{ FIXTURE : away_team
+```
+
+The JSON snapshot is currently the executable repository. Prisma models the
+same durable identities for the ingestion work in Phase 3; no database seed or
+runtime connection is introduced prematurely.
 
 ## Foundation boundaries
 
@@ -29,6 +54,8 @@ Only the UI shell and infrastructure seams exist in Phase 1. Tournament, rating,
 - `src/lib`: narrow cross-cutting utilities and environment parsing
 - `src/stores`: ephemeral client interface state only
 - `prisma`: PostgreSQL provider and future migrations
+- `data/tournament`: source-pinned normalized tournament facts
+- `src/domain/tournament`: parsing, validation, standings, qualification, and bracket logic
 - `tests`: unit, integration, and property tests
 - `e2e`: browser journeys
 

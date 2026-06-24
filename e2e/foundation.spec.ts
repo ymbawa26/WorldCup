@@ -39,3 +39,23 @@ test("skip link reaches the main content", async ({ page }) => {
   await skipLink.press("Enter");
   await expect(page.locator("#main-content")).toBeInViewport();
 });
+
+test("tournament model exposes the verified groups and bracket", async ({
+  page,
+}) => {
+  await page.goto("/tournament-model");
+
+  await expect(
+    page.getByRole("heading", { name: /tournament, wired correctly/i }),
+  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Group A" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Group L" })).toBeVisible();
+  await expect(page.getByText("Match 73", { exact: true })).toBeVisible();
+  await expect(page.getByText("Match 88", { exact: true })).toBeVisible();
+  await expect(page.getByText("2A", { exact: true })).toBeVisible();
+  await expect(page.getByText("2B", { exact: true })).toBeVisible();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.getByRole("heading", { name: "Group A" })).toBeVisible();
+  await expect(page.locator("body")).not.toHaveCSS("overflow-x", "scroll");
+});
