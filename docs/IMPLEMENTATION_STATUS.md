@@ -2,27 +2,27 @@
 
 **Last updated:** 2026-06-24
 
-**Current phase:** Phase 2 complete
+**Current phase:** Phase 3 complete
 
-**Next eligible phase:** Phase 3 — Data-ingestion pipeline
+**Next eligible phase:** Phase 4 — Ratings engine
 
-**Overall product status:** Tested application foundation and official tournament model; simulation features are not yet implemented
+**Overall product status:** Tested tournament model and official 1,248-player squad dataset; ratings and simulation are not yet implemented
 
 ## Phase summary
 
-| Phase                          | Status      | Gate                                          |
-| ------------------------------ | ----------- | --------------------------------------------- |
-| 0. Repository audit and plan   | Complete    | Documentation and baseline audit complete     |
-| 1. Project foundation          | Complete    | Full quality, build, browser, and visual gate |
-| 2. Tournament data model       | Complete    | Data, rules, bracket, and qualification green |
-| 3. Data-ingestion pipeline     | Not started | Awaiting implementation and license approval  |
-| 4. Ratings engine              | Not started | Blocked by Phase 3                            |
-| 5. Headless match engine       | Not started | Blocked by Phase 4                            |
-| 6. Probability and calibration | Not started | Blocked by Phase 5                            |
-| 7. Core game flow              | Not started | Blocked by Phase 6                            |
-| 8. Match-center UI             | Not started | Blocked by Phase 7                            |
-| 9. Visual polish               | Not started | Blocked by Phase 8                            |
-| 10. Deployment and final QA    | Not started | Blocked by Phase 9                            |
+| Phase                          | Status      | Gate                                           |
+| ------------------------------ | ----------- | ---------------------------------------------- |
+| 0. Repository audit and plan   | Complete    | Documentation and baseline audit complete      |
+| 1. Project foundation          | Complete    | Full quality, build, browser, and visual gate  |
+| 2. Tournament data model       | Complete    | Data, rules, bracket, and qualification green  |
+| 3. Data-ingestion pipeline     | Complete    | 48 official squads and data products validated |
+| 4. Ratings engine              | Not started | Awaiting implementation                        |
+| 5. Headless match engine       | Not started | Blocked by Phase 4                             |
+| 6. Probability and calibration | Not started | Blocked by Phase 5                             |
+| 7. Core game flow              | Not started | Blocked by Phase 6                             |
+| 8. Match-center UI             | Not started | Blocked by Phase 7                             |
+| 9. Visual polish               | Not started | Blocked by Phase 8                             |
+| 10. Deployment and final QA    | Not started | Blocked by Phase 9                             |
 
 ## Phase 0 — Repository audit and plan
 
@@ -248,3 +248,84 @@ matching the known Phase 1 environment behavior.
 Phase 3 may build licensed, reproducible player and squad ingestion behind the
 validated tournament identities. It must not bypass source provenance or import
 live 2026 tournament results into a new-game snapshot.
+
+## Phase 3 — Data-ingestion pipeline
+
+### What was implemented
+
+- Pinned FIFA's official 2 June final-squad publication and 48-page Version 1
+  squad document with a reviewed source manifest and SHA-256 checksum.
+- Added a cached single-artifact fetch that refuses changed source bytes, an
+  embedded-layout PDF extractor, normalized identities, and Zod schemas.
+- Imported exactly 1,248 official squad players across 48 teams, including FIFA
+  position, shirt number, full name, date of birth, club, height, caps, and goals.
+- Added deterministic UUIDs, Unicode/whitespace normalization, club association
+  separation, age-at-start derivation, and normalized field-level provenance.
+- Added fail-closed validation for squad sizes, goalkeeper minimums, unique shirt
+  numbers, duplicate players, team identity, source resolution, and estimates.
+- Generated `players.csv`, source data, schema-only later-phase profile CSVs, a
+  12-sheet formatted Excel workbook, and JSON/Markdown quality reports.
+- Added Player, Club, PlayerClub, TournamentSquadPlayer, and PlayerDataSource
+  Prisma models, a PostgreSQL migration, and an idempotent complete-data seed.
+- Added the `/data-quality` diagnostic screen with all 48 validation results and
+  a source-linked normalized roster sample.
+- Added pipeline, identity, dataset, workbook, and browser regression tests.
+
+### Source and licensing controls
+
+- The official PDF remains in ignored `data/raw/`; no FIFA layout, prose,
+  photographs, or branding are redistributed.
+- The committed products contain factual squad records and provenance only.
+- A checksum change fails ingestion and requires explicit source review and a
+  new data version instead of silently changing saved-tournament inputs.
+- Preferred foot, league, and secondary positions are absent from the official
+  source and remain null/empty rather than being fabricated.
+- Player/team ratings and tactical, discipline, and injury values remain
+  schema-only until their owning phases implement documented models.
+
+### Validation results
+
+| Check                      | Result                                                                                          |
+| -------------------------- | ----------------------------------------------------------------------------------------------- |
+| Official source extraction | 48 pages, 48 squads, 1,248 players                                                              |
+| Data-quality gate          | 48/48 squads passed; 0 duplicate identities; 0 estimated official fields                        |
+| Squad rules                | Every team has 26 players, at least 3 goalkeepers, and 26 unique shirt numbers                  |
+| Cached rerun               | Normalized JSON, CSV, and quality report remained byte-identical                                |
+| Excel product              | 12 required sheets, 1,248 player rows, frozen headers, filters, widths, and position validation |
+| Migration                  | Applied successfully to a disposable PostgreSQL-compatible instance                             |
+| Seed idempotency           | Two runs retained 48 teams, 1,248 players, 1,248 squad entries, and 450 clubs                   |
+| TypeScript and ESLint      | Passed with strict TypeScript and zero lint warnings                                            |
+| Unit tests                 | 4 files, 11 tests passed                                                                        |
+| Integration tests          | 5 files, 9 tests passed                                                                         |
+| Property tests             | 2 files, 2 properties passed                                                                    |
+| End-to-end                 | 4 Chromium tests passed, including desktop/mobile data-quality coverage                         |
+| Production build           | Passed; six application routes statically generated plus not-found                              |
+| Dependency audit           | 0 known vulnerabilities                                                                         |
+
+### Failures found and fixed
+
+- The first extractor attempt used system-font geometry and failed schema
+  validation before writing data. The final extractor uses the PDF's embedded
+  layout and validates exactly ten ordered cells for every player row.
+- ExcelJS introduced an advisory through its old UUID dependency; a tested
+  transitive override pins the patched UUID release and restores a clean audit.
+- Docker was not running, and Prisma's optional local server requires Node 22's
+  `node:sqlite`. Migration/seed verification used a disposable PGlite PostgreSQL
+  wire server while the production seed retained Prisma's PostgreSQL adapter.
+- Re-exported XLSX files have different ZIP entry timestamps. Workbook content
+  and formatting are validated structurally; normalized records remain byte-stable.
+
+### Remaining limitations
+
+- Ratings, fine-grained positions, preferred foot, league metadata, tactical
+  profiles, discipline models, and injury models are not implemented.
+- The app reads validated static data; a hosted PostgreSQL database is not provisioned.
+- FIFA's linked PDF is dynamically served despite its Version 1 label; any
+  future byte change requires manual review and a new source version.
+- No deployment or hosted CI run has occurred.
+
+### Next phase
+
+Phase 4 may implement the independent position-aware player rating system and
+dynamic lineup/team strengths from licensed inputs. It must preserve uncertainty
+and estimation flags and cannot copy proprietary commercial-game ratings.

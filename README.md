@@ -4,7 +4,7 @@ World Stage is a browser-based management simulation for the 48-team 2026 men's 
 
 ## Current status
 
-Phase 2 establishes the verified tournament model:
+Phase 3 establishes the verified tournament and official-squad data layer:
 
 - Next.js 16 App Router, React 19, strict TypeScript, and Tailwind CSS 4
 - Original responsive application shell with keyboard and reduced-motion support
@@ -15,6 +15,10 @@ Phase 2 establishes the verified tournament model:
 - Official head-to-head-first standings rules and complete 495-option Annex C allocation
 - Data-driven knockout progression with a 32-unique-entrant invariant
 - A responsive `/tournament-model` diagnostic screen
+- All 48 official 26-player squads with provenance and deterministic identities
+- Cached, checksum-pinned ingestion with CSV, Excel, and quality-report products
+- Prisma migration and idempotent PostgreSQL seed for 1,248 players
+- A responsive `/data-quality` inspection screen
 
 Tournament creation remains intentionally disabled until ratings and simulation systems are implemented in later phases.
 
@@ -46,6 +50,7 @@ npm run test:integration
 npm run test:property
 npm run validate:data
 npm run db:validate
+npm run db:smoke
 npm run build
 npm run test:e2e
 ```
@@ -62,6 +67,7 @@ npm run test:e2e
 - [Known limitations](docs/KNOWN_LIMITATIONS.md)
 - [Tournament rules](docs/TOURNAMENT_RULES.md)
 - [Data dictionary](docs/DATA_DICTIONARY.md)
+- [Data pipeline](docs/DATA_PIPELINE.md)
 
 ## Product identity
 

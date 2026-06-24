@@ -15,6 +15,10 @@ a new version rather than silently rewriting a saved tournament.
 | `data/tournament/third-place-allocation.json` | All Annex C allocations                             | sorted eight-group key                           |
 | `data/tournament/rules.json`                  | Ordered rule identifiers and discipline constants   | `schemaVersion`                                  |
 | `data/tournament/sources.json`                | Provenance, retrieval, integrity, and license notes | source `id`                                      |
+| `data/normalized/official-squads.json`        | Canonical official players and field provenance     | player `id`, `externalIdentity`                  |
+| `data/players.csv`                            | Portable denormalized player seed product           | `id`, `external_identity`                        |
+| `data/reports/squad-data-quality.json`        | Per-team Phase 3 validation evidence                | `dataVersion`, team `fifaCode`                   |
+| `exports/world-cup-simulation-data.xlsx`      | Human-readable validated data workbook              | sheet-specific keys                              |
 
 CSV exports mirror the snapshot's team, group-membership, and group-fixture
 facts for inspection. JSON is the runtime source of truth.
@@ -34,6 +38,19 @@ facts for inspection. JSON is the runtime source of truth.
 | Knockout match | `homeSlot`, `awaySlot` | Group finish or preceding-match progression reference       |
 | Allocation     | `option`               | Annex C row number from the regulations                     |
 | Allocation     | `assignments`          | Group winner to qualifying third-place group map            |
+| Player         | `externalIdentity`     | Stable source/team/birth-date/name identity                 |
+| Player         | `primaryPosition`      | Official coarse position: GK, DF, MF, or FW                 |
+| Player         | `dateOfBirth`          | ISO date normalized from the official list                  |
+| Player         | `ageAtTournamentStart` | Complete years on 11 June 2026                              |
+| Player         | `clubCountryCode`      | Association code published beside the club                  |
+| Player         | `fieldProvenance`      | Imported-field to source-record reference map               |
+| Source         | `confidenceScore`      | 0–1 confidence in the imported factual record               |
+| Source         | `isEstimated`          | Whether a value was modeled rather than observed            |
+
+Preferred foot and secondary positions are deliberately blank because the
+official squad source does not publish them. Player and team rating products,
+tactical profiles, discipline profiles, and injury profiles contain schemas
+only until their owning later phases create documented values.
 
 ## Database identities
 

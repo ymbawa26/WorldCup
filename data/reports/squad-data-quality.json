@@ -1,0 +1,448 @@
+{
+  "schemaVersion": 1,
+  "dataVersion": "2026.06.02-official-squads-v1",
+  "generatedAt": "2026-06-24T19:02:01-04:00",
+  "passed": true,
+  "totals": {
+    "teams": 48,
+    "players": 1248,
+    "duplicatePlayers": 0,
+    "estimatedFields": 0,
+    "missingOptionalFields": 2496
+  },
+  "squads": [
+    {
+      "teamId": "mexico",
+      "fifaCode": "MEX",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "south-africa",
+      "fifaCode": "RSA",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "korea-republic",
+      "fifaCode": "KOR",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "czechia",
+      "fifaCode": "CZE",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "canada",
+      "fifaCode": "CAN",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "bosnia-and-herzegovina",
+      "fifaCode": "BIH",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "qatar",
+      "fifaCode": "QAT",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "switzerland",
+      "fifaCode": "SUI",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "brazil",
+      "fifaCode": "BRA",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "morocco",
+      "fifaCode": "MAR",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "haiti",
+      "fifaCode": "HAI",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "scotland",
+      "fifaCode": "SCO",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "united-states",
+      "fifaCode": "USA",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "paraguay",
+      "fifaCode": "PAR",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "australia",
+      "fifaCode": "AUS",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "turkiye",
+      "fifaCode": "TUR",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "germany",
+      "fifaCode": "GER",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "curacao",
+      "fifaCode": "CUW",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "cote-divoire",
+      "fifaCode": "CIV",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "ecuador",
+      "fifaCode": "ECU",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "netherlands",
+      "fifaCode": "NED",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "japan",
+      "fifaCode": "JPN",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "sweden",
+      "fifaCode": "SWE",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "tunisia",
+      "fifaCode": "TUN",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "belgium",
+      "fifaCode": "BEL",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "egypt",
+      "fifaCode": "EGY",
+      "playerCount": 26,
+      "goalkeeperCount": 4,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "iran",
+      "fifaCode": "IRN",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "new-zealand",
+      "fifaCode": "NZL",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "spain",
+      "fifaCode": "ESP",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "cabo-verde",
+      "fifaCode": "CPV",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "saudi-arabia",
+      "fifaCode": "KSA",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "uruguay",
+      "fifaCode": "URU",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "france",
+      "fifaCode": "FRA",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "senegal",
+      "fifaCode": "SEN",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "iraq",
+      "fifaCode": "IRQ",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "norway",
+      "fifaCode": "NOR",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "argentina",
+      "fifaCode": "ARG",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "algeria",
+      "fifaCode": "ALG",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "austria",
+      "fifaCode": "AUT",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "jordan",
+      "fifaCode": "JOR",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "portugal",
+      "fifaCode": "POR",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "congo-dr",
+      "fifaCode": "COD",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "uzbekistan",
+      "fifaCode": "UZB",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "colombia",
+      "fifaCode": "COL",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "england",
+      "fifaCode": "ENG",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "croatia",
+      "fifaCode": "CRO",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "ghana",
+      "fifaCode": "GHA",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    },
+    {
+      "teamId": "panama",
+      "fifaCode": "PAN",
+      "playerCount": 26,
+      "goalkeeperCount": 3,
+      "uniqueSquadNumbers": 26,
+      "passed": true,
+      "issues": []
+    }
+  ],
+  "failures": []
+}

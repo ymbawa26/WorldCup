@@ -1,6 +1,6 @@
 # Architecture
 
-**Current scope:** Phase 2 tournament model
+**Current scope:** Phase 3 tournament and squad data
 
 **Last updated:** 2026-06-24
 
@@ -40,11 +40,18 @@ erDiagram
     STADIUM ||--o{ FIXTURE : hosts
     TEAM ||--o{ FIXTURE : home_team
     TEAM ||--o{ FIXTURE : away_team
+    TEAM ||--o{ PLAYER : represents
+    PLAYER ||--o{ PLAYER_CLUB : registered_with
+    CLUB ||--o{ PLAYER_CLUB : contains
+    TOURNAMENT_TEAM ||--o{ TOURNAMENT_SQUAD_PLAYER : selects
+    PLAYER ||--o{ TOURNAMENT_SQUAD_PLAYER : enters
+    DATA_SOURCE ||--o{ PLAYER_DATA_SOURCE : supports
+    PLAYER ||--o{ PLAYER_DATA_SOURCE : documented_by
 ```
 
 The JSON snapshot is currently the executable repository. Prisma models the
-same durable identities for the ingestion work in Phase 3; no database seed or
-runtime connection is introduced prematurely.
+same durable identities. Phase 3 adds a migration and idempotent PostgreSQL seed;
+the application still reads immutable validated files during static builds.
 
 ## Foundation boundaries
 
@@ -56,6 +63,8 @@ runtime connection is introduced prematurely.
 - `prisma`: PostgreSQL provider and future migrations
 - `data/tournament`: source-pinned normalized tournament facts
 - `src/domain/tournament`: parsing, validation, standings, qualification, and bracket logic
+- `src/domain/data-ingestion`: source schemas, deterministic identities, quality gates, and seed plans
+- `scripts/data`: cached fetch, extraction, normalization, validation, and export tooling
 - `tests`: unit, integration, and property tests
 - `e2e`: browser journeys
 

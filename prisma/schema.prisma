@@ -17,8 +17,21 @@ enum TournamentStage {
   FINAL
 }
 
+enum PlayerPosition {
+  GK
+  DF
+  MF
+  FW
+}
+
+enum PreferredFoot {
+  LEFT
+  RIGHT
+  BOTH
+}
+
 model DataSource {
-  id                String             @id
+  id                String                  @id
   name              String
   url               String
   retrievedAt       DateTime
@@ -26,8 +39,10 @@ model DataSource {
   sha256            String?
   licenseNote       String
   tournamentSources TournamentSource[]
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
+  playerSources     PlayerDataSource[]
+  squadPlayers      TournamentSquadPlayer[]
+  createdAt         DateTime                @default(now())
+  updatedAt         DateTime                @updatedAt
 }
 
 model Tournament {
@@ -64,22 +79,24 @@ model Team {
   confederation    String
   sourceExternalId String?          @unique
   tournamentTeams  TournamentTeam[]
+  players          Player[]
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
 }
 
 model TournamentTeam {
-  id               String            @id @default(uuid()) @db.Uuid
-  tournamentId     String            @db.Uuid
-  teamId           String            @db.Uuid
+  id               String                  @id @default(uuid()) @db.Uuid
+  tournamentId     String                  @db.Uuid
+  teamId           String                  @db.Uuid
   fifaRank         Int
   previousFifaRank Int
-  fifaPoints       Decimal           @db.Decimal(10, 6)
-  tournament       Tournament        @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
-  team             Team              @relation(fields: [teamId], references: [id], onDelete: Restrict)
+  fifaPoints       Decimal                 @db.Decimal(10, 6)
+  tournament       Tournament              @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  team             Team                    @relation(fields: [teamId], references: [id], onDelete: Restrict)
   memberships      GroupMembership[]
-  homeFixtures     Fixture[]         @relation("HomeTournamentTeam")
-  awayFixtures     Fixture[]         @relation("AwayTournamentTeam")
+  homeFixtures     Fixture[]               @relation("HomeTournamentTeam")
+  awayFixtures     Fixture[]               @relation("AwayTournamentTeam")
+  squadPlayers     TournamentSquadPlayer[]
 
   @@unique([tournamentId, teamId])
 }
@@ -116,6 +133,86 @@ model Stadium {
   fixtures  Fixture[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+}
+
+model Player {
+  id               String                  @id @db.Uuid
+  externalIdentity String                  @unique
+  nationalTeamId   String                  @db.Uuid
+  fullName         String
+  displayName      String
+  firstNames       String
+  lastNames        String
+  shirtName        String
+  dateOfBirth      DateTime                @db.Date
+  heightCm         Int
+  primaryPosition  PlayerPosition
+  preferredFoot    PreferredFoot?
+  nationalTeam     Team                    @relation(fields: [nationalTeamId], references: [id], onDelete: Restrict)
+  clubs            PlayerClub[]
+  tournamentSquads TournamentSquadPlayer[]
+  sources          PlayerDataSource[]
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @updatedAt
+
+  @@index([nationalTeamId])
+  @@index([fullName])
+}
+
+model Club {
+  id          String       @id @db.Uuid
+  name        String
+  countryCode String       @db.Char(3)
+  players     PlayerClub[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@unique([name, countryCode])
+}
+
+model PlayerClub {
+  id          String  @id @db.Uuid
+  playerId    String  @db.Uuid
+  clubId      String  @db.Uuid
+  dataVersion String
+  isCurrent   Boolean @default(true)
+  player      Player  @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  club        Club    @relation(fields: [clubId], references: [id], onDelete: Restrict)
+
+  @@unique([playerId, dataVersion])
+  @@index([clubId])
+}
+
+model TournamentSquadPlayer {
+  id                 String         @id @db.Uuid
+  tournamentTeamId   String         @db.Uuid
+  playerId           String         @db.Uuid
+  sourceId           String
+  squadNumber        Int
+  registeredPosition PlayerPosition
+  internationalCaps  Int
+  internationalGoals Int
+  tournamentTeam     TournamentTeam @relation(fields: [tournamentTeamId], references: [id], onDelete: Cascade)
+  player             Player         @relation(fields: [playerId], references: [id], onDelete: Restrict)
+  source             DataSource     @relation(fields: [sourceId], references: [id], onDelete: Restrict)
+
+  @@unique([tournamentTeamId, playerId])
+  @@unique([tournamentTeamId, squadNumber])
+  @@index([playerId])
+  @@index([sourceId])
+}
+
+model PlayerDataSource {
+  playerId        String     @db.Uuid
+  sourceId        String
+  fields          Json
+  confidenceScore Decimal    @db.Decimal(4, 3)
+  isEstimated     Boolean    @default(false)
+  player          Player     @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  source          DataSource @relation(fields: [sourceId], references: [id], onDelete: Restrict)
+
+  @@id([playerId, sourceId])
+  @@index([sourceId])
 }
 
 model Fixture {

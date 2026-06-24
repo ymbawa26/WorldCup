@@ -59,3 +59,24 @@ test("tournament model exposes the verified groups and bracket", async ({
   await expect(page.getByRole("heading", { name: "Group A" })).toBeVisible();
   await expect(page.locator("body")).not.toHaveCSS("overflow-x", "scroll");
 });
+
+test("data quality exposes all validated official squads", async ({ page }) => {
+  await page.goto("/data-quality");
+
+  await expect(
+    page.getByRole("heading", { name: /every squad.*accounted for/i }),
+  ).toBeVisible();
+  await expect(page.getByText("1,248", { exact: true })).toBeVisible();
+  await expect(page.getByText("48/48", { exact: true })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Mexico · official 26" }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Quality gate passed", { exact: true }),
+  ).toBeVisible();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(
+    page.getByRole("heading", { name: /48 complete official squads/i }),
+  ).toBeVisible();
+});

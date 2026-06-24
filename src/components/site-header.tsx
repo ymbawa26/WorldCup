@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 
 const navigation = [
   { href: "/tournament-model", label: "Tournament model" },
+  { href: "/data-quality", label: "Data quality" },
   { href: "/how-it-works", label: "How it works" },
   { href: "/methodology", label: "Methodology" },
   { href: "/settings", label: "Settings" },

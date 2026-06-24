@@ -8,7 +8,8 @@
   },
   "overrides": {
     "@hono/node-server": "1.19.13",
-    "postcss": "8.5.10"
+    "postcss": "8.5.10",
+    "uuid": "11.1.1"
   },
   "scripts": {
     "dev": "next dev",
@@ -27,6 +28,15 @@
     "validate:data": "node --import tsx scripts/validate-data.ts",
     "db:generate": "prisma generate",
     "db:validate": "prisma validate",
+    "db:seed": "node --import tsx prisma/seed.ts",
+    "db:smoke": "node --import tsx scripts/data/verify-postgres-seed.ts",
+    "data:fetch:squads": "node --import tsx scripts/data/fetch-official-squads.ts",
+    "data:extract:squads": "node --import tsx scripts/data/extract-official-squads.ts",
+    "data:normalize": "node --import tsx scripts/data/normalize-player-data.ts",
+    "data:validate": "node --import tsx scripts/data/validate-dataset.ts",
+    "data:export": "node --import tsx scripts/data/export-dataset.ts",
+    "data:pipeline:cached": "npm run data:extract:squads && npm run data:normalize && npm run data:validate && npm run data:export",
+    "data:pipeline": "npm run data:fetch:squads && npm run data:pipeline:cached",
     "check": "npm run typecheck && npm run lint && npm run format:check && npm run test:unit && npm run test:integration && npm run test:property && npm run validate:data && npm run db:validate && npm run build"
   },
   "dependencies": {
@@ -37,10 +47,12 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^17.4.2",
+    "exceljs": "^4.4.0",
     "framer-motion": "^12.41.0",
     "lucide-react": "^1.21.0",
     "next": "16.2.9",
     "next-intl": "^4.13.0",
+    "pdfjs-dist": "^5.6.205",
     "pg": "^8.22.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
@@ -50,6 +62,8 @@
     "zustand": "^5.0.14"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.3",
+    "@electric-sql/pglite-socket": "^0.2.5",
     "@playwright/test": "^1.61.1",
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.9.1",

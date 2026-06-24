@@ -10,10 +10,9 @@
 /playwright-report/
 /test-results/
 
-# generated data and exports
+# source cache and transient exports
 /data/raw/
-/data/reports/
-/exports/*.xlsx
+/exports/*.tmp
 
 # Prisma generated client
 /src/generated/prisma/

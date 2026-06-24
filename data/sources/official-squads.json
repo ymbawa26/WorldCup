@@ -1,0 +1,15 @@
+{
+  "id": "fifa-official-squads-2026-06-02-v1",
+  "name": "FIFA World Cup 2026 Official Squad Lists",
+  "url": "https://fdp.fifa.org/assetspublic/ce281/pdf/SquadLists-English.pdf",
+  "announcementUrl": "https://www.fifa.com/en/articles/fifa-world-cup-2026-squads-confirmed",
+  "publishedAt": "2026-06-02",
+  "retrievedAt": "2026-06-24T19:02:01-04:00",
+  "sha256": "622200fe617c5313cb0abee108eeeeb5e8f3accfb25b21ac68568f045599553e",
+  "expectedTeams": 48,
+  "expectedPlayers": 1248,
+  "licenseNote": "Official FIFA document. The source PDF is cached outside version control; only factual squad data and provenance are redistributed. No photographs, layout, prose, or branding are copied.",
+  "confidenceScore": 1,
+  "isEstimated": false,
+  "snapshotNote": "The 2 June announcement identifies these as the submitted final lists. FIFA serves the linked PDF dynamically; the retrieved artifact labels itself Version 1 and is checksum-pinned here."
+}

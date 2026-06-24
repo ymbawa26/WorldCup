@@ -21,3 +21,15 @@ The application is structured for Vercel but has not been deployed. No productio
 6. Deploy to Vercel and run public browser smoke tests.
 
 Production migration, seed, rollback, security, and Vercel verification instructions will be completed in Phase 10.
+
+## Database migration and seed
+
+With `DATABASE_URL` pointing to PostgreSQL:
+
+```bash
+npx prisma migrate deploy
+npm run db:seed
+```
+
+The idempotent seed imports the source-pinned tournament and official squad
+snapshots and refuses unexpected final record counts.
