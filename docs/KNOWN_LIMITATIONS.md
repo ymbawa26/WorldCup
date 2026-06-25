@@ -1,15 +1,20 @@
 # Known Limitations
 
-## Phase 3
+## Phase 4
 
 - The current application is a tested visual and technical foundation, not a playable game.
 - New Tournament and Continue are intentionally disabled.
 - Teams, groups, fixtures, tournament rules, official squads, players, a
-  database migration, and a seed are present; ratings and simulation state are not.
+  database migration, a seed, estimated ratings, and default lineups are present;
+  simulation state is not.
 - The application reads immutable files at build time; normal page requests do
   not yet use a live database connection.
 - Preferred foot, secondary positions, and league are absent from the official
-  source and remain unpopulated rather than estimated without a licensed source.
+  source and remain unpopulated as factual fields. Rating outputs account for
+  that missing detail through lower confidence and higher uncertainty.
+- Ratings are estimates derived from official squad facts and team ranking
+  context. They are not scouting reports and are not copied from proprietary
+  games.
 - Fixture dates and venues are modeled, but kickoff times are not yet stored.
 - Only the 11 June 2026 FIFA ranking is populated. The standings engine supports
   preceding editions but explicitly rejects a tie if available history cannot

@@ -5,6 +5,8 @@ import { format } from "prettier";
 
 import { SquadDatasetSchema } from "../../src/domain/data-ingestion/schema";
 import { validateSquadDataset } from "../../src/domain/data-ingestion/validation";
+import { ratingDataset } from "../../src/domain/ratings/data";
+import { validateRatingDataset } from "../../src/domain/ratings/validation";
 
 import {
   NORMALIZED_SQUADS,
@@ -17,6 +19,7 @@ async function main() {
     JSON.parse(await readFile(NORMALIZED_SQUADS, "utf8")),
   );
   const report = validateSquadDataset(dataset, dataset.source.retrievedAt);
+  const ratings = validateRatingDataset(ratingDataset);
   await mkdir(path.dirname(QUALITY_REPORT), { recursive: true });
   await writeFile(QUALITY_REPORT, `${JSON.stringify(report, null, 2)}\n`);
   const lines = [
@@ -52,8 +55,16 @@ async function main() {
   if (!report.passed) {
     throw new Error(`Squad validation failed:\n${report.failures.join("\n")}`);
   }
+  if (!ratings.passed) {
+    throw new Error(
+      `Rating validation failed:\n${ratings.failures.join("\n")}`,
+    );
+  }
   console.info(
     `Squad validation passed: ${report.totals.teams} teams, ${report.totals.players} players, ${report.totals.duplicatePlayers} duplicates`,
+  );
+  console.info(
+    `Rating validation passed: ${ratings.totals.playerRatings} players, ${ratings.totals.teamRatings} teams`,
   );
 }
 

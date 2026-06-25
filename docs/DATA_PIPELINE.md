@@ -6,7 +6,9 @@
 
 Phase 3 turns FIFA's submitted final squad lists into validated, reproducible
 records without redistributing the source document or inventing missing facts.
-The new-game dataset remains independent of live tournament results.
+Phase 4 adds deterministic estimated ratings from those records and documented
+formula parameters. The new-game dataset remains independent of live tournament
+results.
 
 ```mermaid
 flowchart LR
@@ -15,10 +17,11 @@ flowchart LR
     C --> D["Raw factual JSON"]
     D --> E["Identity + name + club normalization"]
     E --> F["Zod and domain validation"]
-    F --> G["CSV products"]
-    F --> H["Formatted Excel workbook"]
+    F --> R["Estimated rating model"]
+    R --> G["CSV products"]
+    R --> H["Formatted Excel workbook"]
     F --> I["Quality report"]
-    F --> J["Idempotent PostgreSQL seed"]
+    R --> J["Idempotent PostgreSQL seed"]
 ```
 
 ## Authoritative source
@@ -38,13 +41,15 @@ under ignored `data/raw/`. Only factual records and provenance are committed.
 
 ```bash
 npm run data:fetch:squads
+npm run ratings:generate
 npm run data:pipeline:cached
 npm run data:pipeline
 npm run db:smoke
 ```
 
-The cached pipeline runs extraction, normalization, validation, and export. The
-full pipeline first downloads the source only when the pinned cache is absent.
+The cached pipeline runs extraction, normalization, rating generation,
+validation, and export. The full pipeline first downloads the source only when
+the pinned cache is absent.
 
 ## Normalization rules
 
@@ -58,7 +63,17 @@ full pipeline first downloads the source only when the pinned cache is absent.
 - Positions remain FIFA's coarse `GK`, `DF`, `MF`, and `FW` classifications.
 - Age is calculated in complete years at 11 June 2026.
 - Preferred foot, league, and secondary positions are not present in this
-  source and remain null/empty. No Phase 3 estimate fills them.
+  source and remain null/empty as factual fields. Phase 4 rating estimates use
+  lower confidence to account for this missing detail rather than backfilling it.
+
+## Rating generation
+
+`npm run ratings:generate` writes `data/ratings/ratings.json` from the normalized
+official squads and tournament ranking context. The model version is
+`rating-model-2026.06.24-v1`, and every generated player/team rating has
+`isEstimated: true`. The formulas are documented in
+[`docs/RATING_MODEL.md`](RATING_MODEL.md) and implemented in
+`src/domain/ratings/model.ts`.
 
 ## Provenance model
 
@@ -89,7 +104,8 @@ runs. XLSX sheet values and formatting are identical; ZIP entry timestamps may
 change its binary checksum. Database records use deterministic IDs and unique
 keys, and the seed uses upserts. Phase 3 verified the migration and ran the seed
 twice against the same disposable PostgreSQL-compatible instance with unchanged
-counts: 48 teams, 1,248 players, 1,248 squad entries, and 450 clubs.
+counts: 48 teams, 1,248 players, 1,248 squad entries, 450 clubs, 1,248 player
+ratings, 48 team ratings, and 528 lineup slots.
 
 Production commands:
 

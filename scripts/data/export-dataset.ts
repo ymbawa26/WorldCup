@@ -8,6 +8,11 @@ import {
   DataQualityReportSchema,
   SquadDatasetSchema,
 } from "../../src/domain/data-ingestion/schema";
+import { ratingDataset } from "../../src/domain/ratings/data";
+import {
+  RATING_ATTRIBUTES,
+  TACTICAL_ROLES,
+} from "../../src/domain/ratings/model";
 import {
   knockoutBracket,
   tournamentSnapshot,
@@ -109,6 +114,41 @@ const playersHeaders = [
   "is_estimated",
 ];
 
+const playerRatingHeaders = [
+  "player_id",
+  "team_id",
+  "fifa_code",
+  "model_version",
+  "primary_position",
+  "best_role",
+  "overall_estimate",
+  ...RATING_ATTRIBUTES,
+  ...TACTICAL_ROLES.map((role) => `role_${role.toLowerCase()}`),
+  "confidence_score",
+  "uncertainty",
+  "is_estimated",
+  "notes",
+];
+
+const teamRatingHeaders = [
+  "team_id",
+  "fifa_code",
+  "model_version",
+  "default_formation",
+  "attack",
+  "midfield",
+  "defense",
+  "goalkeeping",
+  "depth",
+  "set_pieces",
+  "overall",
+  "lineup_player_ids",
+  "lineup_roles",
+  "confidence_score",
+  "uncertainty",
+  "is_estimated",
+];
+
 async function main() {
   const dataset = SquadDatasetSchema.parse(
     JSON.parse(await readFile(NORMALIZED_SQUADS, "utf8")),
@@ -148,29 +188,48 @@ async function main() {
   ]);
   await writeCsv("players.csv", playersHeaders, playerRows);
 
+  const playerRatingRows = ratingDataset.players.map((rating) => [
+    rating.playerId,
+    rating.teamId,
+    rating.fifaCode,
+    rating.modelVersion,
+    rating.primaryPosition,
+    rating.bestRole,
+    rating.overallEstimate,
+    ...RATING_ATTRIBUTES.map((attribute) => rating.attributes[attribute]),
+    ...TACTICAL_ROLES.map((role) => rating.roleRatings[role]),
+    rating.confidenceScore,
+    rating.uncertainty,
+    rating.isEstimated,
+    rating.notes.join(" | "),
+  ]);
+  await writeCsv(
+    "player_attributes.csv",
+    playerRatingHeaders,
+    playerRatingRows,
+  );
+
+  const teamRatingRows = ratingDataset.teams.map((rating) => [
+    rating.teamId,
+    rating.fifaCode,
+    rating.modelVersion,
+    rating.defaultFormation,
+    rating.strengths.attack,
+    rating.strengths.midfield,
+    rating.strengths.defense,
+    rating.strengths.goalkeeping,
+    rating.strengths.depth,
+    rating.strengths.setPieces,
+    rating.strengths.overall,
+    rating.lineup.map((entry) => entry.playerId).join("|"),
+    rating.lineup.map((entry) => entry.role).join("|"),
+    rating.confidenceScore,
+    rating.uncertainty,
+    rating.isEstimated,
+  ]);
+  await writeCsv("team_attributes.csv", teamRatingHeaders, teamRatingRows);
+
   const futureProducts: Array<[string, string[]]> = [
-    [
-      "player_attributes.csv",
-      [
-        "player_id",
-        "model_version",
-        "attribute",
-        "value",
-        "confidence_score",
-        "is_estimated",
-      ],
-    ],
-    [
-      "team_attributes.csv",
-      [
-        "team_id",
-        "model_version",
-        "attribute",
-        "value",
-        "confidence_score",
-        "is_estimated",
-      ],
-    ],
     [
       "tactical_profiles.csv",
       ["team_id", "model_version", "profile_key", "value", "is_estimated"],
@@ -263,8 +322,8 @@ async function main() {
       formulae: ['"GK,DF,MF,FW"'],
     };
   }
-  addSheet(workbook, "Player Ratings", futureProducts[0][1], []);
-  addSheet(workbook, "Team Ratings", futureProducts[1][1], []);
+  addSheet(workbook, "Player Ratings", playerRatingHeaders, playerRatingRows);
+  addSheet(workbook, "Team Ratings", teamRatingHeaders, teamRatingRows);
   addSheet(
     workbook,
     "Groups",
@@ -298,9 +357,9 @@ async function main() {
       ]),
     ],
   );
-  addSheet(workbook, "Tactical Profiles", futureProducts[2][1], []);
-  addSheet(workbook, "Discipline Profiles", futureProducts[3][1], []);
-  addSheet(workbook, "Injury Profiles", futureProducts[4][1], []);
+  addSheet(workbook, "Tactical Profiles", futureProducts[0][1], []);
+  addSheet(workbook, "Discipline Profiles", futureProducts[1][1], []);
+  addSheet(workbook, "Injury Profiles", futureProducts[2][1], []);
   addSheet(
     workbook,
     "Data Dictionary",
@@ -327,14 +386,14 @@ async function main() {
       [
         "Player Ratings",
         "all fields",
-        "Owned by Phase 4 rating model",
-        "schema only",
+        "Independent estimated player attributes and role ratings",
+        "Phase 4 generated",
       ],
       [
         "Team Ratings",
         "all fields",
-        "Owned by Phase 4 rating model",
-        "schema only",
+        "Default lineup and team-strength estimates derived from player ratings",
+        "Phase 4 generated",
       ],
       [
         "Profiles",
@@ -364,9 +423,15 @@ async function main() {
       ],
       [
         "rating_model_version",
-        "",
+        ratingDataset.source.id,
         "Phase 4",
-        "Intentionally not populated in Phase 3",
+        ratingDataset.source.licenseNote,
+      ],
+      [
+        "rating_data_version",
+        ratingDataset.dataVersion,
+        "Phase 4",
+        "Generated from official squads and tournament ranking context",
       ],
     ],
   );

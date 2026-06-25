@@ -30,6 +30,17 @@ enum PreferredFoot {
   BOTH
 }
 
+enum TacticalRole {
+  GK
+  CB
+  FB
+  DM
+  CM
+  AM
+  WG
+  ST
+}
+
 model DataSource {
   id                String                  @id
   name              String
@@ -97,6 +108,7 @@ model TournamentTeam {
   homeFixtures     Fixture[]               @relation("HomeTournamentTeam")
   awayFixtures     Fixture[]               @relation("AwayTournamentTeam")
   squadPlayers     TournamentSquadPlayer[]
+  teamRatings      TeamRating[]
 
   @@unique([tournamentId, teamId])
 }
@@ -152,6 +164,8 @@ model Player {
   clubs            PlayerClub[]
   tournamentSquads TournamentSquadPlayer[]
   sources          PlayerDataSource[]
+  ratings          PlayerRating[]
+  lineupEntries    TeamLineupPlayer[]
   createdAt        DateTime                @default(now())
   updatedAt        DateTime                @updatedAt
 
@@ -213,6 +227,79 @@ model PlayerDataSource {
 
   @@id([playerId, sourceId])
   @@index([sourceId])
+}
+
+model RatingModelVersion {
+  id              String         @id
+  dataVersion     String         @unique
+  name            String
+  createdAt       DateTime
+  inputs          Json
+  licenseNote     String
+  confidenceScore Decimal        @db.Decimal(4, 3)
+  isEstimated     Boolean        @default(true)
+  playerRatings   PlayerRating[]
+  teamRatings     TeamRating[]
+}
+
+model PlayerRating {
+  id                   String             @id @db.Uuid
+  playerId             String             @db.Uuid
+  modelVersionId       String
+  teamId               String
+  fifaCode             String             @db.Char(3)
+  ageAtTournamentStart Int
+  primaryPosition      PlayerPosition
+  attributes           Json
+  roleRatings          Json
+  bestRole             TacticalRole
+  overallEstimate      Int
+  confidenceScore      Decimal            @db.Decimal(4, 3)
+  uncertainty          Decimal            @db.Decimal(4, 3)
+  isEstimated          Boolean            @default(true)
+  notes                Json
+  player               Player             @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  modelVersion         RatingModelVersion @relation(fields: [modelVersionId], references: [id], onDelete: Restrict)
+
+  @@unique([playerId, modelVersionId])
+  @@index([teamId])
+  @@index([fifaCode])
+}
+
+model TeamRating {
+  id               String             @id @db.Uuid
+  tournamentTeamId String             @db.Uuid
+  modelVersionId   String
+  teamId           String
+  fifaCode         String             @db.Char(3)
+  defaultFormation String
+  strengths        Json
+  confidenceScore  Decimal            @db.Decimal(4, 3)
+  uncertainty      Decimal            @db.Decimal(4, 3)
+  isEstimated      Boolean            @default(true)
+  tournamentTeam   TournamentTeam     @relation(fields: [tournamentTeamId], references: [id], onDelete: Cascade)
+  modelVersion     RatingModelVersion @relation(fields: [modelVersionId], references: [id], onDelete: Restrict)
+  lineup           TeamLineupPlayer[]
+
+  @@unique([tournamentTeamId, modelVersionId])
+  @@index([teamId])
+  @@index([fifaCode])
+}
+
+model TeamLineupPlayer {
+  id           String       @id @db.Uuid
+  teamRatingId String       @db.Uuid
+  playerId     String       @db.Uuid
+  slotIndex    Int
+  role         TacticalRole
+  roleRating   Int
+  roleFit      Decimal      @db.Decimal(4, 3)
+  teamRating   TeamRating   @relation(fields: [teamRatingId], references: [id], onDelete: Cascade)
+  player       Player       @relation(fields: [playerId], references: [id], onDelete: Restrict)
+
+  @@unique([teamRatingId, slotIndex])
+  @@unique([teamRatingId, playerId])
+  @@index([playerId])
 }
 
 model Fixture {

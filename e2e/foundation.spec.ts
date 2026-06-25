@@ -80,3 +80,26 @@ test("data quality exposes all validated official squads", async ({ page }) => {
     page.getByRole("heading", { name: /48 complete official squads/i }),
   ).toBeVisible();
 });
+
+test("ratings page exposes estimated player and team ratings", async ({
+  page,
+}) => {
+  await page.goto("/ratings");
+
+  await expect(
+    page.getByRole("heading", {
+      name: /independent ratings, built to be questioned/i,
+    }),
+  ).toBeVisible();
+  await expect(page.getByText("1,248", { exact: true })).toBeVisible();
+  await expect(page.getByText("8/player", { exact: true })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Top estimated squads" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Argentina · default 4-3-3" }),
+  ).toBeVisible();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.getByText("Model contract", { exact: true })).toBeVisible();
+});

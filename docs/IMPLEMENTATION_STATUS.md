@@ -2,11 +2,11 @@
 
 **Last updated:** 2026-06-24
 
-**Current phase:** Phase 3 complete
+**Current phase:** Phase 4 complete
 
-**Next eligible phase:** Phase 4 — Ratings engine
+**Next eligible phase:** Phase 5 — Headless match engine
 
-**Overall product status:** Tested tournament model and official 1,248-player squad dataset; ratings and simulation are not yet implemented
+**Overall product status:** Tested tournament model, official 1,248-player squad dataset, and independent estimated ratings; simulation is not yet implemented
 
 ## Phase summary
 
@@ -16,8 +16,8 @@
 | 1. Project foundation          | Complete    | Full quality, build, browser, and visual gate  |
 | 2. Tournament data model       | Complete    | Data, rules, bracket, and qualification green  |
 | 3. Data-ingestion pipeline     | Complete    | 48 official squads and data products validated |
-| 4. Ratings engine              | Not started | Awaiting implementation                        |
-| 5. Headless match engine       | Not started | Blocked by Phase 4                             |
+| 4. Ratings engine              | Complete    | Player/team ratings generated and tested       |
+| 5. Headless match engine       | Not started | Awaiting implementation                        |
 | 6. Probability and calibration | Not started | Blocked by Phase 5                             |
 | 7. Core game flow              | Not started | Blocked by Phase 6                             |
 | 8. Match-center UI             | Not started | Blocked by Phase 7                             |
@@ -317,15 +317,48 @@ live 2026 tournament results into a new-game snapshot.
 
 ### Remaining limitations
 
-- Ratings, fine-grained positions, preferred foot, league metadata, tactical
-  profiles, discipline models, and injury models are not implemented.
+- Tactical profiles, discipline models, injury models, and match simulation are
+  not implemented.
+- Ratings are estimated from available official facts and ranking context; they
+  are not calibrated scouting reports.
 - The app reads validated static data; a hosted PostgreSQL database is not provisioned.
 - FIFA's linked PDF is dynamically served despite its Version 1 label; any
   future byte change requires manual review and a new source version.
 - No deployment or hosted CI run has occurred.
 
+## Phase 4 — Ratings engine
+
+### Completed scope
+
+- Added `src/domain/ratings` with deterministic player attributes,
+  position-specific role ratings, default 4-3-3 lineup selection, team strength
+  vectors, confidence, uncertainty, and model-version metadata.
+- Generated `data/ratings/ratings.json`, `data/player_attributes.csv`, and
+  `data/team_attributes.csv` from official squad facts and tournament ranking
+  context.
+- Updated the Excel workbook with populated `Player Ratings` and `Team Ratings`
+  sheets.
+- Added Prisma rating-model, player-rating, team-rating, and lineup-slot tables
+  plus idempotent seed coverage.
+- Added `/ratings` diagnostics and documentation in `docs/RATING_MODEL.md`.
+
+### Source and license notes
+
+- Ratings are independent estimates from repository-owned formulas using the
+  already documented official squad and tournament ranking facts.
+- No proprietary football-game ratings, player photographs, or live tournament
+  results were imported.
+
+### Remaining limitations
+
+- Preferred foot, secondary positions, league strength, tactical profiles,
+  discipline profiles, and injury profiles are still not factual source fields.
+- Ratings are not calibrated to a historical match corpus yet; calibration is a
+  later probability phase.
+- There is no headless match engine consuming the rating vectors yet.
+
 ### Next phase
 
-Phase 4 may implement the independent position-aware player rating system and
-dynamic lineup/team strengths from licensed inputs. It must preserve uncertainty
-and estimation flags and cannot copy proprietary commercial-game ratings.
+Phase 5 may implement the deterministic match engine. It should consume the
+rating vectors and role-specific player facets rather than using
+`overallEstimate` as a sole match input.

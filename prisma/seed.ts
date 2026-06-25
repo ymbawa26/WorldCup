@@ -6,6 +6,7 @@ import squadSource from "../data/sources/official-squads.json";
 import { squadDataset } from "../src/domain/data-ingestion/data";
 import { deterministicUuid } from "../src/domain/data-ingestion/identity";
 import { buildSquadSeedPlan } from "../src/domain/data-ingestion/seed-plan";
+import { ratingDataset } from "../src/domain/ratings/data";
 import {
   knockoutBracket,
   tournamentSnapshot,
@@ -301,17 +302,148 @@ export async function seedDatabase(prisma: PrismaClient) {
     });
   }
 
+  await prisma.ratingModelVersion.upsert({
+    where: { id: ratingDataset.source.id },
+    create: {
+      id: ratingDataset.source.id,
+      dataVersion: ratingDataset.dataVersion,
+      name: ratingDataset.source.name,
+      createdAt: new Date(ratingDataset.source.createdAt),
+      inputs: ratingDataset.source.inputs,
+      licenseNote: ratingDataset.source.licenseNote,
+      confidenceScore: ratingDataset.source.confidenceScore,
+      isEstimated: ratingDataset.source.isEstimated,
+    },
+    update: {
+      dataVersion: ratingDataset.dataVersion,
+      name: ratingDataset.source.name,
+      inputs: ratingDataset.source.inputs,
+      licenseNote: ratingDataset.source.licenseNote,
+      confidenceScore: ratingDataset.source.confidenceScore,
+      isEstimated: ratingDataset.source.isEstimated,
+    },
+  });
+
+  for (const rating of ratingDataset.players) {
+    await prisma.playerRating.upsert({
+      where: {
+        playerId_modelVersionId: {
+          playerId: rating.playerId,
+          modelVersionId: rating.modelVersion,
+        },
+      },
+      create: {
+        id: deterministicUuid(
+          `player-rating:${rating.modelVersion}:${rating.playerId}`,
+        ),
+        playerId: rating.playerId,
+        modelVersionId: rating.modelVersion,
+        teamId: rating.teamId,
+        fifaCode: rating.fifaCode,
+        ageAtTournamentStart: rating.ageAtTournamentStart,
+        primaryPosition: rating.primaryPosition,
+        attributes: rating.attributes,
+        roleRatings: rating.roleRatings,
+        bestRole: rating.bestRole,
+        overallEstimate: rating.overallEstimate,
+        confidenceScore: rating.confidenceScore,
+        uncertainty: rating.uncertainty,
+        isEstimated: rating.isEstimated,
+        notes: rating.notes,
+      },
+      update: {
+        attributes: rating.attributes,
+        roleRatings: rating.roleRatings,
+        bestRole: rating.bestRole,
+        overallEstimate: rating.overallEstimate,
+        confidenceScore: rating.confidenceScore,
+        uncertainty: rating.uncertainty,
+        isEstimated: rating.isEstimated,
+        notes: rating.notes,
+      },
+    });
+  }
+
+  for (const rating of ratingDataset.teams) {
+    const squadTeamId = tournamentTeamId.get(rating.teamId)!;
+    const teamRatingId = deterministicUuid(
+      `team-rating:${rating.modelVersion}:${squadTeamId}`,
+    );
+    await prisma.teamRating.upsert({
+      where: {
+        tournamentTeamId_modelVersionId: {
+          tournamentTeamId: squadTeamId,
+          modelVersionId: rating.modelVersion,
+        },
+      },
+      create: {
+        id: teamRatingId,
+        tournamentTeamId: squadTeamId,
+        modelVersionId: rating.modelVersion,
+        teamId: rating.teamId,
+        fifaCode: rating.fifaCode,
+        defaultFormation: rating.defaultFormation,
+        strengths: rating.strengths,
+        confidenceScore: rating.confidenceScore,
+        uncertainty: rating.uncertainty,
+        isEstimated: rating.isEstimated,
+      },
+      update: {
+        defaultFormation: rating.defaultFormation,
+        strengths: rating.strengths,
+        confidenceScore: rating.confidenceScore,
+        uncertainty: rating.uncertainty,
+        isEstimated: rating.isEstimated,
+      },
+    });
+    for (const [index, entry] of rating.lineup.entries()) {
+      await prisma.teamLineupPlayer.upsert({
+        where: {
+          teamRatingId_slotIndex: {
+            teamRatingId,
+            slotIndex: index + 1,
+          },
+        },
+        create: {
+          id: deterministicUuid(`lineup:${teamRatingId}:${index + 1}`),
+          teamRatingId,
+          playerId: entry.playerId,
+          slotIndex: index + 1,
+          role: entry.role,
+          roleRating: entry.roleRating,
+          roleFit: entry.roleFit,
+        },
+        update: {
+          playerId: entry.playerId,
+          role: entry.role,
+          roleRating: entry.roleRating,
+          roleFit: entry.roleFit,
+        },
+      });
+    }
+  }
+
   const counts = await Promise.all([
     prisma.team.count(),
     prisma.player.count(),
     prisma.tournamentSquadPlayer.count(),
     prisma.club.count(),
+    prisma.playerRating.count(),
+    prisma.teamRating.count(),
+    prisma.teamLineupPlayer.count(),
   ]);
-  if (counts[0] !== 48 || counts[1] !== 1248 || counts[2] !== 1248) {
+  if (
+    counts[0] !== 48 ||
+    counts[1] !== 1248 ||
+    counts[2] !== 1248 ||
+    counts[4] !== 1248 ||
+    counts[5] !== 48 ||
+    counts[6] !== 528
+  ) {
     throw new Error(`Unexpected seed counts: ${counts.join(",")}`);
   }
   console.info(
-    `Seed complete: ${counts[0]} teams, ${counts[1]} players, ${counts[2]} squad entries, ${counts[3]} clubs`,
+    `Seed complete: ${counts[0]} teams, ${counts[1]} players, ${counts[2]} squad entries, ${counts[3]} clubs, ${counts[4]} player ratings, ${counts[5]} team ratings`,
   );
 }
 

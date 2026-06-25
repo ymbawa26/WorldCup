@@ -4,7 +4,8 @@ World Stage is a browser-based management simulation for the 48-team 2026 men's 
 
 ## Current status
 
-Phase 3 establishes the verified tournament and official-squad data layer:
+Phase 4 establishes the verified tournament, official-squad, and estimated
+ratings data layer:
 
 - Next.js 16 App Router, React 19, strict TypeScript, and Tailwind CSS 4
 - Original responsive application shell with keyboard and reduced-motion support
@@ -19,8 +20,13 @@ Phase 3 establishes the verified tournament and official-squad data layer:
 - Cached, checksum-pinned ingestion with CSV, Excel, and quality-report products
 - Prisma migration and idempotent PostgreSQL seed for 1,248 players
 - A responsive `/data-quality` inspection screen
+- Independent estimated player attributes, position-specific role ratings, team
+  strengths, and default lineups
+- CSV, Excel, Prisma seed, validation, and `/ratings` diagnostics for the
+  ratings model
 
-Tournament creation remains intentionally disabled until ratings and simulation systems are implemented in later phases.
+Tournament creation remains intentionally disabled until match simulation
+systems are implemented in later phases.
 
 ## Requirements
 
@@ -68,6 +74,7 @@ npm run test:e2e
 - [Tournament rules](docs/TOURNAMENT_RULES.md)
 - [Data dictionary](docs/DATA_DICTIONARY.md)
 - [Data pipeline](docs/DATA_PIPELINE.md)
+- [Rating model](docs/RATING_MODEL.md)
 
 ## Product identity
 

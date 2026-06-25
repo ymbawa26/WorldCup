@@ -34,8 +34,9 @@
     "data:extract:squads": "node --import tsx scripts/data/extract-official-squads.ts",
     "data:normalize": "node --import tsx scripts/data/normalize-player-data.ts",
     "data:validate": "node --import tsx scripts/data/validate-dataset.ts",
+    "ratings:generate": "node --import tsx scripts/ratings/generate-ratings.ts",
     "data:export": "node --import tsx scripts/data/export-dataset.ts",
-    "data:pipeline:cached": "npm run data:extract:squads && npm run data:normalize && npm run data:validate && npm run data:export",
+    "data:pipeline:cached": "npm run data:extract:squads && npm run data:normalize && npm run ratings:generate && npm run data:validate && npm run data:export",
     "data:pipeline": "npm run data:fetch:squads && npm run data:pipeline:cached",
     "check": "npm run typecheck && npm run lint && npm run format:check && npm run test:unit && npm run test:integration && npm run test:property && npm run validate:data && npm run db:validate && npm run build"
   },

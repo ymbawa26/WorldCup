@@ -5,12 +5,12 @@
 | Layer       | Tool                          | Current purpose                                                    |
 | ----------- | ----------------------------- | ------------------------------------------------------------------ |
 | Static      | TypeScript, ESLint, Prettier  | Strict types, Next.js rules, consistent source                     |
-| Unit        | Vitest, React Testing Library | Components, standings, and data normalization                      |
-| Integration | Vitest, ExcelJS               | Qualification, squads, seed plans, and workbook products           |
-| Property    | fast-check                    | Complete bracket invariants and shared utility properties          |
+| Unit        | Vitest, React Testing Library | Components, standings, data normalization, and rating formulas     |
+| Integration | Vitest, ExcelJS               | Qualification, squads, ratings, seed plans, and workbook products  |
+| Property    | fast-check                    | Bracket invariants, rating scale bounds, and shared utility props  |
 | End-to-end  | Playwright Chromium           | Navigation and desktop/mobile diagnostic routes                    |
-| Data        | TypeScript validation scripts | Reject invalid tournament or squad data                            |
-| Database    | Prisma CLI and PGlite socket  | Validate migration and run the PostgreSQL seed twice               |
+| Data        | TypeScript validation scripts | Reject invalid tournament, squad, or rating data                   |
+| Database    | Prisma CLI and PGlite socket  | Validate migrations and run the PostgreSQL seed twice              |
 | Build       | Next.js production build      | Route compilation, server/client boundaries, and static generation |
 
 ## Commands

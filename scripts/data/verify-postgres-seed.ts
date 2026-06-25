@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 
 import { PGlite } from "@electric-sql/pglite";
 import { PGLiteSocketServer } from "@electric-sql/pglite-socket";
@@ -11,11 +11,16 @@ const PORT = 54_331;
 
 async function main() {
   const database = await PGlite.create();
-  const migration = await readFile(
-    "prisma/migrations/20260624190000_phase_3_data_ingestion/migration.sql",
-    "utf8",
-  );
-  await database.exec(migration);
+  const migrationDirectories = (await readdir("prisma/migrations"))
+    .filter((entry) => entry !== "migration_lock.toml")
+    .sort();
+  for (const directory of migrationDirectories) {
+    const migration = await readFile(
+      `prisma/migrations/${directory}/migration.sql`,
+      "utf8",
+    );
+    await database.exec(migration);
+  }
   const server = new PGLiteSocketServer({
     db: database,
     host: "127.0.0.1",
@@ -38,12 +43,18 @@ async function main() {
       players: await prisma.player.count(),
       squadEntries: await prisma.tournamentSquadPlayer.count(),
       clubs: await prisma.club.count(),
+      playerRatings: await prisma.playerRating.count(),
+      teamRatings: await prisma.teamRating.count(),
+      lineupSlots: await prisma.teamLineupPlayer.count(),
     };
     if (
       counts.teams !== 48 ||
       counts.players !== 1248 ||
       counts.squadEntries !== 1248 ||
-      counts.clubs !== 450
+      counts.clubs !== 450 ||
+      counts.playerRatings !== 1248 ||
+      counts.teamRatings !== 48 ||
+      counts.lineupSlots !== 528
     ) {
       throw new Error(
         `Unexpected idempotency counts: ${JSON.stringify(counts)}`,

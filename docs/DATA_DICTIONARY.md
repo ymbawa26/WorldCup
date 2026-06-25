@@ -17,6 +17,9 @@ a new version rather than silently rewriting a saved tournament.
 | `data/tournament/sources.json`                | Provenance, retrieval, integrity, and license notes | source `id`                                      |
 | `data/normalized/official-squads.json`        | Canonical official players and field provenance     | player `id`, `externalIdentity`                  |
 | `data/players.csv`                            | Portable denormalized player seed product           | `id`, `external_identity`                        |
+| `data/ratings/ratings.json`                   | Estimated player/team ratings and lineups           | `playerId`, `teamId`, `modelVersion`             |
+| `data/player_attributes.csv`                  | Denormalized player attributes and role ratings     | `player_id`, `model_version`                     |
+| `data/team_attributes.csv`                    | Denormalized team strengths and default lineups     | `team_id`, `model_version`                       |
 | `data/reports/squad-data-quality.json`        | Per-team Phase 3 validation evidence                | `dataVersion`, team `fifaCode`                   |
 | `exports/world-cup-simulation-data.xlsx`      | Human-readable validated data workbook              | sheet-specific keys                              |
 
@@ -44,13 +47,19 @@ facts for inspection. JSON is the runtime source of truth.
 | Player         | `ageAtTournamentStart` | Complete years on 11 June 2026                              |
 | Player         | `clubCountryCode`      | Association code published beside the club                  |
 | Player         | `fieldProvenance`      | Imported-field to source-record reference map               |
+| Player rating  | `attributes`           | Eight estimated 1–99 player facets                          |
+| Player rating  | `roleRatings`          | Position-specific estimates for GK/CB/FB/DM/CM/AM/WG/ST     |
+| Player rating  | `overallEstimate`      | Display-only maximum role estimate                          |
+| Team rating    | `lineup`               | Default 4-3-3 role assignment with no duplicate players     |
+| Team rating    | `strengths`            | Attack/midfield/defense/goalkeeping/depth/set-pieces vector |
 | Source         | `confidenceScore`      | 0–1 confidence in the imported factual record               |
 | Source         | `isEstimated`          | Whether a value was modeled rather than observed            |
 
-Preferred foot and secondary positions are deliberately blank because the
-official squad source does not publish them. Player and team rating products,
-tactical profiles, discipline profiles, and injury profiles contain schemas
-only until their owning later phases create documented values.
+Preferred foot and secondary positions are deliberately blank as factual fields
+because the official squad source does not publish them. Player and team rating
+products are Phase 4 estimated outputs with confidence/uncertainty fields.
+Tactical profiles, discipline profiles, and injury profiles still contain
+schemas only until their owning later phases create documented values.
 
 ## Database identities
 

@@ -1,6 +1,6 @@
 # Architecture
 
-**Current scope:** Phase 3 tournament and squad data
+**Current scope:** Phase 4 tournament, squad, and ratings data
 
 **Last updated:** 2026-06-24
 
@@ -19,7 +19,9 @@ flowchart LR
     SAVE --> IDB["IndexedDB guest saves"]
 ```
 
-The UI shell and tournament domain now exist. Rating, match, probability, and save domains remain reserved for their owning phases.
+The UI shell, tournament domain, squad ingestion domain, and ratings domain now
+exist. Match, probability, and save domains remain reserved for their owning
+phases.
 
 ## Tournament domain
 
@@ -47,11 +49,18 @@ erDiagram
     PLAYER ||--o{ TOURNAMENT_SQUAD_PLAYER : enters
     DATA_SOURCE ||--o{ PLAYER_DATA_SOURCE : supports
     PLAYER ||--o{ PLAYER_DATA_SOURCE : documented_by
+    RATING_MODEL_VERSION ||--o{ PLAYER_RATING : produces
+    PLAYER ||--o{ PLAYER_RATING : estimated_for
+    RATING_MODEL_VERSION ||--o{ TEAM_RATING : produces
+    TOURNAMENT_TEAM ||--o{ TEAM_RATING : estimated_for
+    TEAM_RATING ||--o{ TEAM_LINEUP_PLAYER : selects
+    PLAYER ||--o{ TEAM_LINEUP_PLAYER : fills
 ```
 
 The JSON snapshot is currently the executable repository. Prisma models the
-same durable identities. Phase 3 adds a migration and idempotent PostgreSQL seed;
-the application still reads immutable validated files during static builds.
+same durable identities. Phase 4 adds ratings migrations and idempotent
+PostgreSQL seed rows; the application still reads immutable validated files
+during static builds.
 
 ## Foundation boundaries
 
@@ -64,7 +73,9 @@ the application still reads immutable validated files during static builds.
 - `data/tournament`: source-pinned normalized tournament facts
 - `src/domain/tournament`: parsing, validation, standings, qualification, and bracket logic
 - `src/domain/data-ingestion`: source schemas, deterministic identities, quality gates, and seed plans
+- `src/domain/ratings`: deterministic estimated player ratings, role fits, lineup selection, and team strengths
 - `scripts/data`: cached fetch, extraction, normalization, validation, and export tooling
+- `scripts/ratings`: deterministic rating generation
 - `tests`: unit, integration, and property tests
 - `e2e`: browser journeys
 
