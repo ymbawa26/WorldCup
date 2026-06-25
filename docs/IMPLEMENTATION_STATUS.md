@@ -2,11 +2,11 @@
 
 **Last updated:** 2026-06-24
 
-**Current phase:** Phase 5 complete
+**Current phase:** Phase 6 complete
 
-**Next eligible phase:** Phase 6 — Probability and calibration
+**Next eligible phase:** Phase 7 — Core game flow
 
-**Overall product status:** Tested tournament model, official 1,248-player squad dataset, independent estimated ratings, and deterministic headless match simulation
+**Overall product status:** Tested tournament model, official 1,248-player squad dataset, independent estimated ratings, deterministic headless match simulation, and backend probability/calibration layer
 
 ## Phase summary
 
@@ -18,8 +18,8 @@
 | 3. Data-ingestion pipeline     | Complete    | 48 official squads and data products validated |
 | 4. Ratings engine              | Complete    | Player/team ratings generated and tested       |
 | 5. Headless match engine       | Complete    | Deterministic event engine tested              |
-| 6. Probability and calibration | Not started | Awaiting implementation                        |
-| 7. Core game flow              | Not started | Blocked by Phase 6                             |
+| 6. Probability and calibration | Complete    | Probability bounds and calibration tested      |
+| 7. Core game flow              | Not started | Awaiting implementation                        |
 | 8. Match-center UI             | Not started | Blocked by Phase 7                             |
 | 9. Visual polish               | Not started | Blocked by Phase 8                             |
 | 10. Deployment and final QA    | Not started | Blocked by Phase 9                             |
@@ -385,7 +385,37 @@ live 2026 tournament results into a new-game snapshot.
   imports, fatigue, and historical distribution fitting remain later phases.
 - The match-center UI is still not implemented; `/match-engine` is diagnostic.
 
+## Phase 6 — Probability and calibration
+
+### Completed scope
+
+- Added `src/domain/probability` with prematch Poisson score matrices, live
+  remaining-time probabilities, current-score conditioning, and red-card
+  manpower adjustments.
+- Added internal Monte Carlo calibration report generation comparing analytical
+  probabilities with Phase 5 simulations.
+- Generated `data/reports/probability-calibration.json` and Markdown companion
+  report.
+- Kept raw calibration details backend/report-only, per product guidance that
+  not every internal model artifact should become user-visible UI.
+- Documented the model in `docs/PROBABILITY_MODEL.md`.
+
+### Gate evidence
+
+- Unit tests cover probability normalization, live monotonicity, and red-card
+  directional effects.
+- Integration tests load/regenerate the calibration report and check tolerance.
+- Property tests validate probability bounds and sums across team pairs and live
+  states.
+
+### Remaining limitations
+
+- Historical calibration against an external licensed results corpus is not
+  bundled yet.
+- No match-center probability chart is exposed to users; Phase 8 should design
+  the user-facing presentation carefully.
+
 ### Next phase
 
-Phase 6 may implement analytical prematch/live probabilities and calibration
-reports using this event engine as the simulation backend.
+Phase 7 may implement core game flow: country selection, tournament creation,
+fixture simulation, standings/progression, and versioned saves.

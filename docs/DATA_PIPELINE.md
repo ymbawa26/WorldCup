@@ -42,14 +42,15 @@ under ignored `data/raw/`. Only factual records and provenance are committed.
 ```bash
 npm run data:fetch:squads
 npm run ratings:generate
+npm run probability:calibrate
 npm run data:pipeline:cached
 npm run data:pipeline
 npm run db:smoke
 ```
 
 The cached pipeline runs extraction, normalization, rating generation,
-validation, and export. The full pipeline first downloads the source only when
-the pinned cache is absent.
+probability calibration, validation, and export. The full pipeline first
+downloads the source only when the pinned cache is absent.
 
 ## Normalization rules
 

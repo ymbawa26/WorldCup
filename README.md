@@ -4,8 +4,8 @@ World Stage is a browser-based management simulation for the 48-team 2026 men's 
 
 ## Current status
 
-Phase 5 establishes the verified tournament, official-squad, estimated ratings,
-and headless match-engine layer:
+Phase 6 establishes the verified tournament, official-squad, estimated ratings,
+headless match-engine, and probability/calibration layer:
 
 - Next.js 16 App Router, React 19, strict TypeScript, and Tailwind CSS 4
 - Original responsive application shell with keyboard and reduced-motion support
@@ -28,6 +28,8 @@ and headless match-engine layer:
   cards, injuries, substitutions, tactical changes, extra time, shootouts, and
   derived statistics
 - A responsive `/match-engine` diagnostic screen
+- Backend/domain prematch and live probabilities, red-card adjustments, and
+  internal calibration reports
 
 Tournament creation remains intentionally disabled until core game flow is
 implemented in later phases.
@@ -80,6 +82,7 @@ npm run test:e2e
 - [Data pipeline](docs/DATA_PIPELINE.md)
 - [Rating model](docs/RATING_MODEL.md)
 - [Simulation engine](docs/SIMULATION_ENGINE.md)
+- [Probability model](docs/PROBABILITY_MODEL.md)
 
 ## Product identity
 

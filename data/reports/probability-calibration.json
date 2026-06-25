@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "modelVersion": "probability-model-2026.06.25-v1",
+  "generatedAt": "2026-06-25T09:00:00-04:00",
+  "sourceNotes": [
+    "Internal consistency report comparing analytical Poisson probabilities with the Phase 5 simulation engine.",
+    "No external historical match-result corpus is bundled in this phase."
+  ],
+  "limitations": [
+    "This is an engine-consistency calibration, not a historical validation.",
+    "The Phase 5 match engine is intentionally simple and will be recalibrated after tactical, fatigue, injury, and discipline profiles mature.",
+    "Raw calibration bands are backend/report artifacts and are not intended as public user-facing odds."
+  ],
+  "tolerance": 0.22,
+  "passed": true,
+  "bands": [
+    {
+      "label": "elite-v-elite",
+      "homeTeamId": "argentina",
+      "awayTeamId": "spain",
+      "analytical": {
+        "homeWin": 0.169436,
+        "draw": 0.719333,
+        "awayWin": 0.111231
+      },
+      "simulated": {
+        "homeWin": 0.038889,
+        "draw": 0.894444,
+        "awayWin": 0.066667
+      },
+      "meanAbsoluteError": 0.116741,
+      "samples": 180
+    },
+    {
+      "label": "elite-v-strong",
+      "homeTeamId": "brazil",
+      "awayTeamId": "england",
+      "analytical": {
+        "homeWin": 0.168093,
+        "draw": 0.719552,
+        "awayWin": 0.112355
+      },
+      "simulated": {
+        "homeWin": 0.061111,
+        "draw": 0.85,
+        "awayWin": 0.088889
+      },
+      "meanAbsoluteError": 0.086965,
+      "samples": 180
+    },
+    {
+      "label": "host-v-mid",
+      "homeTeamId": "mexico",
+      "awayTeamId": "south-africa",
+      "analytical": {
+        "homeWin": 0.185475,
+        "draw": 0.714534,
+        "awayWin": 0.099991
+      },
+      "simulated": {
+        "homeWin": 0.083333,
+        "draw": 0.888889,
+        "awayWin": 0.027778
+      },
+      "meanAbsoluteError": 0.116237,
+      "samples": 180
+    },
+    {
+      "label": "balanced-mid",
+      "homeTeamId": "japan",
+      "awayTeamId": "morocco",
+      "analytical": {
+        "homeWin": 0.167935,
+        "draw": 0.71812,
+        "awayWin": 0.113945
+      },
+      "simulated": {
+        "homeWin": 0.044444,
+        "draw": 0.911111,
+        "awayWin": 0.044444
+      },
+      "meanAbsoluteError": 0.128661,
+      "samples": 180
+    },
+    {
+      "label": "underdog-away",
+      "homeTeamId": "new-zealand",
+      "awayTeamId": "france",
+      "analytical": {
+        "homeWin": 0.147781,
+        "draw": 0.72227,
+        "awayWin": 0.129948
+      },
+      "simulated": {
+        "homeWin": 0.044444,
+        "draw": 0.927778,
+        "awayWin": 0.027778
+      },
+      "meanAbsoluteError": 0.137005,
+      "samples": 180
+    }
+  ]
+}

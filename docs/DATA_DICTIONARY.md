@@ -21,6 +21,7 @@ a new version rather than silently rewriting a saved tournament.
 | `data/player_attributes.csv`                  | Denormalized player attributes and role ratings     | `player_id`, `model_version`                     |
 | `data/team_attributes.csv`                    | Denormalized team strengths and default lineups     | `team_id`, `model_version`                       |
 | `data/reports/squad-data-quality.json`        | Per-team Phase 3 validation evidence                | `dataVersion`, team `fifaCode`                   |
+| `data/reports/probability-calibration.json`   | Internal analytical-vs-simulation calibration       | `modelVersion`, band `label`                     |
 | `exports/world-cup-simulation-data.xlsx`      | Human-readable validated data workbook              | sheet-specific keys                              |
 
 CSV exports mirror the snapshot's team, group-membership, and group-fixture
