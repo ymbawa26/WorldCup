@@ -86,4 +86,16 @@ describe("live match clock contract", () => {
       presentationState: "RUNNING",
     });
   });
+
+  it("caps a regulation clock at full time", () => {
+    const clock = createMatchClock();
+
+    clock.start(0);
+    clock.tick(120_000);
+
+    expect(clock.snapshot()).toMatchObject({
+      simulatedMinute: 90,
+      presentationState: "FULLTIME",
+    });
+  });
 });

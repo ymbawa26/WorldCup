@@ -25,16 +25,18 @@ Exit condition:
 
 ## Stage 2 — Reliable simulation clock
 
-- [ ] Implement `src/domain/live-match/clock.ts`.
-- [ ] Use elapsed real milliseconds rather than fixed interval increments.
-- [ ] Support speed `0.5x`, `1x`, and `2x`.
-- [ ] Support user pause/resume.
-- [ ] Support event-pause queue.
-- [ ] Ensure event pauses do not skip simulated time.
-- [ ] Ensure overlapping event pauses process serially.
-- [ ] Add halftime/full-time phase transitions to clock/runtime state.
-- [ ] Add documentation in `docs/MATCH_TIMING.md`.
-- [ ] Pass all clock tests without weakening assertions.
+- [x] Implement `src/domain/live-match/clock.ts`.
+- [x] Use elapsed real milliseconds rather than fixed interval increments.
+- [x] Support speed `0.5x`, `1x`, and `2x`.
+- [x] Support user pause/resume.
+- [x] Support event-pause queue.
+- [x] Ensure event pauses do not skip simulated time.
+- [x] Ensure overlapping event pauses process serially.
+- [x] Add full-time transition/capping to clock state.
+- [ ] Add halftime runtime transition once the live match UI can require “Start
+      Second Half.”
+- [x] Add documentation in `docs/MATCH_TIMING.md`.
+- [x] Pass all clock tests without weakening assertions.
 
 Exit condition:
 

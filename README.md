@@ -27,6 +27,8 @@ headless match-engine, probability/calibration, and core game-flow layer:
 - Deterministic seeded headless match engine with possession, shots, goals,
   cards, injuries, substitutions, tactical changes, extra time, shootouts, and
   derived statistics
+- Live match clock domain with elapsed-time timing, pause/resume, speed control,
+  event-pause queueing, and full-time capping
 - A responsive `/match-engine` diagnostic screen
 - Backend/domain prematch and live probabilities, red-card adjustments, and
   internal calibration reports
@@ -85,6 +87,7 @@ npm run test:e2e
 - [Data pipeline](docs/DATA_PIPELINE.md)
 - [Rating model](docs/RATING_MODEL.md)
 - [Simulation engine](docs/SIMULATION_ENGINE.md)
+- [Match timing](docs/MATCH_TIMING.md)
 - [Probability model](docs/PROBABILITY_MODEL.md)
 - [Core game flow](docs/GAME_FLOW.md)
 

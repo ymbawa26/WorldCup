@@ -5,7 +5,7 @@
 | Layer       | Tool                          | Current purpose                                                                            |
 | ----------- | ----------------------------- | ------------------------------------------------------------------------------------------ |
 | Static      | TypeScript, ESLint, Prettier  | Strict types, Next.js rules, consistent source                                             |
-| Unit        | Vitest, React Testing Library | Components, standings, normalization, ratings, simulation, probability, saves              |
+| Unit        | Vitest, React Testing Library | Components, standings, normalization, ratings, simulation, probability, saves, live clock  |
 | Integration | Vitest, ExcelJS               | Qualification, squads, ratings, simulation, probability, game flow, presentation, workbook |
 | Property    | fast-check                    | Bracket, rating, simulation, and probability invariants                                    |
 | End-to-end  | Playwright Chromium           | Navigation, desktop/mobile diagnostic routes, and playable progress views                  |
@@ -32,6 +32,9 @@ npm run db:smoke
 Simulation tests use deterministic random seeds and validate replayability,
 monotonic event time, event-derived scores, and batch performance. Every phase
 status entry records exact results and any intentionally unavailable check.
+Live-clock tests validate elapsed-time advancement at `0.5x`, `1x`, and `2x`,
+user pause, event-pause queues, overlapping event pauses, and full-time capping
+without waiting for real 90-second matches.
 Probability tests validate normalization, bounds, live-state monotonicity,
 red-card directional effects, and analytical-vs-simulated calibration tolerance.
 Game-flow tests validate tournament creation, selected-team pacing, accelerated

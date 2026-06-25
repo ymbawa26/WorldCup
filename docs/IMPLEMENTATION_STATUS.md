@@ -1,12 +1,12 @@
 # World Cup Management Simulation — Implementation Status
 
-**Last updated:** 2026-06-24
+**Last updated:** 2026-06-25
 
-**Current phase:** Phase 7 complete
+**Current phase:** Match engine remediation Stage 2 complete
 
-**Next eligible phase:** Phase 8 — Match-center UI
+**Next eligible phase:** Match engine remediation Stage 3 — Player backend and roster services
 
-**Overall product status:** Tested tournament model, official 1,248-player squad dataset, independent estimated ratings, deterministic headless match simulation, backend probability/calibration layer, and playable selected-team tournament flow
+**Overall product status:** Tested tournament model, official 1,248-player squad dataset, independent estimated ratings, deterministic headless match simulation, live match clock domain, backend probability/calibration layer, and playable selected-team tournament flow
 
 ## Phase summary
 
@@ -464,3 +464,53 @@ live 2026 tournament results into a new-game snapshot.
 
 Phase 8 may implement the match-center UI and richer fixture-by-fixture
 management without exposing backend-only model internals unnecessarily.
+
+## Match engine remediation — Stage 1 audit and timing tests
+
+### Completed scope
+
+- Audited the current match engine, match clock gap, frontend match surfaces,
+  team/player data, Prisma schema, state management, probability model, lineup
+  logic, and formation limitations.
+- Documented findings in `docs/MATCH_ENGINE_AUDIT.md`.
+- Added the ordered implementation checklist in `docs/MATCH_ENGINE_FIX_PLAN.md`.
+- Added live-clock contract tests covering 1x/2x/0.5x timing, user pause, event
+  pause, overlapping event queues, and full-time capping.
+
+### Gate evidence
+
+- Baseline before Stage 1 changes: typecheck, lint, unit, integration,
+  property, data validation, db validation, build, E2E, db smoke, and audit all
+  passed.
+- The new clock tests initially failed against the Stage 1 stub as expected.
+
+## Match engine remediation — Stage 2 reliable simulation clock
+
+### Completed scope
+
+- Implemented `src/domain/live-match/clock.ts` as a pure elapsed-time domain
+  clock independent from React rendering and interval drift.
+- Added speed handling for `0.5x`, `1x`, and `2x`.
+- Added user pause/resume.
+- Added serial event-pause queueing so important-event presentation pauses do
+  not skip simulated time or stack broken timers.
+- Added regulation full-time capping at 90 simulated minutes.
+- Documented the timing contract in `docs/MATCH_TIMING.md`.
+
+### Gate evidence
+
+- `tests/unit/match-clock.test.ts`: 7 tests passed.
+
+### Remaining limitations
+
+- The clock is not yet wired into a live match UI.
+- Halftime interaction remains reserved for the live runtime/UI because it needs
+  statistics, lineup/tactics controls, and a required “Start Second Half”
+  action.
+- Stoppage time, extra time, and penalty shootout phase orchestration remain for
+  later remediation stages.
+
+### Next stage
+
+Stage 3 should improve backend/player roster services without duplicating the
+existing Prisma player, squad, rating, and seed systems.
