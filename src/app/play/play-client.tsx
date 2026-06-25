@@ -78,6 +78,40 @@ function stageLabel(stage: string) {
     .replace("FINAL", "Final");
 }
 
+function userResultLabel(
+  match: {
+    homeTeamId: string | null;
+    awayTeamId: string | null;
+    homeGoals: number | null;
+    awayGoals: number | null;
+    winnerTeamId?: string | null;
+    loserTeamId?: string | null;
+  },
+  selectedTeamId: string,
+) {
+  const involvesUser =
+    match.homeTeamId === selectedTeamId || match.awayTeamId === selectedTeamId;
+  if (!involvesUser) return null;
+  if (match.homeGoals === null || match.awayGoals === null) return "Your match";
+  if (match.winnerTeamId === selectedTeamId) return "You won";
+  if (match.loserTeamId === selectedTeamId) return "You lost";
+  if (match.homeGoals === match.awayGoals) return "You drew";
+  if (match.homeTeamId === selectedTeamId) {
+    return match.homeGoals > match.awayGoals ? "You won" : "You lost";
+  }
+  if (match.awayTeamId === selectedTeamId) {
+    return match.awayGoals > match.homeGoals ? "You won" : "You lost";
+  }
+  return "Your result";
+}
+
+function userResultClass(label: string) {
+  if (label === "You won") return "bg-emerald-300/15 text-emerald-100";
+  if (label === "You lost") return "bg-rose-300/15 text-rose-100";
+  if (label === "You drew") return "bg-amber-300/15 text-amber-100";
+  return "bg-cyan-300/15 text-cyan-100";
+}
+
 function randomTournamentSeed() {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
     return `world-stage-${crypto.randomUUID()}`;
@@ -428,14 +462,43 @@ function TournamentProgress({
 }) {
   return (
     <section className="mt-8 space-y-8">
+      {presentation.showBracket ? (
+        <KnockoutBracket
+          presentation={presentation}
+          selectedTeamId={selectedTeamId}
+        />
+      ) : null}
+
+      <GroupStageTables
+        isArchive={presentation.showBracket}
+        presentation={presentation}
+        selectedTeamId={selectedTeamId}
+      />
+    </section>
+  );
+}
+
+function GroupStageTables({
+  isArchive,
+  presentation,
+  selectedTeamId,
+}: {
+  isArchive: boolean;
+  presentation: GamePresentation;
+  selectedTeamId: string;
+}) {
+  return (
+    <section className={isArchive ? "opacity-80" : undefined}>
       <div>
-        <p className="eyebrow">Group stage</p>
+        <p className="eyebrow">
+          {isArchive ? "Group stage archive" : "Group stage"}
+        </p>
         <h2 className="mt-2 text-3xl font-black text-white">
-          Updated tables and results
+          {isArchive ? "Final group tables" : "Updated tables and results"}
         </h2>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="mt-5 grid gap-5 lg:grid-cols-2">
         {tournamentSnapshot.groups.map((group) => (
           <article
             className="rounded-3xl border border-white/10 bg-[#0a102b]/90 p-5"
@@ -511,17 +574,31 @@ function TournamentProgress({
 
             <div className="mt-4 space-y-2">
               {presentation.groupResults[group.id].length > 0 ? (
-                presentation.groupResults[group.id].map((match) => (
-                  <p
-                    className="rounded-2xl bg-white/5 px-3 py-2 text-sm text-slate-200"
-                    key={match.matchNumber}
-                  >
-                    <span className="text-slate-500">
-                      Match {match.matchNumber}
-                    </span>{" "}
-                    {scoreline(match)}
-                  </p>
-                ))
+                presentation.groupResults[group.id].map((match) => {
+                  const resultLabel = userResultLabel(match, selectedTeamId);
+                  return (
+                    <div
+                      className="rounded-2xl bg-white/5 px-3 py-2 text-sm text-slate-200"
+                      key={match.matchNumber}
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <p>
+                          <span className="text-slate-500">
+                            Match {match.matchNumber}
+                          </span>{" "}
+                          {scoreline(match)}
+                        </p>
+                        {resultLabel ? (
+                          <span
+                            className={`rounded-full px-2 py-1 text-[0.65rem] font-black tracking-wider uppercase ${userResultClass(resultLabel)}`}
+                          >
+                            {resultLabel}
+                          </span>
+                        ) : null}
+                      </div>
+                    </div>
+                  );
+                })
               ) : (
                 <p className="rounded-2xl bg-white/5 px-3 py-2 text-sm text-slate-500">
                   No matches played yet.
@@ -531,59 +608,96 @@ function TournamentProgress({
           </article>
         ))}
       </div>
+    </section>
+  );
+}
 
-      {presentation.showBracket ? (
-        <section>
-          <p className="eyebrow">Knockout stage</p>
-          <h2 className="mt-2 text-3xl font-black text-white">
-            Bracket and results
-          </h2>
-          <div className="mt-5 grid gap-5 xl:grid-cols-3">
-            {[
-              "ROUND_OF_32",
-              "ROUND_OF_16",
-              "QUARTER_FINAL",
-              "SEMI_FINAL",
-              "THIRD_PLACE",
-              "FINAL",
-            ].map((stage) => (
-              <article
-                className="rounded-3xl border border-white/10 bg-[#0a102b]/90 p-5"
-                key={stage}
-              >
-                <h3 className="text-lg font-black text-white">
+function KnockoutBracket({
+  presentation,
+  selectedTeamId,
+}: {
+  presentation: GamePresentation;
+  selectedTeamId: string;
+}) {
+  const stages = [
+    "ROUND_OF_32",
+    "ROUND_OF_16",
+    "QUARTER_FINAL",
+    "SEMI_FINAL",
+    "THIRD_PLACE",
+    "FINAL",
+  ];
+
+  return (
+    <section>
+      <p className="eyebrow">Knockout stage</p>
+      <h2 className="mt-2 text-3xl font-black text-white">
+        Tournament bracket
+      </h2>
+      <p className="mt-2 max-w-2xl text-sm text-slate-400">
+        Groups are now decided, so the bracket takes priority. Scroll sideways
+        to follow each round from the Round of 32 through the Final.
+      </p>
+
+      <div className="mt-5 overflow-x-auto rounded-3xl border border-white/10 bg-[#080d23]/80 p-4">
+        <div className="grid min-w-[1320px] grid-cols-6 items-start gap-4">
+          {stages.map((stage) => (
+            <div className="relative" key={stage}>
+              <div className="sticky top-0 z-10 rounded-2xl border border-white/10 bg-[#11183a] px-4 py-3">
+                <h3 className="text-sm font-black tracking-wider text-white uppercase">
                   {stageLabel(stage)}
                 </h3>
-                <div className="mt-4 space-y-2">
-                  {(presentation.knockoutRounds[stage] ?? []).map((match) => (
+                <p className="mt-1 text-xs text-slate-500">
+                  {(presentation.knockoutRounds[stage] ?? []).length} matches
+                </p>
+              </div>
+
+              <div className="mt-4 space-y-3">
+                {(presentation.knockoutRounds[stage] ?? []).map((match) => {
+                  const resultLabel = userResultLabel(match, selectedTeamId);
+                  const involvesUser = Boolean(resultLabel);
+                  return (
                     <div
                       className={
-                        match.homeTeamId === selectedTeamId ||
-                        match.awayTeamId === selectedTeamId
-                          ? "rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-3"
-                          : "rounded-2xl bg-white/5 p-3"
+                        involvesUser
+                          ? "relative rounded-2xl border border-cyan-300/30 bg-cyan-300/10 p-3 shadow-[0_0_28px_rgba(103,232,249,0.12)]"
+                          : "relative rounded-2xl border border-white/10 bg-white/[0.04] p-3"
                       }
                       key={match.matchNumber}
                     >
-                      <p className="text-xs font-black tracking-wider text-slate-500 uppercase">
-                        Match {match.matchNumber}
-                      </p>
-                      <p className="mt-1 text-sm font-bold text-slate-100">
+                      <div className="absolute top-1/2 -right-4 hidden h-px w-4 bg-white/15 xl:block" />
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="text-xs font-black tracking-wider text-slate-500 uppercase">
+                          Match {match.matchNumber}
+                        </p>
+                        {resultLabel ? (
+                          <span
+                            className={`rounded-full px-2 py-1 text-[0.65rem] font-black tracking-wider uppercase ${userResultClass(resultLabel)}`}
+                          >
+                            {resultLabel}
+                          </span>
+                        ) : null}
+                      </div>
+                      <p className="mt-2 text-sm leading-6 font-bold text-slate-100">
                         {scoreline(match)}
                       </p>
                       {match.winnerTeamId ? (
-                        <p className="mt-1 text-xs text-emerald-200">
-                          Winner: {teamName(match.winnerTeamId)}
+                        <p className="mt-2 text-xs text-emerald-200">
+                          Winner: {teamLabel(match.winnerTeamId)}
                         </p>
-                      ) : null}
+                      ) : (
+                        <p className="mt-2 text-xs text-slate-500">
+                          Awaiting result
+                        </p>
+                      )}
                     </div>
-                  ))}
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-      ) : null}
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }

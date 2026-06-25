@@ -44,3 +44,6 @@ save/export/reset behavior.
 Roster-service tests validate all 48 teams, roster counts, goalkeeper coverage,
 duplicate player/shirt-number protection, generated team ratings availability,
 and the missing-player-data report.
+Selected-lineup rating tests validate the active matchday rating schema,
+starter-dominant strength changes, smaller bench influence, duplicate-player
+rejection, and the exactly-one-goalkeeper rule.

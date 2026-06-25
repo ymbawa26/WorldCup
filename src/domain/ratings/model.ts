@@ -119,7 +119,7 @@ const roleWeights: Record<TacticalRole, Record<RatingAttribute, number>> = {
   },
 };
 
-const roleFit: Record<
+export const ROLE_FIT_BY_POSITION: Record<
   Player["primaryPosition"],
   Record<TacticalRole, number>
 > = {
@@ -301,7 +301,7 @@ export function buildPlayerRating(
           sum + attributes[attribute as RatingAttribute] * weight,
         0,
       );
-      const fit = roleFit[player.primaryPosition][role];
+      const fit = ROLE_FIT_BY_POSITION[player.primaryPosition][role];
       return [role, rating(weighted * (0.86 + fit * 0.14))];
     }),
   ) as PlayerRating["roleRatings"];
@@ -358,7 +358,9 @@ export function buildTeamRating(
     const selected = available
       .map((player) => ({
         player,
-        score: player.roleRatings[role] * roleFit[player.primaryPosition][role],
+        score:
+          player.roleRatings[role] *
+          ROLE_FIT_BY_POSITION[player.primaryPosition][role],
       }))
       .sort((left, right) => right.score - left.score)[0];
     if (!selected) throw new Error(`Unable to fill ${team.id} ${role}`);
@@ -368,7 +370,7 @@ export function buildTeamRating(
       role,
       roleRating: selected.player.roleRatings[role],
       roleFit: Number(
-        roleFit[selected.player.primaryPosition][role].toFixed(2),
+        ROLE_FIT_BY_POSITION[selected.player.primaryPosition][role].toFixed(2),
       ),
     };
   });

@@ -68,15 +68,15 @@ Exit condition:
 
 ## Stage 4 — Team ratings from selected lineups
 
-- [ ] Define selected-lineup rating input schema.
-- [ ] Calculate attack, midfield, defense, goalkeeping, bench strength,
+- [x] Define selected-lineup rating input schema.
+- [x] Calculate attack, midfield, defense, goalkeeping, bench strength,
       pressing, counterattacking, set pieces, and discipline from selected
       starters/bench.
-- [ ] Ensure starting lineup dominates active rating influence.
-- [ ] Ensure bench strength is a smaller influence.
-- [ ] Exclude non-selected players from direct in-match influence.
-- [ ] Add position-fit and tactical-role-fit calculations.
-- [ ] Document formulas in `docs/TEAM_RATING_MODEL.md`.
+- [x] Ensure starting lineup dominates active rating influence.
+- [x] Ensure bench strength is a smaller influence.
+- [x] Exclude non-selected players from direct in-match influence.
+- [x] Add position-fit and tactical-role-fit calculations.
+- [x] Document formulas in `docs/TEAM_RATING_MODEL.md`.
 
 Exit condition:
 

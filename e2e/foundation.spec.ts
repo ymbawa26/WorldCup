@@ -152,6 +152,7 @@ test("play flow advances by selected-team match and manages saves", async ({
   ).toBeVisible();
   await expect(page.getByText("🇲🇽").first()).toBeVisible();
   await expect(page.getByText(/Match 1.*Mexico/).last()).toBeVisible();
+  await expect(page.getByText(/You (won|lost|drew)/).first()).toBeVisible();
   await expect(
     page.getByRole("button", { name: /play next match/i }),
   ).toBeEnabled();
@@ -163,7 +164,7 @@ test("play flow advances by selected-team match and manages saves", async ({
   for (let attempt = 0; attempt < 6; attempt += 1) {
     if (
       await page
-        .getByRole("heading", { name: /bracket and results/i })
+        .getByRole("heading", { name: /tournament bracket/i })
         .isVisible()
     ) {
       break;
@@ -171,7 +172,7 @@ test("play flow advances by selected-team match and manages saves", async ({
     await page.getByRole("button", { name: /play next match/i }).click();
   }
   await expect(
-    page.getByRole("heading", { name: /bracket and results/i }),
+    page.getByRole("heading", { name: /tournament bracket/i }),
   ).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Round of 32" }),

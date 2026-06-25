@@ -2,11 +2,11 @@
 
 **Last updated:** 2026-06-25
 
-**Current phase:** Match engine remediation Stage 3 complete
+**Current phase:** Match engine remediation Stage 4 complete
 
-**Next eligible phase:** Match engine remediation Stage 4 — Team ratings from selected lineups
+**Next eligible phase:** Match engine remediation Stage 5 — Prematch lineup, formations, and tactical setup
 
-**Overall product status:** Tested tournament model, official 1,248-player squad dataset, independent estimated ratings, deterministic headless match simulation, live match clock domain, backend probability/calibration layer, and playable selected-team tournament flow
+**Overall product status:** Tested tournament model, official 1,248-player squad dataset, independent estimated ratings, selected-lineup active team ratings, deterministic headless match simulation, live match clock domain, backend probability/calibration layer, and playable selected-team tournament flow
 
 ## Phase summary
 
@@ -552,5 +552,45 @@ existing Prisma player, squad, rating, and seed systems.
 
 ### Next stage
 
-Stage 4 should calculate team ratings from selected lineups rather than only
-from default generated lineups.
+Stage 4 was the next handoff: calculate team ratings from selected lineups
+rather than only from default generated lineups.
+
+## Match engine remediation Stage 4 — Selected-lineup active ratings
+
+### Completed scope
+
+- Added `src/domain/lineups/rating.ts` with a Zod input schema for selected
+  starters and bench players.
+- Added active team strengths derived only from the selected eleven starters and
+  selected bench: attack, midfield, defense, goalkeeping, bench strength,
+  pressing, counterattacking, set pieces, discipline, and overall.
+- Weighted starters as the dominant influence and bench strength as a smaller
+  stabilizer.
+- Reused the rating model's tactical role-fit matrix so out-of-position players
+  are penalized consistently.
+- Added unit coverage for starter changes, bench-limited influence, duplicate
+  rejection, and the exactly-one-goalkeeper rule.
+- Updated `/play` so knockout brackets become the primary section when the
+  Round of 32 begins; group tables remain below as a final archive.
+- Added player-facing “You won”, “You lost”, and “You drew” badges on the
+  user's completed group and knockout matches.
+
+### Gate evidence
+
+- Selected-lineup unit tests verify that changing a starter changes active
+  rating output and that weak bench players do not distort active attack or
+  defense like weak starters do.
+- UI output still keeps model internals in backend/domain code; the player sees
+  only useful tournament state, bracket structure, and personal result labels.
+
+### Remaining limitations
+
+- Formation definitions and matchup modifiers are intentionally deferred to
+  Stage 5.
+- The match simulator still uses the current static team probabilities until
+  Stage 5/6 connect active lineup ratings to prematch probability recalculation.
+
+### Next stage
+
+Stage 5 should add formation definitions, lineup validation by formation slots,
+tactical controls, and prematch probability updates.
