@@ -1,16 +1,13 @@
 "use client";
 
-import { BarChart3, CircleDot, Menu } from "lucide-react";
+import { CircleDot, Menu } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
 const navigation = [
-  { href: "/tournament-model", label: "Tournament model" },
-  { href: "/data-quality", label: "Data quality" },
-  { href: "/ratings", label: "Ratings" },
-  { href: "/match-engine", label: "Match engine" },
+  { href: "/play", label: "Play" },
   { href: "/how-it-works", label: "How it works" },
   { href: "/methodology", label: "Methodology" },
   { href: "/settings", label: "Settings" },
@@ -54,15 +51,8 @@ export function SiteHeader() {
         <div className="hidden items-center gap-3 sm:flex">
           <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.14em] text-emerald-300 uppercase">
             <span className="size-2 rounded-full bg-emerald-300 shadow-[0_0_10px_rgba(110,231,183,0.7)]" />
-            Model verified
+            Ready to play
           </span>
-          <Button
-            aria-label="Tournament data status"
-            size="icon"
-            variant="secondary"
-          >
-            <BarChart3 aria-hidden="true" className="size-4" />
-          </Button>
         </div>
 
         <Button

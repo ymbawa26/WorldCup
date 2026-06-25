@@ -9,8 +9,8 @@ test("foundation shell is navigable and responsive", async ({ page }) => {
     }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: /new tournament/i }),
-  ).toBeDisabled();
+    page.getByRole("link", { name: /new tournament/i }),
+  ).toBeVisible();
 
   await page.getByRole("link", { name: "Methodology" }).first().click();
   await expect(
@@ -122,4 +122,40 @@ test("match engine page exposes deterministic event log diagnostics", async ({
   await expect(
     page.getByText("Immutable event log", { exact: true }),
   ).toBeVisible();
+});
+
+test("play flow completes an accelerated tournament and manages saves", async ({
+  page,
+}) => {
+  await page.goto("/play");
+
+  await page.getByLabel("Country").selectOption("mexico");
+  await page.getByLabel("Seed").fill("e2e-core-flow");
+  await page.getByRole("button", { name: /^new tournament/i }).click();
+
+  await expect(
+    page.getByText("Tournament complete. Autosave updated.", { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByText("104", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: /continue/i })).toBeEnabled();
+
+  await page.getByRole("button", { name: /manual save/i }).click();
+  await expect(page.getByText(/manual save complete/i)).toBeVisible();
+
+  await page.getByRole("button", { name: /^export/i }).click();
+  const exported = await page.locator("textarea").first().inputValue();
+  expect(exported).toContain('"schemaVersion": 1');
+
+  await page
+    .getByPlaceholder("Paste exported save JSON here")
+    .fill("{bad json");
+  await page.getByRole("button", { name: /^import/i }).click();
+  await expect(page.getByText(/import rejected/i)).toBeVisible();
+
+  await page.getByPlaceholder("Paste exported save JSON here").fill(exported);
+  await page.getByRole("button", { name: /^import/i }).click();
+  await expect(page.getByText(/save imported/i)).toBeVisible();
+
+  await page.getByRole("button", { name: /^reset/i }).click();
+  await expect(page.getByText(/save reset/i)).toBeVisible();
 });

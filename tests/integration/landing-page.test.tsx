@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import HomePage from "@/app/page";
 
 describe("landing page", () => {
-  it("presents the product and keeps unavailable tournament actions disabled", () => {
+  it("presents the product and links into the playable tournament flow", () => {
     render(<HomePage />);
 
     expect(
@@ -13,9 +13,12 @@ describe("landing page", () => {
       }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /new tournament/i }),
-    ).toBeDisabled();
-    expect(screen.getByRole("button", { name: /continue/i })).toBeDisabled();
+      screen.getByRole("link", { name: /new tournament/i }),
+    ).toHaveAttribute("href", "/play");
+    expect(screen.getByRole("link", { name: /continue/i })).toHaveAttribute(
+      "href",
+      "/play",
+    );
     expect(screen.getByText("104")).toBeInTheDocument();
   });
 });

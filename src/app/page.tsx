@@ -65,17 +65,19 @@ export default function HomePage() {
             </p>
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Button disabled size="large">
-                New tournament
-                <ArrowRight aria-hidden="true" className="size-4" />
+              <Button asChild size="large">
+                <Link href="/play">
+                  New tournament
+                  <ArrowRight aria-hidden="true" className="size-4" />
+                </Link>
               </Button>
-              <Button disabled size="large" variant="secondary">
-                Continue
+              <Button asChild size="large" variant="secondary">
+                <Link href="/play">Continue</Link>
               </Button>
             </div>
             <p className="mt-3 text-sm text-slate-500">
-              Tournament creation unlocks after the verified data foundation is
-              complete.
+              Accelerated tournament flow is available. Detailed match-center
+              controls arrive in the next phase.
             </p>
 
             <div className="mt-11 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-4">
@@ -139,14 +141,14 @@ export default function HomePage() {
       <section className="border-t border-white/10 bg-[#050819] px-5 py-16 sm:px-8 lg:px-12">
         <div className="mx-auto grid max-w-[1440px] gap-8 rounded-[2rem] border border-violet-300/15 bg-gradient-to-r from-violet-500/10 via-sky-500/5 to-cyan-300/10 p-8 sm:p-10 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
-            <p className="eyebrow">Phase 1 foundation</p>
+            <p className="eyebrow">Playable core</p>
             <h2 className="mt-3 text-2xl font-black text-white sm:text-3xl">
-              The platform is ready for verified tournament data.
+              Start a tournament without seeing the machinery.
             </h2>
             <p className="mt-3 max-w-3xl leading-7 text-slate-400">
-              Application architecture, accessibility, test automation, and
-              database tooling are established before competition logic enters
-              the codebase.
+              Internal models, calibration reports, and validation tools stay
+              behind the curtain. The player flow focuses on choosing a nation,
+              completing the tournament, and managing saves.
             </p>
           </div>
           <div className="flex items-center gap-3 rounded-2xl border border-emerald-300/20 bg-emerald-300/[0.06] px-5 py-4 text-emerald-200">

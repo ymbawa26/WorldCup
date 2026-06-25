@@ -1,6 +1,6 @@
 # Architecture
 
-**Current scope:** Phase 6 tournament, squad, ratings, simulation, and probability
+**Current scope:** Phase 7 tournament, squad, ratings, simulation, probability, and game flow
 
 **Last updated:** 2026-06-24
 
@@ -20,8 +20,8 @@ flowchart LR
 ```
 
 The UI shell, tournament domain, squad ingestion domain, ratings domain,
-headless match engine, and probability domain now exist. Save domains remain
-reserved for their owning phases.
+headless match engine, probability domain, core game-flow domain, and browser
+save adapter now exist.
 
 ## Tournament domain
 
@@ -76,6 +76,7 @@ during static builds.
 - `src/domain/ratings`: deterministic estimated player ratings, role fits, lineup selection, and team strengths
 - `src/domain/simulation`: deterministic match clock, event log, AI manager actions, and derived match statistics
 - `src/domain/probability`: prematch score matrices, live probabilities, red-card adjustments, and calibration reports
+- `src/domain/game`: tournament creation, accelerated simulation, bracket completion, save serialization, and IndexedDB adapter
 - `scripts/data`: cached fetch, extraction, normalization, validation, and export tooling
 - `scripts/ratings`: deterministic rating generation
 - `tests`: unit, integration, and property tests

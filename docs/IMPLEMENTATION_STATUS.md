@@ -2,11 +2,11 @@
 
 **Last updated:** 2026-06-24
 
-**Current phase:** Phase 6 complete
+**Current phase:** Phase 7 complete
 
-**Next eligible phase:** Phase 7 — Core game flow
+**Next eligible phase:** Phase 8 — Match-center UI
 
-**Overall product status:** Tested tournament model, official 1,248-player squad dataset, independent estimated ratings, deterministic headless match simulation, and backend probability/calibration layer
+**Overall product status:** Tested tournament model, official 1,248-player squad dataset, independent estimated ratings, deterministic headless match simulation, backend probability/calibration layer, and playable accelerated tournament flow
 
 ## Phase summary
 
@@ -19,8 +19,8 @@
 | 4. Ratings engine              | Complete    | Player/team ratings generated and tested       |
 | 5. Headless match engine       | Complete    | Deterministic event engine tested              |
 | 6. Probability and calibration | Complete    | Probability bounds and calibration tested      |
-| 7. Core game flow              | Not started | Awaiting implementation                        |
-| 8. Match-center UI             | Not started | Blocked by Phase 7                             |
+| 7. Core game flow              | Complete    | Accelerated tournament and saves tested        |
+| 8. Match-center UI             | Not started | Awaiting implementation                        |
 | 9. Visual polish               | Not started | Blocked by Phase 8                             |
 | 10. Deployment and final QA    | Not started | Blocked by Phase 9                             |
 
@@ -415,7 +415,40 @@ live 2026 tournament results into a new-game snapshot.
 - No match-center probability chart is exposed to users; Phase 8 should design
   the user-facing presentation carefully.
 
+## Phase 7 — Core game flow
+
+### Completed scope
+
+- Added `src/domain/game` for versioned tournament creation, accelerated group
+  and knockout simulation, standings/progression, save serialization, import
+  parsing, and legacy save migration.
+- Added IndexedDB browser save adapter for autosave, manual save, resume,
+  import, export, invalid import rejection, and reset.
+- Added `/play` as the player-facing route for choosing a country and completing
+  an accelerated tournament to one champion.
+- Removed internal diagnostics from the primary navigation. Tournament-model,
+  data-quality, ratings, match-engine, and probability/calibration internals
+  remain backend/development audit surfaces rather than ordinary user-facing
+  pages.
+- Documented the flow in `docs/GAME_FLOW.md`.
+
+### Gate evidence
+
+- Integration tests create a tournament, track simultaneous fixture batches, and
+  complete 72 group matches plus 32 knockout matches to one champion.
+- Unit tests cover save export/import, invalid import rejection, and v0-to-v1
+  save migration.
+- Playwright completes an accelerated tournament from country selection to one
+  champion, then verifies autosave/continue, manual save, export, import
+  rejection, valid import, and reset.
+
+### Remaining limitations
+
+- `/play` is accelerated and summary-oriented; match-center controls and
+  fixture-by-fixture management belong to Phase 8.
+- User-edited tactics and lineup selection are not exposed yet.
+
 ### Next phase
 
-Phase 7 may implement core game flow: country selection, tournament creation,
-fixture simulation, standings/progression, and versioned saves.
+Phase 8 may implement the match-center UI and richer fixture-by-fixture
+management without exposing backend-only model internals unnecessarily.
