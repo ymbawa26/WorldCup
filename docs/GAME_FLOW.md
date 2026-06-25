@@ -17,6 +17,9 @@ selection to one champion, with saves and selected-team pacing.
 - Users see concise match odds and the latest selected-team result. Raw seed,
   model factors, calibration reports, and diagnostic internals remain backend
   data.
+- After a match is played, `/play` renders every group with updated standings
+  and played results. Once knockout information exists, it renders bracket
+  rounds with participants, scores, and winners as they are resolved.
 - Autosave, manual save, export, import, invalid-import rejection, migrated
   legacy saves, continue, and reset are implemented.
 
@@ -44,7 +47,9 @@ not part of the ordinary player journey.
    available.
 6. Resolve official group standings, best third-place allocation, and knockout
    progression while preserving already-played save-state results.
-7. Persist the save to IndexedDB and allow export/import/reset from a secondary
+7. Build a player-facing presentation snapshot for group tables, group results,
+   and bracket rounds.
+8. Persist the save to IndexedDB and allow export/import/reset from a secondary
    save-transfer drawer.
 
 ## Current simplifications

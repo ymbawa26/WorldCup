@@ -4,6 +4,7 @@ import {
   advanceToNextUserMatch,
   accelerateTournament,
   createTournamentGame,
+  gamePresentation,
   nextUserMatchPreview,
   simulateGroupStage,
   validateLegalLineup,
@@ -72,5 +73,42 @@ describe("core game flow", () => {
       awayTeamId: "haiti",
     });
     expect(afterOpener.state.groupMatches[0]!.modelFactors).toHaveLength(10);
+  });
+
+  it("builds player-facing group tables, results, and knockout bracket presentation", () => {
+    const created = createTournamentGame({
+      seed: "integration-presentation",
+      userTeamId: "mexico",
+    });
+    const afterOpener = advanceToNextUserMatch(created);
+    const groupPresentation = gamePresentation(afterOpener.state);
+
+    expect(groupPresentation.groupResults.A).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ matchNumber: 1, homeTeamId: "mexico" }),
+      ]),
+    );
+    expect(groupPresentation.standingsByGroup.A).toHaveLength(4);
+    expect(
+      groupPresentation.standingsByGroup.A.find(
+        (standing) => standing.teamId === "mexico",
+      )?.played,
+    ).toBe(1);
+    expect(groupPresentation.showBracket).toBe(false);
+
+    const complete = accelerateTournament(
+      "integration-presentation-complete",
+      "mexico",
+    );
+    const completePresentation = gamePresentation(complete.state);
+
+    expect(completePresentation.showBracket).toBe(true);
+    expect(completePresentation.knockoutRounds.ROUND_OF_32).toHaveLength(16);
+    expect(completePresentation.knockoutRounds.FINAL).toEqual([
+      expect.objectContaining({
+        matchNumber: 104,
+        winnerTeamId: complete.state.championTeamId,
+      }),
+    ]);
   });
 });

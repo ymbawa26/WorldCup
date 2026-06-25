@@ -141,11 +141,34 @@ test("play flow advances by selected-team match and manages saves", async ({
   await expect(page.getByText("Match 1 autosaved")).toBeVisible();
   await expect(page.getByText("Next: Mexico vs Korea Republic")).toBeVisible();
   await expect(
+    page.getByRole("heading", { name: /updated tables and results/i }),
+  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Group A" })).toBeVisible();
+  await expect(page.getByText(/Match 1 Mexico/)).toBeVisible();
+  await expect(
     page.getByRole("button", { name: /play next match/i }),
   ).toBeEnabled();
 
   await page.getByRole("button", { name: /play next match/i }).click();
   await expect(page.getByText("Match 28 autosaved")).toBeVisible();
+  await expect(page.getByText(/Match 28 Mexico/)).toBeVisible();
+
+  for (let attempt = 0; attempt < 6; attempt += 1) {
+    if (
+      await page
+        .getByRole("heading", { name: /bracket and results/i })
+        .isVisible()
+    ) {
+      break;
+    }
+    await page.getByRole("button", { name: /play next match/i }).click();
+  }
+  await expect(
+    page.getByRole("heading", { name: /bracket and results/i }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Round of 32" }),
+  ).toBeVisible();
 
   await page.getByRole("button", { name: /manual save/i }).click();
   await expect(page.getByText(/manual save complete/i)).toBeVisible();

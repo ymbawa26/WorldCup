@@ -126,6 +126,14 @@ function groupStandingsFromMatches(groupMatches: MatchRecord[]) {
   ) as Record<GroupId, ReturnType<typeof buildGroupStandings>>;
 }
 
+function groupForMatch(matchNumber: number) {
+  const fixture = tournamentSnapshot.fixtures.find(
+    (candidate) => candidate.matchNumber === matchNumber,
+  );
+  if (!fixture) throw new Error(`Missing group fixture ${matchNumber}`);
+  return fixture.group;
+}
+
 export function createTournamentGame({
   seed = `world-stage-${Date.now().toString(36)}-${Math.random()
     .toString(36)
@@ -224,6 +232,65 @@ function completedKnockoutByNumber(state: TournamentGameState) {
       } as ResolvedKnockoutMatch,
     ]),
   );
+}
+
+export function gamePresentation(state: TournamentGameState) {
+  const standingsByGroup = groupStandingsFromMatches(state.groupMatches);
+  const knockoutRecords = new Map(
+    state.knockoutMatches.map((match) => [match.matchNumber, match]),
+  );
+  const resolvedKnockout = completedKnockoutByNumber(state);
+  const knockoutParticipants = groupStageComplete(state)
+    ? resolveKnockoutParticipants(state, resolvedKnockout)
+    : [];
+
+  return {
+    groupResults: Object.fromEntries(
+      tournamentSnapshot.groups.map((group) => [
+        group.id,
+        state.groupMatches
+          .filter((match) => groupForMatch(match.matchNumber) === group.id)
+          .sort((left, right) => left.matchNumber - right.matchNumber),
+      ]),
+    ) as Record<GroupId, MatchRecord[]>,
+    standingsByGroup,
+    knockoutRounds: knockoutBracket.matches.reduce(
+      (rounds, bracketMatch) => {
+        const participantMatch = knockoutParticipants.find(
+          (match) => match?.matchNumber === bracketMatch.matchNumber,
+        );
+        const record = knockoutRecords.get(bracketMatch.matchNumber) ?? null;
+        const match = {
+          matchNumber: bracketMatch.matchNumber,
+          stage: bracketMatch.stage,
+          homeTeamId:
+            record?.homeTeamId ?? participantMatch?.homeTeamId ?? null,
+          awayTeamId:
+            record?.awayTeamId ?? participantMatch?.awayTeamId ?? null,
+          homeGoals: record?.homeGoals ?? null,
+          awayGoals: record?.awayGoals ?? null,
+          winnerTeamId: record?.winnerTeamId ?? null,
+        };
+        return {
+          ...rounds,
+          [bracketMatch.stage]: [...(rounds[bracketMatch.stage] ?? []), match],
+        };
+      },
+      {} as Record<
+        string,
+        Array<{
+          matchNumber: number;
+          stage: string;
+          homeTeamId: string | null;
+          awayTeamId: string | null;
+          homeGoals: number | null;
+          awayGoals: number | null;
+          winnerTeamId: string | null;
+        }>
+      >,
+    ),
+    showBracket: groupStageComplete(state) || state.knockoutMatches.length > 0,
+  };
 }
 
 function groupStageComplete(state: TournamentGameState) {

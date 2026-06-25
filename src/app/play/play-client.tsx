@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import {
   advanceToNextUserMatch,
   createTournamentGame,
+  gamePresentation,
   nextUserMatchPreview,
 } from "@/domain/game/engine";
 import type { TournamentGameState } from "@/domain/game/schema";
@@ -27,6 +28,7 @@ import {
 import { tournamentSnapshot } from "@/domain/tournament/data";
 
 type NextMatchPreview = NonNullable<ReturnType<typeof nextUserMatchPreview>>;
+type GamePresentation = ReturnType<typeof gamePresentation>;
 
 const teamsById = new Map(
   tournamentSnapshot.teams.map((team) => [team.id, team]),
@@ -38,6 +40,29 @@ function teamName(teamId: string | null | undefined) {
 
 function percent(value: number) {
   return `${Math.round(value * 100)}%`;
+}
+
+function scoreline(match: {
+  homeTeamId: string | null;
+  awayTeamId: string | null;
+  homeGoals: number | null;
+  awayGoals: number | null;
+}) {
+  if (!match.homeTeamId || !match.awayTeamId) return "TBD";
+  if (match.homeGoals === null || match.awayGoals === null) {
+    return `${teamName(match.homeTeamId)} vs ${teamName(match.awayTeamId)}`;
+  }
+  return `${teamName(match.homeTeamId)} ${match.homeGoals}–${match.awayGoals} ${teamName(match.awayTeamId)}`;
+}
+
+function stageLabel(stage: string) {
+  return stage
+    .replace("ROUND_OF_32", "Round of 32")
+    .replace("ROUND_OF_16", "Round of 16")
+    .replace("QUARTER_FINAL", "Quarter-finals")
+    .replace("SEMI_FINAL", "Semi-finals")
+    .replace("THIRD_PLACE", "Third place")
+    .replace("FINAL", "Final");
 }
 
 function randomTournamentSeed() {
@@ -96,6 +121,10 @@ export function PlayClient() {
   const matchesPlayed =
     (currentState?.groupMatches.length ?? 0) +
     (currentState?.knockoutMatches.length ?? 0);
+  const presentation = useMemo(
+    () => (currentState ? gamePresentation(currentState) : null),
+    [currentState],
+  );
 
   async function persistNext(next: ReturnType<typeof advanceToNextUserMatch>) {
     setCurrentState(next.state);
@@ -337,6 +366,13 @@ export function PlayClient() {
           </section>
         </div>
 
+        {presentation ? (
+          <TournamentProgress
+            presentation={presentation}
+            selectedTeamId={selectedTeamId}
+          />
+        ) : null}
+
         <details className="mt-8 rounded-3xl border border-white/10 bg-[#0a102b]/90 p-6">
           <summary className="cursor-pointer text-xl font-black text-white">
             Save transfer
@@ -367,5 +403,163 @@ export function PlayClient() {
         </details>
       </div>
     </div>
+  );
+}
+
+function TournamentProgress({
+  presentation,
+  selectedTeamId,
+}: {
+  presentation: GamePresentation;
+  selectedTeamId: string;
+}) {
+  return (
+    <section className="mt-8 space-y-8">
+      <div>
+        <p className="eyebrow">Group stage</p>
+        <h2 className="mt-2 text-3xl font-black text-white">
+          Updated tables and results
+        </h2>
+      </div>
+
+      <div className="grid gap-5 xl:grid-cols-3">
+        {tournamentSnapshot.groups.map((group) => (
+          <article
+            className="rounded-3xl border border-white/10 bg-[#0a102b]/90 p-5"
+            key={group.id}
+          >
+            <div className="flex items-center justify-between gap-4">
+              <h3 className="text-xl font-black text-white">
+                Group {group.id}
+              </h3>
+              <p className="text-xs font-black tracking-wider text-slate-500 uppercase">
+                {presentation.groupResults[group.id].length}/6 played
+              </p>
+            </div>
+
+            <div className="mt-4 overflow-x-auto">
+              <table className="w-full min-w-[420px] text-left text-sm">
+                <thead className="text-xs tracking-wider text-slate-500 uppercase">
+                  <tr>
+                    <th className="py-2 pr-3">Team</th>
+                    <th className="px-2 py-2 text-center">P</th>
+                    <th className="px-2 py-2 text-center">W</th>
+                    <th className="px-2 py-2 text-center">D</th>
+                    <th className="px-2 py-2 text-center">L</th>
+                    <th className="px-2 py-2 text-center">GD</th>
+                    <th className="px-2 py-2 text-center">Pts</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {presentation.standingsByGroup[group.id].map((standing) => (
+                    <tr
+                      className={
+                        standing.teamId === selectedTeamId
+                          ? "bg-cyan-300/10 text-cyan-100"
+                          : "border-t border-white/5 text-slate-200"
+                      }
+                      key={standing.teamId}
+                    >
+                      <td className="py-2 pr-3 font-bold">
+                        {teamName(standing.teamId)}
+                      </td>
+                      <td className="px-2 py-2 text-center">
+                        {standing.played}
+                      </td>
+                      <td className="px-2 py-2 text-center">{standing.wins}</td>
+                      <td className="px-2 py-2 text-center">
+                        {standing.draws}
+                      </td>
+                      <td className="px-2 py-2 text-center">
+                        {standing.losses}
+                      </td>
+                      <td className="px-2 py-2 text-center">
+                        {standing.goalDifference}
+                      </td>
+                      <td className="px-2 py-2 text-center font-black text-white">
+                        {standing.points}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="mt-4 space-y-2">
+              {presentation.groupResults[group.id].length > 0 ? (
+                presentation.groupResults[group.id].map((match) => (
+                  <p
+                    className="rounded-2xl bg-white/5 px-3 py-2 text-sm text-slate-200"
+                    key={match.matchNumber}
+                  >
+                    <span className="text-slate-500">
+                      Match {match.matchNumber}
+                    </span>{" "}
+                    {scoreline(match)}
+                  </p>
+                ))
+              ) : (
+                <p className="rounded-2xl bg-white/5 px-3 py-2 text-sm text-slate-500">
+                  No matches played yet.
+                </p>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+
+      {presentation.showBracket ? (
+        <section>
+          <p className="eyebrow">Knockout stage</p>
+          <h2 className="mt-2 text-3xl font-black text-white">
+            Bracket and results
+          </h2>
+          <div className="mt-5 grid gap-5 xl:grid-cols-3">
+            {[
+              "ROUND_OF_32",
+              "ROUND_OF_16",
+              "QUARTER_FINAL",
+              "SEMI_FINAL",
+              "THIRD_PLACE",
+              "FINAL",
+            ].map((stage) => (
+              <article
+                className="rounded-3xl border border-white/10 bg-[#0a102b]/90 p-5"
+                key={stage}
+              >
+                <h3 className="text-lg font-black text-white">
+                  {stageLabel(stage)}
+                </h3>
+                <div className="mt-4 space-y-2">
+                  {(presentation.knockoutRounds[stage] ?? []).map((match) => (
+                    <div
+                      className={
+                        match.homeTeamId === selectedTeamId ||
+                        match.awayTeamId === selectedTeamId
+                          ? "rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-3"
+                          : "rounded-2xl bg-white/5 p-3"
+                      }
+                      key={match.matchNumber}
+                    >
+                      <p className="text-xs font-black tracking-wider text-slate-500 uppercase">
+                        Match {match.matchNumber}
+                      </p>
+                      <p className="mt-1 text-sm font-bold text-slate-100">
+                        {scoreline(match)}
+                      </p>
+                      {match.winnerTeamId ? (
+                        <p className="mt-1 text-xs text-emerald-200">
+                          Winner: {teamName(match.winnerTeamId)}
+                        </p>
+                      ) : null}
+                    </div>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
+    </section>
   );
 }

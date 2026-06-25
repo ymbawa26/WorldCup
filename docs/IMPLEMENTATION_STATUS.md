@@ -433,6 +433,9 @@ live 2026 tournament results into a new-game snapshot.
 - Added `/play` as the player-facing route for choosing a country, playing the
   selected team’s next match, and letting the computer instantly simulate other
   fixtures up to the selected team’s following match.
+- Added player-facing tournament progress views: latest match result, all 12
+  group tables with played group results, and knockout bracket rounds with
+  participants, scores, and winners as they resolve.
 - Removed internal diagnostics from the primary navigation. Tournament-model,
   data-quality, ratings, match-engine, and probability/calibration internals
   remain backend/development audit surfaces rather than ordinary user-facing
@@ -443,13 +446,13 @@ live 2026 tournament results into a new-game snapshot.
 
 - Integration tests create a tournament, track simultaneous fixture batches,
   prove Brazil’s first selected-team window, verify ten model factors on match
-  records, and complete 72 group matches plus 32 knockout matches to one
-  champion.
+  records, build group-table/result/bracket presentation snapshots, and complete
+  72 group matches plus 32 knockout matches to one champion.
 - Unit tests cover save export/import, invalid import rejection, and legacy
   save migration into the current schema.
 - Playwright verifies no seed field is exposed, selected-team match advancement,
-  autosave/continue, manual save, export, import rejection, valid import, and
-  reset.
+  group-table/result rendering, knockout bracket rendering, autosave/continue,
+  manual save, export, import rejection, valid import, and reset.
 
 ### Remaining limitations
 
