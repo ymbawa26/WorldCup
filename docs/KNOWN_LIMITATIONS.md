@@ -1,12 +1,12 @@
 # Known Limitations
 
-## Phase 4
+## Phase 5
 
 - The current application is a tested visual and technical foundation, not a playable game.
 - New Tournament and Continue are intentionally disabled.
 - Teams, groups, fixtures, tournament rules, official squads, players, a
-  database migration, a seed, estimated ratings, and default lineups are present;
-  simulation state is not.
+  database migration, a seed, estimated ratings, default lineups, and headless
+  match simulation are present.
 - The application reads immutable files at build time; normal page requests do
   not yet use a live database connection.
 - Preferred foot, secondary positions, and league are absent from the official
@@ -22,7 +22,8 @@
 - No authentication or save storage exists.
 - The mobile navigation is a simple disclosure menu; richer focus management will be reviewed with the complete navigation system.
 - English is the only locale. The locale/message boundary is prepared for `next-intl`, but localized routing is not active.
-- The animated pitch remains decorative product framing, not a match simulation.
+- The animated pitch remains decorative product framing; the headless event log
+  exists but is not yet wired into a playable match UI.
 - No deployment has occurred.
 
 These are phase boundaries rather than hidden placeholders. Each system will be removed from this list only after its owning phase passes automated and manual validation.

@@ -5,9 +5,9 @@
 | Layer       | Tool                          | Current purpose                                                    |
 | ----------- | ----------------------------- | ------------------------------------------------------------------ |
 | Static      | TypeScript, ESLint, Prettier  | Strict types, Next.js rules, consistent source                     |
-| Unit        | Vitest, React Testing Library | Components, standings, data normalization, and rating formulas     |
-| Integration | Vitest, ExcelJS               | Qualification, squads, ratings, seed plans, and workbook products  |
-| Property    | fast-check                    | Bracket invariants, rating scale bounds, and shared utility props  |
+| Unit        | Vitest, React Testing Library | Components, standings, data normalization, ratings, and simulation |
+| Integration | Vitest, ExcelJS               | Qualification, squads, ratings, simulation, seed, and workbook     |
+| Property    | fast-check                    | Bracket invariants, rating bounds, and simulation invariants       |
 | End-to-end  | Playwright Chromium           | Navigation and desktop/mobile diagnostic routes                    |
 | Data        | TypeScript validation scripts | Reject invalid tournament, squad, or rating data                   |
 | Database    | Prisma CLI and PGlite socket  | Validate migrations and run the PostgreSQL seed twice              |
@@ -29,4 +29,6 @@ npm run test:e2e
 npm run db:smoke
 ```
 
-Tests must use deterministic random seeds once simulation randomness is introduced. Every phase status entry records exact results and any intentionally unavailable check.
+Simulation tests use deterministic random seeds and validate replayability,
+monotonic event time, event-derived scores, and batch performance. Every phase
+status entry records exact results and any intentionally unavailable check.

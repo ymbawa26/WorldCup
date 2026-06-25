@@ -2,11 +2,11 @@
 
 **Last updated:** 2026-06-24
 
-**Current phase:** Phase 4 complete
+**Current phase:** Phase 5 complete
 
-**Next eligible phase:** Phase 5 — Headless match engine
+**Next eligible phase:** Phase 6 — Probability and calibration
 
-**Overall product status:** Tested tournament model, official 1,248-player squad dataset, and independent estimated ratings; simulation is not yet implemented
+**Overall product status:** Tested tournament model, official 1,248-player squad dataset, independent estimated ratings, and deterministic headless match simulation
 
 ## Phase summary
 
@@ -17,8 +17,8 @@
 | 2. Tournament data model       | Complete    | Data, rules, bracket, and qualification green  |
 | 3. Data-ingestion pipeline     | Complete    | 48 official squads and data products validated |
 | 4. Ratings engine              | Complete    | Player/team ratings generated and tested       |
-| 5. Headless match engine       | Not started | Awaiting implementation                        |
-| 6. Probability and calibration | Not started | Blocked by Phase 5                             |
+| 5. Headless match engine       | Complete    | Deterministic event engine tested              |
+| 6. Probability and calibration | Not started | Awaiting implementation                        |
 | 7. Core game flow              | Not started | Blocked by Phase 6                             |
 | 8. Match-center UI             | Not started | Blocked by Phase 7                             |
 | 9. Visual polish               | Not started | Blocked by Phase 8                             |
@@ -357,8 +357,35 @@ live 2026 tournament results into a new-game snapshot.
   later probability phase.
 - There is no headless match engine consuming the rating vectors yet.
 
+## Phase 5 — Headless match engine
+
+### Completed scope
+
+- Added `src/domain/simulation` with a deterministic seeded event engine,
+  named random streams, possession state machine, immutable event log, and
+  event-derived match statistics.
+- Implemented shots, goals, xG, cards, injuries, forced substitutions,
+  AI-manager substitutions, tactical changes, extra time, and shootouts.
+- Kept engine time separate from UI/animation time through a pure domain API and
+  explicit kickoff metadata.
+- Added `/match-engine` diagnostics for a reproducible sample fixture.
+- Documented the engine contract in `docs/SIMULATION_ENGINE.md`.
+
+### Gate evidence
+
+- Unit tests cover replay determinism, changed-seed divergence, event/stat
+  invariants, and engine-clock separation.
+- Integration tests simulate repository fixtures, knockout extra-time/shootout
+  paths, and a 104-match batch.
+- Property tests validate invariants across seeded team pairs.
+
+### Remaining limitations
+
+- Probability calibration, live win/draw/loss probabilities, tactical profile
+  imports, fatigue, and historical distribution fitting remain later phases.
+- The match-center UI is still not implemented; `/match-engine` is diagnostic.
+
 ### Next phase
 
-Phase 5 may implement the deterministic match engine. It should consume the
-rating vectors and role-specific player facets rather than using
-`overallEstimate` as a sole match input.
+Phase 6 may implement analytical prematch/live probabilities and calibration
+reports using this event engine as the simulation backend.

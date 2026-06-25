@@ -1,6 +1,6 @@
 # Architecture
 
-**Current scope:** Phase 4 tournament, squad, and ratings data
+**Current scope:** Phase 5 tournament, squad, ratings, and headless simulation
 
 **Last updated:** 2026-06-24
 
@@ -19,9 +19,9 @@ flowchart LR
     SAVE --> IDB["IndexedDB guest saves"]
 ```
 
-The UI shell, tournament domain, squad ingestion domain, and ratings domain now
-exist. Match, probability, and save domains remain reserved for their owning
-phases.
+The UI shell, tournament domain, squad ingestion domain, ratings domain, and
+headless match engine now exist. Probability and save domains remain reserved
+for their owning phases.
 
 ## Tournament domain
 
@@ -74,6 +74,7 @@ during static builds.
 - `src/domain/tournament`: parsing, validation, standings, qualification, and bracket logic
 - `src/domain/data-ingestion`: source schemas, deterministic identities, quality gates, and seed plans
 - `src/domain/ratings`: deterministic estimated player ratings, role fits, lineup selection, and team strengths
+- `src/domain/simulation`: deterministic match clock, event log, AI manager actions, and derived match statistics
 - `scripts/data`: cached fetch, extraction, normalization, validation, and export tooling
 - `scripts/ratings`: deterministic rating generation
 - `tests`: unit, integration, and property tests

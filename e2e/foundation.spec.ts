@@ -103,3 +103,23 @@ test("ratings page exposes estimated player and team ratings", async ({
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(page.getByText("Model contract", { exact: true })).toBeVisible();
 });
+
+test("match engine page exposes deterministic event log diagnostics", async ({
+  page,
+}) => {
+  await page.goto("/match-engine");
+
+  await expect(
+    page.getByRole("heading", { name: /a match log first\. animation later/i }),
+  ).toBeVisible();
+  await expect(page.getByText(/engine gate passed/i)).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: /first notable events/i }),
+  ).toBeVisible();
+  await expect(page.getByText("phase-5-sample-opening-match")).toBeVisible();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(
+    page.getByText("Immutable event log", { exact: true }),
+  ).toBeVisible();
+});

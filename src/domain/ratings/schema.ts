@@ -92,6 +92,7 @@ export const RatingDatasetSchema = z.object({
 export type RatingAttribute = z.infer<typeof RatingAttributeSchema>;
 export type TacticalRole = z.infer<typeof TacticalRoleSchema>;
 export type TeamStrength = z.infer<typeof TeamStrengthSchema>;
+export type LineupPlayer = z.infer<typeof LineupPlayerSchema>;
 export type PlayerRating = z.infer<typeof PlayerRatingSchema>;
 export type TeamRating = z.infer<typeof TeamRatingSchema>;
 export type RatingDataset = z.infer<typeof RatingDatasetSchema>;

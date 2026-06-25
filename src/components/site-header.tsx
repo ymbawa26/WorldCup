@@ -10,6 +10,7 @@ const navigation = [
   { href: "/tournament-model", label: "Tournament model" },
   { href: "/data-quality", label: "Data quality" },
   { href: "/ratings", label: "Ratings" },
+  { href: "/match-engine", label: "Match engine" },
   { href: "/how-it-works", label: "How it works" },
   { href: "/methodology", label: "Methodology" },
   { href: "/settings", label: "Settings" },
