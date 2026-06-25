@@ -124,27 +124,37 @@ test("match engine page exposes deterministic event log diagnostics", async ({
   ).toBeVisible();
 });
 
-test("play flow completes an accelerated tournament and manages saves", async ({
+test("play flow advances by selected-team match and manages saves", async ({
   page,
 }) => {
   await page.goto("/play");
 
   await page.getByLabel("Country").selectOption("mexico");
-  await page.getByLabel("Seed").fill("e2e-core-flow");
+  await expect(page.getByLabel("Seed")).toHaveCount(0);
   await page.getByRole("button", { name: /^new tournament/i }).click();
 
   await expect(
-    page.getByText("Tournament complete. Autosave updated.", { exact: true }),
+    page.getByText("Your match was played. The rest of the world caught up.", {
+      exact: true,
+    }),
   ).toBeVisible();
-  await expect(page.getByText("104", { exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: /continue/i })).toBeEnabled();
+  await expect(page.getByText("Match 1 autosaved")).toBeVisible();
+  await expect(page.getByText("Next: Mexico vs Korea Republic")).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /play next match/i }),
+  ).toBeEnabled();
+
+  await page.getByRole("button", { name: /play next match/i }).click();
+  await expect(page.getByText("Match 28 autosaved")).toBeVisible();
 
   await page.getByRole("button", { name: /manual save/i }).click();
   await expect(page.getByText(/manual save complete/i)).toBeVisible();
 
+  await page.getByText("Save transfer").click();
   await page.getByRole("button", { name: /^export/i }).click();
   const exported = await page.locator("textarea").first().inputValue();
-  expect(exported).toContain('"schemaVersion": 1');
+  expect(exported).toContain('"schemaVersion": 2');
+  expect(exported).toContain('"prematchOdds"');
 
   await page
     .getByPlaceholder("Paste exported save JSON here")

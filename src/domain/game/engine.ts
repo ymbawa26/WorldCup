@@ -2,15 +2,16 @@ import {
   buildRoundOf32,
   resolveTournamentBracket,
   type RoundOf32Match,
+  type ResolvedKnockoutMatch,
 } from "../tournament/bracket";
-import { tournamentSnapshot } from "../tournament/data";
-import type { GroupId } from "../tournament/schema";
+import { knockoutBracket, tournamentSnapshot } from "../tournament/data";
+import type { GroupFixture, GroupId } from "../tournament/schema";
 import {
   buildGroupStandings,
   type CompletedGroupMatch,
 } from "../tournament/standings";
-import { simulateMatch } from "../simulation/engine";
-import type { MatchSimulationResult } from "../simulation/schema";
+import { prematchProbability } from "../probability/model";
+import { NamedRandomStreams } from "../simulation/random";
 
 import {
   GAME_FLOW_VERSION,
@@ -21,6 +22,18 @@ import {
 } from "./schema";
 
 const CREATED_AT = "2026-06-25T10:00:00-04:00";
+const MATCHUP_FACTORS = [
+  "attack",
+  "midfield",
+  "defense",
+  "goalkeeping",
+  "depth",
+  "setPieces",
+  "overall",
+  "fifaRankingPoints",
+  "rankingMomentum",
+  "ratingConfidence",
+] as const;
 
 function teamRankings() {
   return Object.fromEntries(
@@ -31,37 +44,54 @@ function teamRankings() {
   );
 }
 
-function winnerFromSimulation(result: MatchSimulationResult) {
-  if (result.finalScore.home > result.finalScore.away) return result.homeTeamId;
-  if (result.finalScore.away > result.finalScore.home) return result.awayTeamId;
-  return result.shootout?.winner === "HOME"
-    ? result.homeTeamId
-    : result.awayTeamId;
-}
-
-function recordFromSimulation(
-  matchNumber: number,
-  stage: string,
-  result: MatchSimulationResult,
-): MatchRecord {
-  const winnerTeamId = stage === "GROUP" ? null : winnerFromSimulation(result);
-  const loserTeamId =
-    stage === "GROUP"
-      ? null
-      : winnerTeamId === result.homeTeamId
-        ? result.awayTeamId
-        : result.homeTeamId;
+function weightedRecordFromProbability(input: {
+  matchNumber: number;
+  stage: string;
+  seed: string;
+  homeTeamId: string;
+  awayTeamId: string;
+  knockout?: boolean;
+}): MatchRecord {
+  const probability = prematchProbability(input.homeTeamId, input.awayTeamId);
+  const random = new NamedRandomStreams(input.seed);
+  const roll = random.next("scoreline");
+  let cumulative = 0;
+  const score =
+    probability.scoreMatrix.find((cell) => {
+      cumulative += cell.probability;
+      return roll <= cumulative;
+    }) ?? probability.scoreMatrix.at(-1)!;
+  let winnerTeamId: string | null = null;
+  let loserTeamId: string | null = null;
+  if (input.knockout) {
+    if (score.homeGoals > score.awayGoals) winnerTeamId = input.homeTeamId;
+    else if (score.awayGoals > score.homeGoals) winnerTeamId = input.awayTeamId;
+    else {
+      const decisiveTotal =
+        probability.outcomes.homeWin + probability.outcomes.awayWin;
+      winnerTeamId = random.chance(
+        "knockout-decider",
+        probability.outcomes.homeWin / decisiveTotal,
+      )
+        ? input.homeTeamId
+        : input.awayTeamId;
+    }
+    loserTeamId =
+      winnerTeamId === input.homeTeamId ? input.awayTeamId : input.homeTeamId;
+  }
   return {
-    matchNumber,
-    stage,
-    homeTeamId: result.homeTeamId,
-    awayTeamId: result.awayTeamId,
-    homeGoals: result.finalScore.home,
-    awayGoals: result.finalScore.away,
+    matchNumber: input.matchNumber,
+    stage: input.stage,
+    homeTeamId: input.homeTeamId,
+    awayTeamId: input.awayTeamId,
+    homeGoals: score.homeGoals,
+    awayGoals: score.awayGoals,
     winnerTeamId,
     loserTeamId,
     playedAt: CREATED_AT,
-    seed: result.seed,
+    seed: input.seed,
+    prematchOdds: probability.outcomes,
+    modelFactors: [...MATCHUP_FACTORS],
   };
 }
 
@@ -97,10 +127,12 @@ function groupStandingsFromMatches(groupMatches: MatchRecord[]) {
 }
 
 export function createTournamentGame({
-  seed,
+  seed = `world-stage-${Date.now().toString(36)}-${Math.random()
+    .toString(36)
+    .slice(2, 10)}`,
   userTeamId,
 }: {
-  seed: string;
+  seed?: string;
   userTeamId: string;
 }): TournamentGameState {
   if (!tournamentSnapshot.teams.some((team) => team.id === userTeamId)) {
@@ -134,19 +166,7 @@ export function simulateGroupStage(state: TournamentGameState) {
     if (fixture.simultaneousKey && !batches.includes(fixture.simultaneousKey)) {
       batches.push(fixture.simultaneousKey);
     }
-    const result = simulateMatch({
-      seed: `${state.seed}:group:${fixture.matchNumber}`,
-      fixtureId: `match-${fixture.matchNumber}`,
-      homeTeamId: fixture.homeTeamId,
-      awayTeamId: fixture.awayTeamId,
-    });
-    const record = recordFromSimulation(fixture.matchNumber, "GROUP", result);
-    groupMatches.push({
-      ...record,
-      // Conduct is consumed by standings via CompletedGroupMatch when richer
-      // discipline profiles arrive; the simulated card data remains available
-      // in the underlying match result.
-    });
+    groupMatches.push(groupMatchRecord(state, fixture));
   }
   return { groupMatches, simultaneousBatches: batches };
 }
@@ -155,16 +175,334 @@ function simulateKnockoutMatch(
   state: TournamentGameState,
   match: RoundOf32Match,
 ): MatchRecord {
-  const result = simulateMatch({
+  return weightedRecordFromProbability({
     seed: `${state.seed}:knockout:${match.matchNumber}`,
-    fixtureId: `match-${match.matchNumber}`,
+    matchNumber: match.matchNumber,
+    stage: match.stage,
     homeTeamId: match.homeTeamId,
     awayTeamId: match.awayTeamId,
     knockout: true,
-    allowExtraTime: true,
-    allowShootout: true,
   });
-  return recordFromSimulation(match.matchNumber, match.stage, result);
+}
+
+function hasTeam(
+  match: { homeTeamId: string; awayTeamId: string },
+  teamId: string,
+) {
+  return match.homeTeamId === teamId || match.awayTeamId === teamId;
+}
+
+function groupMatchRecord(state: TournamentGameState, fixture: GroupFixture) {
+  return weightedRecordFromProbability({
+    seed: `${state.seed}:group:${fixture.matchNumber}`,
+    matchNumber: fixture.matchNumber,
+    stage: "GROUP",
+    homeTeamId: fixture.homeTeamId,
+    awayTeamId: fixture.awayTeamId,
+  });
+}
+
+function addGroupRecord(records: MatchRecord[], record: MatchRecord) {
+  if (records.some((match) => match.matchNumber === record.matchNumber)) {
+    return records;
+  }
+  return [...records, record].sort(
+    (left, right) => left.matchNumber - right.matchNumber,
+  );
+}
+
+function completedKnockoutByNumber(state: TournamentGameState) {
+  return new Map(
+    state.knockoutMatches.map((match) => [
+      match.matchNumber,
+      {
+        ...match,
+        date: "",
+        venueId: "",
+        homeSlot: "",
+        awaySlot: "",
+      } as ResolvedKnockoutMatch,
+    ]),
+  );
+}
+
+function groupStageComplete(state: TournamentGameState) {
+  return state.groupMatches.length === tournamentSnapshot.fixtures.length;
+}
+
+function userStillAlive(state: TournamentGameState) {
+  return !state.knockoutMatches.some(
+    (match) =>
+      hasTeam(match, state.userTeamId) &&
+      match.loserTeamId === state.userTeamId,
+  );
+}
+
+function standingsForState(state: TournamentGameState) {
+  if (!groupStageComplete(state)) return null;
+  return groupStandingsFromMatches(state.groupMatches);
+}
+
+function roundOf32ForState(state: TournamentGameState) {
+  const standingsByGroup = standingsForState(state);
+  return standingsByGroup ? buildRoundOf32(standingsByGroup) : [];
+}
+
+function resolveKnockoutParticipants(
+  state: TournamentGameState,
+  resolved: Map<number, ResolvedKnockoutMatch>,
+) {
+  const roundOf32 = new Map(
+    roundOf32ForState(state).map((match) => [match.matchNumber, match]),
+  );
+  return knockoutBracket.matches.map((match) => {
+    const base = roundOf32.get(match.matchNumber);
+    const resolveProgressionSlot = (slot: string) => {
+      const sourceMatch = Number(slot.slice(1));
+      const source = resolved.get(sourceMatch);
+      if (!source) return null;
+      return slot.startsWith("W") ? source.winnerTeamId : source.loserTeamId;
+    };
+    const homeTeamId =
+      base?.homeTeamId ?? resolveProgressionSlot(match.homeSlot);
+    const awayTeamId =
+      base?.awayTeamId ?? resolveProgressionSlot(match.awaySlot);
+    if (!homeTeamId || !awayTeamId) return null;
+    return { ...match, homeTeamId, awayTeamId };
+  });
+}
+
+function upsertKnockoutRecord(records: MatchRecord[], record: MatchRecord) {
+  if (records.some((match) => match.matchNumber === record.matchNumber)) {
+    return records;
+  }
+  return [...records, record].sort(
+    (left, right) => left.matchNumber - right.matchNumber,
+  );
+}
+
+export function nextUserMatchPreview(state: TournamentGameState) {
+  if (state.status === "COMPLETE") return null;
+  const playedGroupNumbers = new Set(
+    state.groupMatches.map((match) => match.matchNumber),
+  );
+  const nextGroupFixture = tournamentSnapshot.fixtures.find(
+    (fixture) =>
+      hasTeam(fixture, state.userTeamId) &&
+      !playedGroupNumbers.has(fixture.matchNumber),
+  );
+  if (nextGroupFixture) {
+    return {
+      matchNumber: nextGroupFixture.matchNumber,
+      stage: "GROUP",
+      homeTeamId: nextGroupFixture.homeTeamId,
+      awayTeamId: nextGroupFixture.awayTeamId,
+      odds: prematchProbability(
+        nextGroupFixture.homeTeamId,
+        nextGroupFixture.awayTeamId,
+      ).outcomes,
+    };
+  }
+
+  if (!groupStageComplete(state)) return null;
+  if (!userStillAlive(state)) return null;
+
+  const resolved = completedKnockoutByNumber(state);
+  const nextKnockout = resolveKnockoutParticipants(state, resolved).find(
+    (match) =>
+      match &&
+      !state.knockoutMatches.some(
+        (record) => record.matchNumber === match.matchNumber,
+      ) &&
+      hasTeam(match, state.userTeamId),
+  );
+  if (!nextKnockout) return null;
+  return {
+    matchNumber: nextKnockout.matchNumber,
+    stage: nextKnockout.stage,
+    homeTeamId: nextKnockout.homeTeamId,
+    awayTeamId: nextKnockout.awayTeamId,
+    odds: prematchProbability(nextKnockout.homeTeamId, nextKnockout.awayTeamId)
+      .outcomes,
+  };
+}
+
+export function advanceToNextUserMatch(state: TournamentGameState) {
+  let nextState = state;
+  const playedGroupNumbers = new Set(
+    nextState.groupMatches.map((match) => match.matchNumber),
+  );
+  const nextUserFixture = tournamentSnapshot.fixtures.find(
+    (fixture) =>
+      hasTeam(fixture, nextState.userTeamId) &&
+      !playedGroupNumbers.has(fixture.matchNumber),
+  );
+
+  if (nextUserFixture) {
+    let groupMatches = addGroupRecord(
+      nextState.groupMatches,
+      groupMatchRecord(nextState, nextUserFixture),
+    );
+    const followingUserFixture = tournamentSnapshot.fixtures.find(
+      (fixture) =>
+        fixture.matchNumber > nextUserFixture.matchNumber &&
+        hasTeam(fixture, nextState.userTeamId),
+    );
+    const boundary = followingUserFixture?.matchNumber ?? Infinity;
+    for (const fixture of tournamentSnapshot.fixtures) {
+      if (fixture.matchNumber >= boundary) break;
+      if (hasTeam(fixture, nextState.userTeamId)) continue;
+      if (
+        groupMatches.some((match) => match.matchNumber === fixture.matchNumber)
+      ) {
+        continue;
+      }
+      groupMatches = addGroupRecord(
+        groupMatches,
+        groupMatchRecord({ ...nextState, groupMatches }, fixture),
+      );
+    }
+    nextState = TournamentGameStateSchema.parse({
+      ...nextState,
+      updatedAt: CREATED_AT,
+      status: "IN_PROGRESS",
+      groupMatches,
+    });
+    return { state: nextState, nextMatch: nextUserMatchPreview(nextState) };
+  }
+
+  if (!groupStageComplete(nextState)) {
+    let groupMatches = nextState.groupMatches;
+    for (const fixture of tournamentSnapshot.fixtures) {
+      if (
+        groupMatches.some((match) => match.matchNumber === fixture.matchNumber)
+      ) {
+        continue;
+      }
+      groupMatches = addGroupRecord(
+        groupMatches,
+        groupMatchRecord({ ...nextState, groupMatches }, fixture),
+      );
+    }
+    nextState = TournamentGameStateSchema.parse({
+      ...nextState,
+      updatedAt: CREATED_AT,
+      status: "IN_PROGRESS",
+      groupMatches,
+    });
+  }
+
+  const roundOf32 = roundOf32ForState(nextState);
+  if (!roundOf32.some((match) => hasTeam(match, nextState.userTeamId))) {
+    const finished = completeRemainingTournament(nextState).state;
+    return { state: finished, nextMatch: null };
+  }
+
+  let knockoutMatches = nextState.knockoutMatches;
+  let resolved = completedKnockoutByNumber({ ...nextState, knockoutMatches });
+  let playedUserMatchThisAdvance = false;
+  while (true) {
+    const match = resolveKnockoutParticipants(nextState, resolved).find(
+      (candidate) =>
+        candidate &&
+        !knockoutMatches.some(
+          (record) => record.matchNumber === candidate.matchNumber,
+        ),
+    );
+    if (!match) break;
+    if (
+      knockoutMatches.some((record) => record.matchNumber === match.matchNumber)
+    ) {
+      break;
+    }
+    const involvesUser = hasTeam(match, nextState.userTeamId);
+    if (involvesUser && playedUserMatchThisAdvance) break;
+    const record = simulateKnockoutMatch(nextState, match);
+    knockoutMatches = upsertKnockoutRecord(knockoutMatches, record);
+    resolved = completedKnockoutByNumber({ ...nextState, knockoutMatches });
+    if (involvesUser) {
+      playedUserMatchThisAdvance = true;
+      if (record.loserTeamId === nextState.userTeamId) {
+        const finished = completeRemainingTournament({
+          ...nextState,
+          knockoutMatches,
+        }).state;
+        return { state: finished, nextMatch: null };
+      }
+    }
+  }
+
+  const championTeamId =
+    knockoutMatches.find((match) => match.matchNumber === 104)?.winnerTeamId ??
+    null;
+  nextState = TournamentGameStateSchema.parse({
+    ...nextState,
+    updatedAt: CREATED_AT,
+    status: championTeamId ? "COMPLETE" : "IN_PROGRESS",
+    knockoutMatches,
+    championTeamId,
+  });
+  return { state: nextState, nextMatch: nextUserMatchPreview(nextState) };
+}
+
+export function completeRemainingTournament(state: TournamentGameState) {
+  let groupMatches = state.groupMatches;
+  if (groupMatches.length < tournamentSnapshot.fixtures.length) {
+    for (const fixture of tournamentSnapshot.fixtures) {
+      if (
+        groupMatches.some((match) => match.matchNumber === fixture.matchNumber)
+      ) {
+        continue;
+      }
+      groupMatches = addGroupRecord(
+        groupMatches,
+        groupMatchRecord({ ...state, groupMatches }, fixture),
+      );
+    }
+  }
+
+  const standingsByGroup = groupStandingsFromMatches(groupMatches);
+  let knockoutMatches = state.knockoutMatches;
+  let resolved = completedKnockoutByNumber({ ...state, knockoutMatches });
+
+  while (knockoutMatches.length < knockoutBracket.matches.length) {
+    const match = resolveKnockoutParticipants(
+      { ...state, groupMatches, knockoutMatches },
+      resolved,
+    ).find(
+      (candidate) =>
+        candidate &&
+        !knockoutMatches.some(
+          (record) => record.matchNumber === candidate.matchNumber,
+        ),
+    );
+    if (!match) break;
+    const record = simulateKnockoutMatch(
+      { ...state, groupMatches, knockoutMatches },
+      match,
+    );
+    knockoutMatches = upsertKnockoutRecord(knockoutMatches, record);
+    resolved = completedKnockoutByNumber({ ...state, knockoutMatches });
+  }
+
+  const championTeamId =
+    knockoutMatches.find((match) => match.matchNumber === 104)?.winnerTeamId ??
+    null;
+  return {
+    state: TournamentGameStateSchema.parse({
+      ...state,
+      updatedAt: CREATED_AT,
+      status: "COMPLETE",
+      groupMatches,
+      knockoutMatches,
+      championTeamId,
+    }),
+    standingsByGroup,
+    bracket: {
+      championTeamId,
+      matches: [...resolved.values()],
+    },
+  };
 }
 
 export function completeTournament(state: TournamentGameState) {

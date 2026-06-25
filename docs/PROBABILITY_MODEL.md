@@ -14,12 +14,18 @@ odds screen.
 - Live remaining-time probabilities conditional on current score and minute.
 - Red-card manpower adjustments that reduce the penalized side's expected goals
   and increase the opponent's attacking expectation.
+- Playable tournament results sample from the same weighted score matrix, so
+  favorites, underdogs, and draws are not treated as equal outcomes.
 - Internal Monte Carlo calibration report comparing analytical probabilities
   with deterministic Phase 5 simulations.
 
 ## Inputs
 
-- Phase 4 team strength vectors.
+- Phase 4 team strength vectors: attack, midfield, defense, goalkeeping, depth,
+  set pieces, and overall.
+- FIFA ranking points and rank position from the frozen pre-opening tournament
+  snapshot.
+- Ranking momentum, rating confidence, and rating uncertainty.
 - Phase 5 deterministic match engine for internal simulation comparison.
 - Current live state: minute, score, and red-card counts.
 
@@ -28,9 +34,11 @@ report is therefore an internal consistency report, not historical validation.
 
 ## Score matrix
 
-The model computes expected goals for each side from attack, midfield,
-set-pieces, depth, defense, and goalkeeping. It then creates a Poisson score
-matrix from 0–10 goals for both teams and normalizes the matrix to sum to one.
+The model computes expected goals for each side from ten backend factors:
+attack, midfield, defense, goalkeeping, depth, set pieces, overall strength,
+FIFA ranking points, ranking momentum, and rating confidence/uncertainty. It
+then creates a Poisson score matrix from 0–10 goals for both teams and
+normalizes the matrix to sum to one.
 
 Outcome probabilities are sums across the matrix:
 

@@ -11,7 +11,11 @@ import {
 import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { accelerateTournament } from "@/domain/game/engine";
+import {
+  advanceToNextUserMatch,
+  createTournamentGame,
+  nextUserMatchPreview,
+} from "@/domain/game/engine";
 import type { TournamentGameState } from "@/domain/game/schema";
 import {
   exportSave,
@@ -22,9 +26,7 @@ import {
 } from "@/domain/game/storage";
 import { tournamentSnapshot } from "@/domain/tournament/data";
 
-const defaultSeed = "world-stage-user-run";
-
-type TournamentResult = ReturnType<typeof accelerateTournament>;
+type NextMatchPreview = NonNullable<ReturnType<typeof nextUserMatchPreview>>;
 
 const teamsById = new Map(
   tournamentSnapshot.teams.map((team) => [team.id, team]),
@@ -34,13 +36,28 @@ function teamName(teamId: string | null | undefined) {
   return teamId ? (teamsById.get(teamId)?.name ?? teamId) : "—";
 }
 
+function percent(value: number) {
+  return `${Math.round(value * 100)}%`;
+}
+
+function randomTournamentSeed() {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return `world-stage-${crypto.randomUUID()}`;
+  }
+  return `world-stage-${Date.now().toString(36)}-${Math.random()
+    .toString(36)
+    .slice(2, 10)}`;
+}
+
 export function PlayClient() {
   const [selectedTeamId, setSelectedTeamId] = useState("united-states");
-  const [seed, setSeed] = useState(defaultSeed);
-  const [result, setResult] = useState<TournamentResult | null>(null);
+  const [currentState, setCurrentState] = useState<TournamentGameState | null>(
+    null,
+  );
   const [savedState, setSavedState] = useState<TournamentGameState | null>(
     null,
   );
+  const [nextMatch, setNextMatch] = useState<NextMatchPreview | null>(null);
   const [exportText, setExportText] = useState("");
   const [importText, setImportText] = useState("");
   const [message, setMessage] = useState("Choose a nation to begin.");
@@ -49,8 +66,9 @@ export function PlayClient() {
     void loadGame().then((save) => {
       if (!save) return;
       setSavedState(save);
+      setCurrentState(save);
       setSelectedTeamId(save.userTeamId);
-      setSeed(save.seed);
+      setNextMatch(nextUserMatchPreview(save));
       setMessage("Saved tournament found. Continue or start fresh.");
     });
   }, []);
@@ -59,35 +77,62 @@ export function PlayClient() {
     () => teamsById.get(selectedTeamId),
     [selectedTeamId],
   );
-  const champion = result?.state.championTeamId;
-  const userKnockoutRecord = result?.state.knockoutMatches.find(
+  const champion = currentState?.championTeamId;
+  const userKnockoutRecord = currentState?.knockoutMatches.find(
     (match) =>
       match.homeTeamId === selectedTeamId ||
       match.awayTeamId === selectedTeamId,
   );
+  const latestUserMatch = [
+    ...(currentState?.groupMatches ?? []),
+    ...(currentState?.knockoutMatches ?? []),
+  ]
+    .filter(
+      (match) =>
+        match.homeTeamId === selectedTeamId ||
+        match.awayTeamId === selectedTeamId,
+    )
+    .at(-1);
+  const matchesPlayed =
+    (currentState?.groupMatches.length ?? 0) +
+    (currentState?.knockoutMatches.length ?? 0);
 
-  async function runTournament(teamId = selectedTeamId, activeSeed = seed) {
-    const next = accelerateTournament(activeSeed, teamId);
-    setResult(next);
+  async function persistNext(next: ReturnType<typeof advanceToNextUserMatch>) {
+    setCurrentState(next.state);
     setSavedState(next.state);
+    setSelectedTeamId(next.state.userTeamId);
+    setNextMatch(next.nextMatch);
     await saveGame(next.state);
-    setMessage("Tournament complete. Autosave updated.");
+    setMessage(
+      next.state.status === "COMPLETE"
+        ? "Tournament complete. Autosave updated."
+        : "Your match was played. The rest of the world caught up.",
+    );
+  }
+
+  async function startTournament(teamId = selectedTeamId) {
+    const created = createTournamentGame({
+      seed: randomTournamentSeed(),
+      userTeamId: teamId,
+    });
+    await persistNext(advanceToNextUserMatch(created));
   }
 
   async function continueSaved() {
-    if (!savedState) return;
-    await runTournament(savedState.userTeamId, savedState.seed);
+    const state = currentState ?? savedState;
+    if (!state) return;
+    await persistNext(advanceToNextUserMatch(state));
   }
 
   async function manualSave() {
-    if (!result) return;
-    await saveGame(result.state);
-    setSavedState(result.state);
+    if (!currentState) return;
+    await saveGame(currentState);
+    setSavedState(currentState);
     setMessage("Manual save complete.");
   }
 
   function exportCurrentSave() {
-    const state = result?.state ?? savedState;
+    const state = currentState ?? savedState;
     if (!state) return;
     setExportText(exportSave(state));
     setMessage("Export generated.");
@@ -97,10 +142,10 @@ export function PlayClient() {
     try {
       const state = await importSave(importText);
       setSavedState(state);
+      setCurrentState(state);
       setSelectedTeamId(state.userTeamId);
-      setSeed(state.seed);
-      setResult(null);
-      setMessage("Save imported. Continue to simulate it.");
+      setNextMatch(nextUserMatchPreview(state));
+      setMessage("Save imported. Continue when ready.");
     } catch {
       setMessage("Import rejected: invalid or unsupported save.");
     }
@@ -109,7 +154,8 @@ export function PlayClient() {
   async function resetCurrentSave() {
     await resetSave();
     setSavedState(null);
-    setResult(null);
+    setCurrentState(null);
+    setNextMatch(null);
     setExportText("");
     setImportText("");
     setMessage("Save reset. Start a new tournament when ready.");
@@ -127,9 +173,9 @@ export function PlayClient() {
               Choose your nation. Simulate the world.
             </h1>
             <p className="mt-4 leading-7 text-slate-300">
-              This accelerated flow plays the full tournament using the headless
-              engine. Deeper tactics and match-center controls come next; this
-              phase proves the core game loop and saves.
+              Your tournament now moves at your team&apos;s pace: play your next
+              match, then the rest of the world catches up in the background.
+              Randomness is generated privately for every run.
             </p>
 
             <label className="mt-8 block">
@@ -153,29 +199,18 @@ export function PlayClient() {
               </select>
             </label>
 
-            <label className="mt-5 block">
-              <span className="text-xs font-black tracking-wider text-slate-500 uppercase">
-                Seed
-              </span>
-              <input
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white"
-                onChange={(event) => setSeed(event.target.value)}
-                value={seed}
-              />
-            </label>
-
             <div className="mt-7 flex flex-wrap gap-3">
-              <Button onClick={() => void runTournament()} size="large">
+              <Button onClick={() => void startTournament()} size="large">
                 <Play aria-hidden="true" className="size-4" />
                 New tournament
               </Button>
               <Button
-                disabled={!savedState}
+                disabled={!currentState && !savedState}
                 onClick={() => void continueSaved()}
                 size="large"
                 variant="secondary"
               >
-                Continue
+                Play next match
               </Button>
             </div>
             <p aria-live="polite" className="mt-4 text-sm text-cyan-200">
@@ -188,13 +223,17 @@ export function PlayClient() {
             <h2 className="mt-2 text-3xl font-black text-white">
               {champion
                 ? `${teamName(champion)} are champions`
-                : "Awaiting kickoff"}
+                : nextMatch
+                  ? `Next: ${teamName(nextMatch.homeTeamId)} vs ${teamName(
+                      nextMatch.awayTeamId,
+                    )}`
+                  : "Awaiting kickoff"}
             </h2>
             <div className="mt-7 grid gap-4 sm:grid-cols-3">
               {[
                 ["Your nation", userTeam?.name ?? "—"],
                 ["Champion", teamName(champion)],
-                ["Matches played", result ? "104" : "0"],
+                ["Matches played", String(matchesPlayed)],
               ].map(([label, value]) => (
                 <div className="rounded-2xl bg-white/5 p-4" key={label}>
                   <p className="text-xs font-black tracking-wider text-slate-500 uppercase">
@@ -204,30 +243,83 @@ export function PlayClient() {
                 </div>
               ))}
             </div>
-            {result ? (
+
+            {nextMatch ? (
+              <div className="mt-7 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-5">
+                <p className="text-xs font-black tracking-wider text-cyan-100 uppercase">
+                  Match {nextMatch.matchNumber} ·{" "}
+                  {nextMatch.stage.replaceAll("_", " ")}
+                </p>
+                <h3 className="mt-2 text-xl font-black text-white">
+                  {teamName(nextMatch.homeTeamId)} vs{" "}
+                  {teamName(nextMatch.awayTeamId)}
+                </h3>
+                <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                  <div>
+                    <p className="text-xs text-slate-400">
+                      {teamName(nextMatch.homeTeamId)}
+                    </p>
+                    <p className="text-2xl font-black text-white">
+                      {percent(nextMatch.odds.homeWin)}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-400">Draw</p>
+                    <p className="text-2xl font-black text-white">
+                      {percent(nextMatch.odds.draw)}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-400">
+                      {teamName(nextMatch.awayTeamId)}
+                    </p>
+                    <p className="text-2xl font-black text-white">
+                      {percent(nextMatch.odds.awayWin)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+
+            {latestUserMatch ? (
               <div className="mt-7 rounded-2xl border border-emerald-300/20 bg-emerald-300/10 p-5">
                 <div className="flex items-center gap-3 text-emerald-200">
                   <CheckCircle2 aria-hidden="true" className="size-5" />
-                  <strong>Tournament completed and autosaved</strong>
+                  <strong>
+                    Match {latestUserMatch.matchNumber} autosaved ·{" "}
+                    {teamName(latestUserMatch.homeTeamId)}{" "}
+                    {latestUserMatch.homeGoals}–{latestUserMatch.awayGoals}{" "}
+                    {teamName(latestUserMatch.awayTeamId)}
+                  </strong>
                 </div>
                 <p className="mt-3 leading-7 text-slate-300">
-                  {teamName(selectedTeamId)}{" "}
-                  {champion === selectedTeamId
-                    ? "won the tournament."
-                    : userKnockoutRecord
-                      ? `were knocked out in Match ${userKnockoutRecord.matchNumber}.`
-                      : "did not reach the knockout rounds."}
+                  {currentState?.status === "COMPLETE"
+                    ? champion === selectedTeamId
+                      ? `${teamName(selectedTeamId)} won the tournament.`
+                      : userKnockoutRecord
+                        ? `${teamName(
+                            selectedTeamId,
+                          )} were knocked out in Match ${
+                            userKnockoutRecord.matchNumber
+                          }.`
+                        : `${teamName(
+                            selectedTeamId,
+                          )} did not reach the knockout rounds.`
+                    : "Background fixtures were simulated up to your next match."}
                 </p>
               </div>
             ) : null}
 
             <div className="mt-7 flex flex-wrap gap-3">
-              <Button disabled={!result} onClick={() => void manualSave()}>
+              <Button
+                disabled={!currentState}
+                onClick={() => void manualSave()}
+              >
                 <Save aria-hidden="true" className="size-4" />
                 Manual save
               </Button>
               <Button
-                disabled={!result && !savedState}
+                disabled={!currentState && !savedState}
                 onClick={exportCurrentSave}
                 variant="secondary"
               >
@@ -245,29 +337,34 @@ export function PlayClient() {
           </section>
         </div>
 
-        <section className="mt-8 grid gap-6 lg:grid-cols-2">
-          <article className="rounded-3xl border border-white/10 bg-[#0a102b]/90 p-6">
-            <h2 className="text-xl font-black text-white">Exported save</h2>
-            <textarea
-              className="mt-4 min-h-52 w-full rounded-2xl border border-white/10 bg-white/5 p-4 font-mono text-xs text-slate-200"
-              readOnly
-              value={exportText}
-            />
-          </article>
-          <article className="rounded-3xl border border-white/10 bg-[#0a102b]/90 p-6">
-            <h2 className="text-xl font-black text-white">Import save</h2>
-            <textarea
-              className="mt-4 min-h-52 w-full rounded-2xl border border-white/10 bg-white/5 p-4 font-mono text-xs text-slate-200"
-              onChange={(event) => setImportText(event.target.value)}
-              placeholder="Paste exported save JSON here"
-              value={importText}
-            />
-            <Button className="mt-4" onClick={() => void importCurrentSave()}>
-              <Upload aria-hidden="true" className="size-4" />
-              Import
-            </Button>
-          </article>
-        </section>
+        <details className="mt-8 rounded-3xl border border-white/10 bg-[#0a102b]/90 p-6">
+          <summary className="cursor-pointer text-xl font-black text-white">
+            Save transfer
+          </summary>
+          <section className="mt-6 grid gap-6 lg:grid-cols-2">
+            <article>
+              <h2 className="text-xl font-black text-white">Exported save</h2>
+              <textarea
+                className="mt-4 min-h-52 w-full rounded-2xl border border-white/10 bg-white/5 p-4 font-mono text-xs text-slate-200"
+                readOnly
+                value={exportText}
+              />
+            </article>
+            <article>
+              <h2 className="text-xl font-black text-white">Import save</h2>
+              <textarea
+                className="mt-4 min-h-52 w-full rounded-2xl border border-white/10 bg-white/5 p-4 font-mono text-xs text-slate-200"
+                onChange={(event) => setImportText(event.target.value)}
+                placeholder="Paste exported save JSON here"
+                value={importText}
+              />
+              <Button className="mt-4" onClick={() => void importCurrentSave()}>
+                <Upload aria-hidden="true" className="size-4" />
+                Import
+              </Button>
+            </article>
+          </section>
+        </details>
       </div>
     </div>
   );

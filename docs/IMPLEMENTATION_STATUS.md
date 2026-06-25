@@ -6,7 +6,7 @@
 
 **Next eligible phase:** Phase 8 — Match-center UI
 
-**Overall product status:** Tested tournament model, official 1,248-player squad dataset, independent estimated ratings, deterministic headless match simulation, backend probability/calibration layer, and playable accelerated tournament flow
+**Overall product status:** Tested tournament model, official 1,248-player squad dataset, independent estimated ratings, deterministic headless match simulation, backend probability/calibration layer, and playable selected-team tournament flow
 
 ## Phase summary
 
@@ -19,7 +19,7 @@
 | 4. Ratings engine              | Complete    | Player/team ratings generated and tested       |
 | 5. Headless match engine       | Complete    | Deterministic event engine tested              |
 | 6. Probability and calibration | Complete    | Probability bounds and calibration tested      |
-| 7. Core game flow              | Complete    | Accelerated tournament and saves tested        |
+| 7. Core game flow              | Complete    | Selected-team pacing and saves tested          |
 | 8. Match-center UI             | Not started | Awaiting implementation                        |
 | 9. Visual polish               | Not started | Blocked by Phase 8                             |
 | 10. Deployment and final QA    | Not started | Blocked by Phase 9                             |
@@ -419,13 +419,20 @@ live 2026 tournament results into a new-game snapshot.
 
 ### Completed scope
 
-- Added `src/domain/game` for versioned tournament creation, accelerated group
-  and knockout simulation, standings/progression, save serialization, import
-  parsing, and legacy save migration.
+- Added `src/domain/game` for versioned tournament creation, selected-team
+  match pacing, background fixture simulation, standings/progression, save
+  serialization, import parsing, and legacy save migration.
+- Moved the random seed out of the player UI. Seeds are generated internally,
+  persisted in save data, and still available to tests/imports for
+  reproducibility.
+- Added weighted playable results and concise next-match odds from ten backend
+  factors: attack, midfield, defense, goalkeeping, depth, set pieces, overall,
+  FIFA ranking points, ranking momentum, and rating confidence/uncertainty.
 - Added IndexedDB browser save adapter for autosave, manual save, resume,
   import, export, invalid import rejection, and reset.
-- Added `/play` as the player-facing route for choosing a country and completing
-  an accelerated tournament to one champion.
+- Added `/play` as the player-facing route for choosing a country, playing the
+  selected team’s next match, and letting the computer instantly simulate other
+  fixtures up to the selected team’s following match.
 - Removed internal diagnostics from the primary navigation. Tournament-model,
   data-quality, ratings, match-engine, and probability/calibration internals
   remain backend/development audit surfaces rather than ordinary user-facing
@@ -434,18 +441,20 @@ live 2026 tournament results into a new-game snapshot.
 
 ### Gate evidence
 
-- Integration tests create a tournament, track simultaneous fixture batches, and
-  complete 72 group matches plus 32 knockout matches to one champion.
-- Unit tests cover save export/import, invalid import rejection, and v0-to-v1
-  save migration.
-- Playwright completes an accelerated tournament from country selection to one
-  champion, then verifies autosave/continue, manual save, export, import
-  rejection, valid import, and reset.
+- Integration tests create a tournament, track simultaneous fixture batches,
+  prove Brazil’s first selected-team window, verify ten model factors on match
+  records, and complete 72 group matches plus 32 knockout matches to one
+  champion.
+- Unit tests cover save export/import, invalid import rejection, and legacy
+  save migration into the current schema.
+- Playwright verifies no seed field is exposed, selected-team match advancement,
+  autosave/continue, manual save, export, import rejection, valid import, and
+  reset.
 
 ### Remaining limitations
 
-- `/play` is accelerated and summary-oriented; match-center controls and
-  fixture-by-fixture management belong to Phase 8.
+- `/play` is still summary-oriented; full match-center controls, commentary,
+  substitutions, tactics, and animation belong to Phase 8.
 - User-edited tactics and lineup selection are not exposed yet.
 
 ### Next phase

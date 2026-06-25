@@ -1,6 +1,7 @@
 import { teamRatingsById } from "../ratings/data";
 import type { TeamRating } from "../ratings/schema";
 import type { MatchSimulationResult } from "../simulation/schema";
+import { tournamentSnapshot } from "../tournament/data";
 
 import {
   PROBABILITY_MODEL_VERSION,
@@ -41,6 +42,38 @@ function getTeam(teamId: string) {
   return team;
 }
 
+function getTournamentTeam(teamId: string) {
+  const team = tournamentSnapshot.teams.find(
+    (candidate) => candidate.id === teamId,
+  );
+  if (!team)
+    throw new Error(`Unknown tournament team for probability: ${teamId}`);
+  return team;
+}
+
+function weightedQuality(team: TeamRating) {
+  const tournamentTeam = getTournamentTeam(team.teamId);
+  const ratingQuality =
+    team.strengths.attack * 0.16 +
+    team.strengths.midfield * 0.13 +
+    team.strengths.defense * 0.13 +
+    team.strengths.goalkeeping * 0.1 +
+    team.strengths.depth * 0.08 +
+    team.strengths.setPieces * 0.06 +
+    team.strengths.overall * 0.14;
+  const fifaPointsQuality = tournamentTeam.fifaRanking.points / 24;
+  const rankQuality = (220 - tournamentTeam.fifaRanking.rank) / 3.2;
+  const momentum =
+    (tournamentTeam.fifaRanking.previousPoints -
+      tournamentTeam.fifaRanking.points) /
+    -18;
+  const confidence = team.confidenceScore * 7 - team.uncertainty * 3;
+
+  return (
+    ratingQuality + fifaPointsQuality + rankQuality + momentum + confidence
+  );
+}
+
 export function estimateExpectedGoals(
   home: TeamRating,
   away: TeamRating,
@@ -51,39 +84,39 @@ export function estimateExpectedGoals(
   } = {},
 ) {
   const minutesFactor = (options.minutesRemaining ?? 90) / 90;
+  const qualityGap = weightedQuality(home) - weightedQuality(away);
   const homeAttack =
-    home.strengths.attack * 0.48 +
-    home.strengths.midfield * 0.18 +
-    home.strengths.setPieces * 0.11 +
-    home.strengths.depth * 0.08 +
-    6;
+    home.strengths.attack * 0.28 +
+    home.strengths.midfield * 0.12 +
+    home.strengths.setPieces * 0.08 +
+    home.strengths.depth * 0.05;
   const awayAttack =
-    away.strengths.attack * 0.48 +
-    away.strengths.midfield * 0.18 +
-    away.strengths.setPieces * 0.11 +
-    away.strengths.depth * 0.08;
+    away.strengths.attack * 0.28 +
+    away.strengths.midfield * 0.12 +
+    away.strengths.setPieces * 0.08 +
+    away.strengths.depth * 0.05;
   const homeDefense =
-    home.strengths.defense * 0.48 +
-    home.strengths.goalkeeping * 0.24 +
-    home.strengths.midfield * 0.14;
+    home.strengths.defense * 0.28 +
+    home.strengths.goalkeeping * 0.18 +
+    home.strengths.midfield * 0.08;
   const awayDefense =
-    away.strengths.defense * 0.48 +
-    away.strengths.goalkeeping * 0.24 +
-    away.strengths.midfield * 0.14;
+    away.strengths.defense * 0.28 +
+    away.strengths.goalkeeping * 0.18 +
+    away.strengths.midfield * 0.08;
   const homeManpower = clamp(1 - (options.homeRedCards ?? 0) * 0.18, 0.52, 1);
   const awayManpower = clamp(1 - (options.awayRedCards ?? 0) * 0.18, 0.52, 1);
   const homeLambda =
-    (0.18 + (homeAttack - awayDefense) / 120) *
+    (1.28 + (homeAttack - awayDefense) / 95 + qualityGap / 28) *
     homeManpower *
     (1 + (1 - awayManpower) * 0.42);
   const awayLambda =
-    (0.16 + (awayAttack - homeDefense) / 120) *
+    (1.12 + (awayAttack - homeDefense) / 95 - qualityGap / 28) *
     awayManpower *
     (1 + (1 - homeManpower) * 0.42);
 
   return {
-    home: round(clamp(homeLambda * minutesFactor, 0.05, 4.2)),
-    away: round(clamp(awayLambda * minutesFactor, 0.05, 4.2)),
+    home: round(clamp(homeLambda * minutesFactor, 0.08, 5.4)),
+    away: round(clamp(awayLambda * minutesFactor, 0.08, 5.4)),
   };
 }
 

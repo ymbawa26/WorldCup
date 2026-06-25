@@ -32,7 +32,7 @@ describe("game save serialization", () => {
     );
 
     expect(migrated).toMatchObject({
-      schemaVersion: 1,
+      schemaVersion: 2,
       id: "legacy",
       seed: "legacy-seed",
       userTeamId: "canada",

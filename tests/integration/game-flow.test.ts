@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  advanceToNextUserMatch,
   accelerateTournament,
   createTournamentGame,
+  nextUserMatchPreview,
   simulateGroupStage,
   validateLegalLineup,
 } from "@/domain/game/engine";
@@ -44,5 +46,31 @@ describe("core game flow", () => {
         (match) => match.matchNumber === 104 && match.winnerTeamId,
       ),
     ).toHaveLength(1);
+  });
+
+  it("advances at the selected country's pace and hides the random seed from the flow", () => {
+    const created = createTournamentGame({ userTeamId: "brazil" });
+    const opener = nextUserMatchPreview(created);
+
+    expect(created.seed).toMatch(/^world-stage-/);
+    expect(opener).toMatchObject({
+      matchNumber: 7,
+      homeTeamId: "brazil",
+      awayTeamId: "morocco",
+    });
+    expect(opener!.odds.homeWin).toBeGreaterThan(opener!.odds.awayWin);
+
+    const afterOpener = advanceToNextUserMatch(created);
+    expect(afterOpener.state.status).toBe("IN_PROGRESS");
+    expect(
+      afterOpener.state.groupMatches.some((match) => match.matchNumber === 7),
+    ).toBe(true);
+    expect(afterOpener.state.groupMatches).toHaveLength(28);
+    expect(afterOpener.nextMatch).toMatchObject({
+      matchNumber: 29,
+      homeTeamId: "brazil",
+      awayTeamId: "haiti",
+    });
+    expect(afterOpener.state.groupMatches[0]!.modelFactors).toHaveLength(10);
   });
 });

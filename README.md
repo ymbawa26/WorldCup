@@ -30,9 +30,9 @@ headless match-engine, probability/calibration, and core game-flow layer:
 - A responsive `/match-engine` diagnostic screen
 - Backend/domain prematch and live probabilities, red-card adjustments, and
   internal calibration reports
-- Player-facing `/play` route for country selection, accelerated tournament
-  completion, champion display, IndexedDB saves, import/export, continue, and
-  reset
+- Player-facing `/play` route for country selection, hidden random seed
+  generation, selected-team match pacing, weighted odds/results, IndexedDB
+  saves, import/export, continue, and reset
 
 Detailed match-center controls are still reserved for later phases.
 
