@@ -17,6 +17,7 @@ headless match-engine, probability/calibration, and core game-flow layer:
 - Data-driven knockout progression with a 32-unique-entrant invariant
 - A responsive `/tournament-model` diagnostic screen
 - All 48 official 26-player squads with provenance and deterministic identities
+- Read-only roster backend services and API routes for teams and players
 - Cached, checksum-pinned ingestion with CSV, Excel, and quality-report products
 - Prisma migration and idempotent PostgreSQL seed for 1,248 players
 - A responsive `/data-quality` inspection screen
@@ -85,6 +86,7 @@ npm run test:e2e
 - [Tournament rules](docs/TOURNAMENT_RULES.md)
 - [Data dictionary](docs/DATA_DICTIONARY.md)
 - [Data pipeline](docs/DATA_PIPELINE.md)
+- [Player data pipeline](docs/PLAYER_DATA_PIPELINE.md)
 - [Rating model](docs/RATING_MODEL.md)
 - [Simulation engine](docs/SIMULATION_ENGINE.md)
 - [Match timing](docs/MATCH_TIMING.md)

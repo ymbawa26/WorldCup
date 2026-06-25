@@ -38,6 +38,19 @@ function teamName(teamId: string | null | undefined) {
   return teamId ? (teamsById.get(teamId)?.name ?? teamId) : "—";
 }
 
+function teamFlag(teamId: string | null | undefined) {
+  const flagCode = teamId ? teamsById.get(teamId)?.flagCode : null;
+  if (!flagCode || flagCode.length !== 2) return "";
+  return flagCode
+    .toUpperCase()
+    .replace(/./g, (char) => String.fromCodePoint(127397 + char.charCodeAt(0)));
+}
+
+function teamLabel(teamId: string | null | undefined) {
+  const flag = teamFlag(teamId);
+  return `${flag ? `${flag} ` : ""}${teamName(teamId)}`;
+}
+
 function percent(value: number) {
   return `${Math.round(value * 100)}%`;
 }
@@ -50,9 +63,9 @@ function scoreline(match: {
 }) {
   if (!match.homeTeamId || !match.awayTeamId) return "TBD";
   if (match.homeGoals === null || match.awayGoals === null) {
-    return `${teamName(match.homeTeamId)} vs ${teamName(match.awayTeamId)}`;
+    return `${teamLabel(match.homeTeamId)} vs ${teamLabel(match.awayTeamId)}`;
   }
-  return `${teamName(match.homeTeamId)} ${match.homeGoals}–${match.awayGoals} ${teamName(match.awayTeamId)}`;
+  return `${teamLabel(match.homeTeamId)} ${match.homeGoals}–${match.awayGoals} ${teamLabel(match.awayTeamId)}`;
 }
 
 function stageLabel(stage: string) {
@@ -422,7 +435,7 @@ function TournamentProgress({
         </h2>
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-3">
+      <div className="grid gap-5 lg:grid-cols-2">
         {tournamentSnapshot.groups.map((group) => (
           <article
             className="rounded-3xl border border-white/10 bg-[#0a102b]/90 p-5"
@@ -438,7 +451,7 @@ function TournamentProgress({
             </div>
 
             <div className="mt-4 overflow-x-auto">
-              <table className="w-full min-w-[420px] text-left text-sm">
+              <table className="w-full min-w-[560px] text-left text-sm">
                 <thead className="text-xs tracking-wider text-slate-500 uppercase">
                   <tr>
                     <th className="py-2 pr-3">Team</th>
@@ -446,6 +459,8 @@ function TournamentProgress({
                     <th className="px-2 py-2 text-center">W</th>
                     <th className="px-2 py-2 text-center">D</th>
                     <th className="px-2 py-2 text-center">L</th>
+                    <th className="px-2 py-2 text-center">GF</th>
+                    <th className="px-2 py-2 text-center">GA</th>
                     <th className="px-2 py-2 text-center">GD</th>
                     <th className="px-2 py-2 text-center">Pts</th>
                   </tr>
@@ -461,6 +476,9 @@ function TournamentProgress({
                       key={standing.teamId}
                     >
                       <td className="py-2 pr-3 font-bold">
+                        <span className="mr-2" aria-hidden="true">
+                          {teamFlag(standing.teamId)}
+                        </span>
                         {teamName(standing.teamId)}
                       </td>
                       <td className="px-2 py-2 text-center">
@@ -472,6 +490,12 @@ function TournamentProgress({
                       </td>
                       <td className="px-2 py-2 text-center">
                         {standing.losses}
+                      </td>
+                      <td className="px-2 py-2 text-center">
+                        {standing.goalsFor}
+                      </td>
+                      <td className="px-2 py-2 text-center">
+                        {standing.goalsAgainst}
                       </td>
                       <td className="px-2 py-2 text-center">
                         {standing.goalDifference}

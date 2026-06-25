@@ -45,19 +45,20 @@ Exit condition:
 
 ## Stage 3 — Player backend and roster services
 
-- [ ] Audit existing Prisma player/team models against the requested fields.
-- [ ] Add only missing fields or normalized companion tables; avoid duplicating
+- [x] Audit existing Prisma player/team models against the requested fields.
+- [x] Add only missing fields or normalized companion tables; avoid duplicating
       existing Player/Team/Rating concepts.
-- [ ] Confirm all 48 teams and 1,248 players seed idempotently.
-- [ ] Add or adapt data scripts to the requested command names if needed:
-  - [ ] `scripts/fetch-squads.ts`
-  - [ ] `scripts/normalize-players.ts`
-  - [ ] `scripts/validate-rosters.ts`
-  - [ ] `scripts/seed-player-database.ts`
-- [ ] Create `reports/missing-player-data.json` if any fallback players are
+- [x] Confirm all 48 teams and 1,248 players seed idempotently.
+- [x] Add or adapt data scripts to the requested command names if needed:
+  - [x] `scripts/fetch-squads.ts`
+  - [x] `scripts/normalize-players.ts`
+  - [x] `scripts/validate-rosters.ts`
+  - [x] `scripts/seed-player-database.ts`
+- [x] Create `reports/missing-player-data.json` if any fallback players are
       introduced.
-- [ ] Add API/domain services for teams, team players, and formations.
-- [ ] Document in `docs/PLAYER_DATA_PIPELINE.md`.
+- [x] Add API/domain services for teams and team players.
+- [ ] Add formation services during Stage 5 with formation definitions.
+- [x] Document in `docs/PLAYER_DATA_PIPELINE.md`.
 
 Exit condition:
 

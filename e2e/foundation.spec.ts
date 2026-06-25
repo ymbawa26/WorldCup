@@ -144,14 +144,21 @@ test("play flow advances by selected-team match and manages saves", async ({
     page.getByRole("heading", { name: /updated tables and results/i }),
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: "Group A" })).toBeVisible();
-  await expect(page.getByText(/Match 1 Mexico/)).toBeVisible();
+  await expect(
+    page.getByRole("columnheader", { name: "GF" }).first(),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("columnheader", { name: "GA" }).first(),
+  ).toBeVisible();
+  await expect(page.getByText("🇲🇽").first()).toBeVisible();
+  await expect(page.getByText(/Match 1.*Mexico/).last()).toBeVisible();
   await expect(
     page.getByRole("button", { name: /play next match/i }),
   ).toBeEnabled();
 
   await page.getByRole("button", { name: /play next match/i }).click();
   await expect(page.getByText("Match 28 autosaved")).toBeVisible();
-  await expect(page.getByText(/Match 28 Mexico/)).toBeVisible();
+  await expect(page.getByText(/Match 28.*Mexico/).last()).toBeVisible();
 
   for (let attempt = 0; attempt < 6; attempt += 1) {
     if (

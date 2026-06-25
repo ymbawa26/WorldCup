@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-06-25
 
-**Current phase:** Match engine remediation Stage 2 complete
+**Current phase:** Match engine remediation Stage 3 complete
 
-**Next eligible phase:** Match engine remediation Stage 3 — Player backend and roster services
+**Next eligible phase:** Match engine remediation Stage 4 — Team ratings from selected lineups
 
 **Overall product status:** Tested tournament model, official 1,248-player squad dataset, independent estimated ratings, deterministic headless match simulation, live match clock domain, backend probability/calibration layer, and playable selected-team tournament flow
 
@@ -514,3 +514,43 @@ management without exposing backend-only model internals unnecessarily.
 
 Stage 3 should improve backend/player roster services without duplicating the
 existing Prisma player, squad, rating, and seed systems.
+
+## Match engine remediation — Stage 3 player backend and roster services
+
+### Completed scope
+
+- Added `src/domain/rosters/service.ts` as a read-only backend roster service
+  over the existing official squad dataset and generated team ratings.
+- Added API routes:
+  - `GET /api/teams`
+  - `GET /api/teams/:teamId`
+  - `GET /api/teams/:teamId/players`
+- Added requested root-level roster script aliases:
+  - `scripts/fetch-squads.ts`
+  - `scripts/normalize-players.ts`
+  - `scripts/validate-rosters.ts`
+  - `scripts/seed-player-database.ts`
+- Added `reports/missing-player-data.json`.
+- Documented the player data pipeline in `docs/PLAYER_DATA_PIPELINE.md`.
+- Updated `/play` group tables to show two groups per row on desktop, flags,
+  goals for, and goals against.
+
+### Gate evidence
+
+- `npm run rosters:validate` passed with 48 teams, 1,248 players, 0 fallback
+  players, and 0 unresolved teams.
+- Integration tests validate roster services, duplicate protection, goalkeeper
+  coverage, and the missing-data report.
+
+### Remaining limitations
+
+- No Prisma migration was required because player, squad, rating, and lineup
+  tables already exist.
+- Formation services are intentionally deferred to Stage 5.
+- Live lineup selection, unavailable-player state, substitutions, and formation
+  changes are not implemented yet.
+
+### Next stage
+
+Stage 4 should calculate team ratings from selected lineups rather than only
+from default generated lineups.
