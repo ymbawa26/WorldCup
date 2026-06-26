@@ -40,7 +40,7 @@ import {
 } from "@/domain/game/storage";
 import { prematchProbabilityFromRatings } from "@/domain/probability/model";
 import { NamedRandomStreams } from "@/domain/simulation/random";
-import { tournamentSnapshot } from "@/domain/tournament/data";
+import { knockoutBracket, tournamentSnapshot } from "@/domain/tournament/data";
 
 type NextMatchPreview = NonNullable<ReturnType<typeof nextUserMatchPreview>>;
 type GamePresentation = ReturnType<typeof gamePresentation>;
@@ -59,6 +59,9 @@ type LiveMatchState = {
   breakEndsAtMs: number | null;
   handledHydration: boolean;
   handledHalftime: boolean;
+  hydrationChoiceMade: boolean;
+  halftimeLevelChosen: boolean;
+  halftimeStrategyChosen: boolean;
   hydrationLevel: 1 | 2 | 3 | 4 | 5;
   halftimeLevel: 1 | 2 | 3 | 4 | 5;
   halftimeStrategy:
@@ -79,6 +82,7 @@ type LiveTimelineEvent = {
     | "MISSED_SHOT"
     | "CORNER"
     | "FOUL"
+    | "PENALTY"
     | "YELLOW_CARD"
     | "RED_CARD"
     | "HYDRATION_BREAK"
@@ -122,6 +126,10 @@ function playerName(playerId: string | null | undefined) {
 
 function percent(value: number) {
   return `${Math.round(value * 100)}%`;
+}
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
 }
 
 function adjustedOddsForNextMatch(
@@ -255,11 +263,78 @@ function strategyModifier(strategy: LiveMatchState["halftimeStrategy"]) {
 }
 
 function tacticalInfluenceText(level: LiveMatchState["hydrationLevel"]) {
-  if (level === 1) return "full defense: scoring -20%, conceding -20%";
-  if (level === 2) return "defensive: scoring -10%, conceding -10%";
-  if (level === 4) return "attacking: scoring +10%, conceding +10%";
-  if (level === 5) return "full attack: scoring +20%, conceding +20%";
-  return "neutral: no scoring/conceding modifier";
+  if (level === 1) return "Protect the box and slow the tempo.";
+  if (level === 2) return "Stay compact but keep an outlet forward.";
+  if (level === 4) return "Push higher and hunt the next chance.";
+  if (level === 5) return "Commit numbers forward and accept the risk.";
+  return "Keep the shape balanced.";
+}
+
+function baseHomePossession({
+  awayTeamId,
+  halftimeStrategy,
+  homeTeamId,
+  odds,
+  setup,
+}: {
+  awayTeamId: string | null;
+  halftimeStrategy: LiveMatchState["halftimeStrategy"];
+  homeTeamId: string | null;
+  odds: { homeWin: number; draw: number; awayWin: number };
+  setup: ParsedPrematchTeamSetup;
+}) {
+  const userIsHome = setup.teamId === homeTeamId;
+  const userIsAway = setup.teamId === awayTeamId;
+  if (!userIsHome && !userIsAway) return 0.5;
+
+  const userStrength = userIsHome ? odds.homeWin : odds.awayWin;
+  const opponentStrength = userIsHome ? odds.awayWin : odds.homeWin;
+  const strategyShift =
+    halftimeStrategy === "POSSESSION"
+      ? 0.08
+      : halftimeStrategy === "HIGH_PRESS"
+        ? 0.03
+        : halftimeStrategy === "LONG_BALL"
+          ? -0.04
+          : halftimeStrategy === "COUNTER_ATTACK"
+            ? -0.05
+            : 0;
+  const mentalityShift =
+    setup.tactics.mentality === "ATTACKING"
+      ? 0.02
+      : setup.tactics.mentality === "DEFENSIVE"
+        ? -0.03
+        : 0;
+  const userPossession = clamp(
+    0.5 +
+      (userStrength - opponentStrength) * 0.22 +
+      strategyShift +
+      mentalityShift,
+    0.34,
+    0.66,
+  );
+  return userIsHome ? userPossession : 1 - userPossession;
+}
+
+function livePossessionAtMinute(match: LiveMatchState, minute: number) {
+  const odds = match.result?.prematchOdds ?? match.preview.odds;
+  const baseHome = baseHomePossession({
+    awayTeamId: match.preview.awayTeamId,
+    halftimeStrategy: match.halftimeStrategy,
+    homeTeamId: match.preview.homeTeamId,
+    odds,
+    setup: match.setup,
+  });
+  const phase = ((match.preview.matchNumber % 11) + 1) * 0.37;
+  const tacticalPulse = Math.sin(minute / 8 + phase) * 0.035;
+  const latePush =
+    minute > 70 && match.setup.tactics.mentality === "ATTACKING" ? 0.018 : 0;
+  const home = clamp(baseHome + tacticalPulse + latePush, 0.32, 0.68);
+  return { away: 1 - home, home };
+}
+
+function possessionImpact(share: number) {
+  return clamp(1 + (share - 0.5) * 0.6, 0.85, 1.15);
 }
 
 function createLiveMatchEvents({
@@ -419,25 +494,56 @@ function createLiveMatchEvents({
     result.homeTeamId === setup.teamId ? ("HOME" as const) : ("AWAY" as const);
   const opponentSideForEvents =
     userSideForEvents === "HOME" ? ("AWAY" as const) : ("HOME" as const);
+  const homePossession = baseHomePossession({
+    awayTeamId: result.awayTeamId,
+    halftimeStrategy,
+    homeTeamId: result.homeTeamId,
+    odds: result.prematchOdds,
+    setup,
+  });
+  const userPossessionShare =
+    userSideForEvents === "HOME" ? homePossession : 1 - homePossession;
+  const opponentPossessionShare = 1 - userPossessionShare;
+  const userPossessionImpact = possessionImpact(userPossessionShare);
+  const opponentPossessionImpact = possessionImpact(opponentPossessionShare);
   const attackModifier =
     hydrationGoalModifier * 0.35 +
     halftimeGoalModifier * 0.35 +
     strategy.goals * 0.3;
   const userCorners = Math.max(
     1,
-    Math.round((1 + userSideStrength * 5) * strategy.corners * attackModifier),
+    Math.round(
+      (1 + userSideStrength * 5) *
+        strategy.corners *
+        attackModifier *
+        userPossessionImpact,
+    ),
   );
   const opponentCorners = Math.max(
     0,
-    Math.round((1 + opponentStrength * 4) / Math.max(0.8, attackModifier)),
+    Math.round(
+      ((1 + opponentStrength * 4) * opponentPossessionImpact) /
+        Math.max(0.8, attackModifier),
+    ),
   );
+  const userGoals =
+    result.homeTeamId === setup.teamId ? result.homeGoals : result.awayGoals;
+  const opponentGoals =
+    result.homeTeamId === setup.teamId ? result.awayGoals : result.homeGoals;
   const userShots = Math.max(
-    result.homeTeamId === setup.teamId ? result.homeGoals : result.awayGoals,
-    Math.round((3 + userSideStrength * 7) * strategy.shots * attackModifier),
+    userGoals,
+    Math.round(
+      (3 + userSideStrength * 7) *
+        strategy.shots *
+        attackModifier *
+        userPossessionImpact,
+    ),
   );
   const opponentShots = Math.max(
-    result.homeTeamId === setup.teamId ? result.awayGoals : result.homeGoals,
-    Math.round((3 + opponentStrength * 7) * strategy.against),
+    opponentGoals,
+    Math.round(
+      (3 + opponentStrength * 7) * strategy.against * opponentPossessionImpact,
+    ),
   );
   const fouls = Math.round((7 + (1 - userSideStrength) * 6) * strategy.fouls);
 
@@ -463,7 +569,7 @@ function createLiveMatchEvents({
       awayScore,
     });
   });
-  Array.from({ length: Math.max(0, userShots - goalSides.length) }).forEach(
+  Array.from({ length: Math.max(0, userShots - userGoals) }).forEach(
     (_, index) => {
       events.push({
         minute: eventMinute(random, "user-shot", index, userShots),
@@ -475,7 +581,7 @@ function createLiveMatchEvents({
       });
     },
   );
-  Array.from({ length: Math.max(0, opponentShots - goalSides.length) }).forEach(
+  Array.from({ length: Math.max(0, opponentShots - opponentGoals) }).forEach(
     (_, index) => {
       const opponentId =
         opponentSideForEvents === "HOME"
@@ -491,6 +597,22 @@ function createLiveMatchEvents({
       });
     },
   );
+
+  if (random.chance("penalty-drama", 0.08 + fouls * 0.003)) {
+    const side = random.chance("penalty-side", userPossessionShare)
+      ? userSideForEvents
+      : opponentSideForEvents;
+    const teamId = side === "HOME" ? result.homeTeamId : result.awayTeamId;
+    events.push({
+      minute: 24 + Math.floor(random.next("penalty-minute") * 58),
+      type: "PENALTY",
+      side,
+      text: `${teamLabel(teamId)} have a penalty shot moment. The keeper keeps it out.`,
+      homeScore,
+      awayScore,
+    });
+  }
+
   Array.from({ length: fouls }).forEach((_, index) => {
     const side = random.chance(`foul-side:${index}`, 0.56)
       ? userSideForEvents
@@ -523,6 +645,7 @@ function createLiveMatchEvents({
         "TACTICAL",
         "CORNER",
         "MISSED_SHOT",
+        "PENALTY",
         "FOUL",
         "YELLOW_CARD",
         "RED_CARD",
@@ -537,6 +660,7 @@ function createLiveMatchEvents({
           "TACTICAL",
           "CORNER",
           "MISSED_SHOT",
+          "PENALTY",
           "FOUL",
           "YELLOW_CARD",
           "RED_CARD",
@@ -647,6 +771,7 @@ export function PlayClient() {
     () => defaultPrematchTeamSetup("united-states"),
   );
   const [liveMatch, setLiveMatch] = useState<LiveMatchState | null>(null);
+  const [nowMs, setNowMs] = useState(() => Date.now());
   const [exportText, setExportText] = useState("");
   const [importText, setImportText] = useState("");
   const [message, setMessage] = useState("Choose a nation to begin.");
@@ -682,8 +807,9 @@ export function PlayClient() {
             minute: 30,
             status: "BREAK",
             breakType: "HYDRATION",
-            breakEndsAtMs: Date.now() + 5_000,
+            breakEndsAtMs: Date.now() + 10_000,
             handledHydration: true,
+            hydrationChoiceMade: false,
             elapsedBeforePauseMs: elapsedMs,
           };
         }
@@ -693,8 +819,10 @@ export function PlayClient() {
             minute: 45,
             status: "BREAK",
             breakType: "HALFTIME",
-            breakEndsAtMs: Date.now() + 10_000,
+            breakEndsAtMs: Date.now() + 15_000,
             handledHalftime: true,
+            halftimeLevelChosen: false,
+            halftimeStrategyChosen: false,
             elapsedBeforePauseMs: elapsedMs,
           };
         }
@@ -726,6 +854,12 @@ export function PlayClient() {
     }, remainingMs);
     return () => window.clearTimeout(timer);
   }, [liveMatch?.breakEndsAtMs, liveMatch?.status]);
+
+  useEffect(() => {
+    if (liveMatch?.status !== "BREAK") return;
+    const timer = window.setInterval(() => setNowMs(Date.now()), 250);
+    return () => window.clearInterval(timer);
+  }, [liveMatch?.status]);
 
   const userTeam = useMemo(
     () => teamsById.get(selectedTeamId),
@@ -880,6 +1014,9 @@ export function PlayClient() {
       breakEndsAtMs: null,
       handledHydration: false,
       handledHalftime: false,
+      hydrationChoiceMade: false,
+      halftimeLevelChosen: false,
+      halftimeStrategyChosen: false,
       hydrationLevel: 3,
       halftimeLevel: 3,
       halftimeStrategy: "BALANCED",
@@ -926,21 +1063,67 @@ export function PlayClient() {
   }
 
   function setHydrationLevel(level: LiveMatchState["hydrationLevel"]) {
-    setLiveMatch((match) =>
-      match ? { ...match, hydrationLevel: level } : match,
-    );
+    setLiveMatch((match) => {
+      if (!match) return match;
+      const next = {
+        ...match,
+        hydrationChoiceMade: true,
+        hydrationLevel: level,
+      };
+      return match.status === "BREAK" && match.breakType === "HYDRATION"
+        ? {
+            ...next,
+            status: "RUNNING",
+            breakType: null,
+            breakEndsAtMs: null,
+            startedAtMs: Date.now(),
+          }
+        : next;
+    });
   }
 
   function setHalftimeLevel(level: LiveMatchState["halftimeLevel"]) {
-    setLiveMatch((match) =>
-      match ? { ...match, halftimeLevel: level } : match,
-    );
+    setLiveMatch((match) => {
+      if (!match) return match;
+      const next = {
+        ...match,
+        halftimeLevel: level,
+        halftimeLevelChosen: true,
+      };
+      return match.status === "BREAK" &&
+        match.breakType === "HALFTIME" &&
+        next.halftimeStrategyChosen
+        ? {
+            ...next,
+            status: "RUNNING",
+            breakType: null,
+            breakEndsAtMs: null,
+            startedAtMs: Date.now(),
+          }
+        : next;
+    });
   }
 
   function setHalftimeStrategy(strategy: LiveMatchState["halftimeStrategy"]) {
-    setLiveMatch((match) =>
-      match ? { ...match, halftimeStrategy: strategy } : match,
-    );
+    setLiveMatch((match) => {
+      if (!match) return match;
+      const next = {
+        ...match,
+        halftimeStrategy: strategy,
+        halftimeStrategyChosen: true,
+      };
+      return match.status === "BREAK" &&
+        match.breakType === "HALFTIME" &&
+        next.halftimeLevelChosen
+        ? {
+            ...next,
+            status: "RUNNING",
+            breakType: null,
+            breakEndsAtMs: null,
+            startedAtMs: Date.now(),
+          }
+        : next;
+    });
   }
 
   function updateFormation(formationId: FormationId) {
@@ -1101,6 +1284,7 @@ export function PlayClient() {
             {liveMatch ? (
               <LiveMatchPanel
                 liveMatch={liveMatch}
+                nowMs={nowMs}
                 onFinish={() => void finishLiveMatchNow()}
                 onHalftimeLevelChange={setHalftimeLevel}
                 onHalftimeStrategyChange={setHalftimeStrategy}
@@ -1381,6 +1565,7 @@ function PrematchSetupPanel({
 
 function LiveMatchPanel({
   liveMatch,
+  nowMs,
   onFinish,
   onHalftimeLevelChange,
   onHalftimeStrategyChange,
@@ -1390,6 +1575,7 @@ function LiveMatchPanel({
   onSpeedChange,
 }: {
   liveMatch: LiveMatchState;
+  nowMs: number;
   onFinish: () => void;
   onHalftimeLevelChange: (level: LiveMatchState["halftimeLevel"]) => void;
   onHalftimeStrategyChange: (
@@ -1414,9 +1600,14 @@ function LiveMatchPanel({
   const latestImpact = allEvents
     .filter((event) => event.minute <= visibleMinute)
     .filter((event) =>
-      ["GOAL", "RED_CARD", "YELLOW_CARD", "CORNER", "MISSED_SHOT"].includes(
-        event.type,
-      ),
+      [
+        "GOAL",
+        "RED_CARD",
+        "YELLOW_CARD",
+        "CORNER",
+        "MISSED_SHOT",
+        "PENALTY",
+      ].includes(event.type),
     )
     .at(-1);
   const yellowCards = allEvents.filter(
@@ -1430,7 +1621,9 @@ function LiveMatchPanel({
   ).length;
   const shots = allEvents.filter(
     (event) =>
-      (event.type === "MISSED_SHOT" || event.type === "GOAL") &&
+      (event.type === "MISSED_SHOT" ||
+        event.type === "GOAL" ||
+        event.type === "PENALTY") &&
       event.minute <= visibleMinute,
   ).length;
   const fouls = allEvents.filter(
@@ -1440,6 +1633,7 @@ function LiveMatchPanel({
     100,
     (liveMatch.minute / liveMatch.maxMinute) * 100,
   );
+  const possession = livePossessionAtMinute(liveMatch, visibleMinute);
 
   return (
     <section className="mt-7 rounded-3xl border border-emerald-300/20 bg-emerald-300/10 p-5">
@@ -1466,9 +1660,19 @@ function LiveMatchPanel({
         </div>
       </div>
 
+      <MatchPitchScreen
+        event={latestImpact}
+        homePossession={possession.home}
+        liveScore={liveScore}
+        liveStatus={liveMatch.status}
+        minute={visibleMinute}
+        preview={liveMatch.preview}
+      />
+
       {latestImpact ? (
         <MatchMoment
           event={latestImpact}
+          homeTeamId={liveMatch.preview.homeTeamId}
           userTeamId={liveMatch.pending.state.userTeamId}
         />
       ) : null}
@@ -1476,6 +1680,7 @@ function LiveMatchPanel({
       {liveMatch.status === "BREAK" ? (
         <BreakControls
           liveMatch={liveMatch}
+          nowMs={nowMs}
           onHalftimeLevelChange={onHalftimeLevelChange}
           onHalftimeStrategyChange={onHalftimeStrategyChange}
           onHydrationLevelChange={onHydrationLevelChange}
@@ -1508,6 +1713,9 @@ function LiveMatchPanel({
           </p>
           <p className="mt-1 text-xs text-slate-300">
             Shots {shots} · Corners {corners} · Fouls {fouls}
+          </p>
+          <p className="mt-1 text-xs text-cyan-100">
+            Possession {percent(possession.home)} · {percent(possession.away)}
           </p>
         </div>
         <div className="rounded-2xl bg-white/5 p-4 text-center">
@@ -1554,11 +1762,13 @@ function LiveMatchPanel({
             className={
               event.type === "GOAL"
                 ? "rounded-2xl bg-emerald-300/15 px-3 py-2 text-sm text-emerald-50"
-                : event.type === "RED_CARD"
-                  ? "rounded-2xl bg-rose-300/15 px-3 py-2 text-sm text-rose-50"
-                  : event.type === "YELLOW_CARD"
-                    ? "rounded-2xl bg-amber-300/15 px-3 py-2 text-sm text-amber-50"
-                    : "rounded-2xl bg-black/20 px-3 py-2 text-sm text-slate-100"
+                : event.type === "PENALTY"
+                  ? "rounded-2xl bg-amber-300/15 px-3 py-2 text-sm text-amber-50"
+                  : event.type === "RED_CARD"
+                    ? "rounded-2xl bg-rose-300/15 px-3 py-2 text-sm text-rose-50"
+                    : event.type === "YELLOW_CARD"
+                      ? "rounded-2xl bg-amber-300/15 px-3 py-2 text-sm text-amber-50"
+                      : "rounded-2xl bg-black/20 px-3 py-2 text-sm text-slate-100"
             }
             key={`${event.minute}:${event.text}`}
           >
@@ -1573,22 +1783,190 @@ function LiveMatchPanel({
   );
 }
 
+function MatchPitchScreen({
+  event,
+  homePossession,
+  liveScore,
+  liveStatus,
+  minute,
+  preview,
+}: {
+  event: LiveTimelineEvent | undefined;
+  homePossession: number;
+  liveScore: { home: number; away: number };
+  liveStatus: LiveMatchState["status"];
+  minute: number;
+  preview: NextMatchPreview;
+}) {
+  const awayPossession = 1 - homePossession;
+  const side = event?.side ?? "HOME";
+  const isHomeAction = side === "HOME";
+  const ballLeft =
+    event?.type === "GOAL" || event?.type === "PENALTY"
+      ? isHomeAction
+        ? 84
+        : 16
+      : event?.type === "CORNER"
+        ? isHomeAction
+          ? 92
+          : 8
+        : event?.type === "FOUL"
+          ? 50
+          : isHomeAction
+            ? 64
+            : 36;
+  const ballTop =
+    event?.type === "CORNER"
+      ? 18
+      : event?.type === "YELLOW_CARD" || event?.type === "RED_CARD"
+        ? 54
+        : event?.type === "PENALTY"
+          ? 50
+          : 42;
+  const actionLabel =
+    event?.type === "GOAL"
+      ? "Goal sequence"
+      : event?.type === "PENALTY"
+        ? "Penalty shot"
+        : event?.type === "RED_CARD"
+          ? "Red-card stoppage"
+          : event?.type === "YELLOW_CARD"
+            ? "Card shown"
+            : event?.type === "CORNER"
+              ? "Corner pressure"
+              : event?.type === "MISSED_SHOT"
+                ? "Shot attempt"
+                : "Live phase";
+  const glow =
+    event?.type === "GOAL"
+      ? "shadow-[0_0_50px_rgba(52,211,153,0.45)]"
+      : event?.type === "PENALTY"
+        ? "shadow-[0_0_50px_rgba(251,191,36,0.45)]"
+        : event?.type === "RED_CARD"
+          ? "shadow-[0_0_50px_rgba(251,113,133,0.4)]"
+          : "shadow-[0_0_36px_rgba(103,232,249,0.2)]";
+
+  return (
+    <div className="mt-5 overflow-hidden rounded-3xl border border-white/10 bg-[#07111f]">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-3">
+        <div>
+          <p className="text-xs font-black tracking-[0.2em] text-emerald-200 uppercase">
+            Match screen · {actionLabel}
+          </p>
+          <p className="mt-1 text-sm text-slate-300">
+            {minute}′ · {liveStatus.toLowerCase()} ·{" "}
+            {event?.text ?? "Both teams are feeling each other out."}
+          </p>
+        </div>
+        <p className="rounded-full bg-white/10 px-3 py-1 text-sm font-black text-white">
+          {teamFlag(preview.homeTeamId)} {liveScore.home}–{liveScore.away}{" "}
+          {teamFlag(preview.awayTeamId)}
+        </p>
+      </div>
+
+      <div className="grid gap-4 p-4 lg:grid-cols-[1fr_260px]">
+        <div className="relative h-72 overflow-hidden rounded-3xl border border-emerald-100/20 bg-[linear-gradient(90deg,rgba(22,101,52,.9),rgba(21,128,61,.75),rgba(22,101,52,.9))]">
+          <div className="absolute inset-y-0 left-1/2 w-px bg-white/35" />
+          <div className="absolute top-1/2 left-1/2 size-24 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/35" />
+          <div className="absolute top-1/2 left-0 h-32 w-20 -translate-y-1/2 rounded-r-3xl border border-l-0 border-white/35" />
+          <div className="absolute top-1/2 right-0 h-32 w-20 -translate-y-1/2 rounded-l-3xl border border-r-0 border-white/35" />
+          <div className="absolute top-0 bottom-0 left-[25%] w-px bg-white/10" />
+          <div className="absolute top-0 right-[25%] bottom-0 w-px bg-white/10" />
+
+          {[18, 34, 49, 66, 82].map((left, index) => (
+            <div
+              className="absolute size-3 rounded-full bg-cyan-100/80 ring-4 ring-cyan-300/20"
+              key={`home-dot-${left}`}
+              style={{ left: `${left}%`, top: `${28 + (index % 3) * 18}%` }}
+            />
+          ))}
+          {[18, 34, 51, 66, 82].map((right, index) => (
+            <div
+              className="absolute size-3 rounded-full bg-rose-100/80 ring-4 ring-rose-300/20"
+              key={`away-dot-${right}`}
+              style={{ right: `${right}%`, top: `${34 + (index % 3) * 16}%` }}
+            />
+          ))}
+
+          <div
+            className={`absolute size-8 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-white text-center text-lg leading-7 transition-all duration-500 ${glow}`}
+            style={{ left: `${ballLeft}%`, top: `${ballTop}%` }}
+          >
+            ⚽
+          </div>
+          {event?.type === "GOAL" ? (
+            <div
+              className="absolute top-1/2 -translate-y-1/2 rounded-full bg-emerald-300/90 px-3 py-1 text-xs font-black text-emerald-950"
+              style={{ [isHomeAction ? "right" : "left"]: "18px" }}
+            >
+              GOAL
+            </div>
+          ) : null}
+          {event?.type === "YELLOW_CARD" || event?.type === "RED_CARD" ? (
+            <div
+              className={`absolute top-[48%] left-1/2 h-12 w-8 -translate-x-1/2 rounded-md ${
+                event.type === "RED_CARD" ? "bg-rose-500" : "bg-amber-300"
+              }`}
+            />
+          ) : null}
+        </div>
+
+        <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-4">
+          <p className="text-xs font-black tracking-wider text-slate-400 uppercase">
+            Possession
+          </p>
+          <div className="mt-4 space-y-4">
+            <div>
+              <div className="flex justify-between text-xs text-slate-300">
+                <span>{teamLabel(preview.homeTeamId)}</span>
+                <span>{percent(homePossession)}</span>
+              </div>
+              <div className="mt-2 h-3 overflow-hidden rounded-full bg-white/10">
+                <div
+                  className="h-full rounded-full bg-cyan-300 transition-all"
+                  style={{ width: percent(homePossession) }}
+                />
+              </div>
+            </div>
+            <div>
+              <div className="flex justify-between text-xs text-slate-300">
+                <span>{teamLabel(preview.awayTeamId)}</span>
+                <span>{percent(awayPossession)}</span>
+              </div>
+              <div className="mt-2 h-3 overflow-hidden rounded-full bg-white/10">
+                <div
+                  className="h-full rounded-full bg-rose-300 transition-all"
+                  style={{ width: percent(awayPossession) }}
+                />
+              </div>
+            </div>
+          </div>
+          <p className="mt-4 text-xs leading-5 text-slate-400">
+            Possession moves during the match and quietly nudges chance quality,
+            corners, and pressure without deciding the result by itself.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function MatchMoment({
   event,
+  homeTeamId,
   userTeamId,
 }: {
   event: LiveTimelineEvent;
+  homeTeamId: string | null;
   userTeamId: string;
 }) {
   const eventTeam =
     event.side === "HOME"
-      ? event.text.includes(teamName(userTeamId))
-        ? userTeamId
-        : null
+      ? homeTeamId
       : event.side === "AWAY"
-        ? event.text.includes(teamName(userTeamId))
-          ? userTeamId
-          : null
+        ? homeTeamId === userTeamId
+          ? null
+          : userTeamId
         : null;
   const isUserMoment = eventTeam === userTeamId;
   const style =
@@ -1612,7 +1990,9 @@ function MatchMoment({
           ? "YELLOW CARD"
           : event.type === "CORNER"
             ? "CORNER"
-            : "CHANCE";
+            : event.type === "PENALTY"
+              ? "PENALTY SHOT"
+              : "CHANCE";
 
   return (
     <div className={`mt-5 rounded-3xl border p-5 ${style}`}>
@@ -1627,11 +2007,13 @@ function MatchMoment({
 
 function BreakControls({
   liveMatch,
+  nowMs,
   onHalftimeLevelChange,
   onHalftimeStrategyChange,
   onHydrationLevelChange,
 }: {
   liveMatch: LiveMatchState;
+  nowMs: number;
   onHalftimeLevelChange: (level: LiveMatchState["halftimeLevel"]) => void;
   onHalftimeStrategyChange: (
     strategy: LiveMatchState["halftimeStrategy"],
@@ -1639,8 +2021,13 @@ function BreakControls({
   onHydrationLevelChange: (level: LiveMatchState["hydrationLevel"]) => void;
 }) {
   const isHalftime = liveMatch.breakType === "HALFTIME";
-  const breakSeconds = isHalftime ? 10 : 5;
+  const breakSeconds = isHalftime ? 15 : 10;
+  const remainingSeconds = liveMatch.breakEndsAtMs
+    ? Math.max(0, Math.ceil((liveMatch.breakEndsAtMs - nowMs) / 1000))
+    : breakSeconds;
   const level = isHalftime ? liveMatch.halftimeLevel : liveMatch.hydrationLevel;
+  const halftimeReady =
+    liveMatch.halftimeLevelChosen && liveMatch.halftimeStrategyChosen;
 
   return (
     <div className="mt-5 rounded-3xl border border-cyan-300/25 bg-cyan-300/10 p-5">
@@ -1654,14 +2041,25 @@ function BreakControls({
           </h4>
           <p className="mt-2 text-sm text-cyan-50/80">
             {isHalftime
-              ? "The match pauses for 10 seconds."
-              : "The match pauses for 5 seconds."}{" "}
+              ? "The match pauses for 15 seconds unless you finish your team talk first."
+              : "The match pauses for 10 seconds unless you pick your posture first."}{" "}
             {tacticalInfluenceText(level)}
           </p>
         </div>
-        <p className="rounded-full bg-white/10 px-3 py-1 text-sm font-black text-white">
-          {breakSeconds}s pause
-        </p>
+        <div className="text-right">
+          <p className="rounded-full bg-white/10 px-3 py-1 text-sm font-black text-white">
+            {remainingSeconds}s left
+          </p>
+          <p className="mt-2 text-xs text-cyan-100/75">
+            {isHalftime
+              ? halftimeReady
+                ? "Restarting now"
+                : "Pick tempo + strategy"
+              : liveMatch.hydrationChoiceMade
+                ? "Restarting now"
+                : "Pick a posture"}
+          </p>
+        </div>
       </div>
 
       <div className="mt-5">
@@ -1703,18 +2101,18 @@ function BreakControls({
             }
             value={liveMatch.halftimeStrategy}
           >
-            <option value="BALANCED">Balanced — no modifier</option>
+            <option value="BALANCED">Balanced — keep your match plan</option>
             <option value="COUNTER_ATTACK">
-              Counter attack — goals +12%, conceded +8%, fewer corners
+              Counter attack — break quickly when space opens
             </option>
             <option value="HIGH_PRESS">
-              High press — goals +10%, conceded +12%, fouls +15%
+              High press — squeeze the opponent high up the pitch
             </option>
             <option value="LONG_BALL">
-              Long ball — corners +15%, goals +8%, conceded +6%
+              Long ball — go direct and force second-ball pressure
             </option>
             <option value="POSSESSION">
-              Possession — conceded -10%, goals +6%, fewer fouls
+              Possession — control rhythm and reduce chaos
             </option>
           </select>
         </label>
@@ -1916,6 +2314,76 @@ function GroupStageTables({
   );
 }
 
+type BracketPresentationMatch =
+  GamePresentation["knockoutRounds"][string][number];
+
+function allKnockoutMatches(presentation: GamePresentation) {
+  return Object.values(presentation.knockoutRounds).flat();
+}
+
+function presentedKnockoutMatch(
+  presentation: GamePresentation,
+  matchNumber: number,
+) {
+  return allKnockoutMatches(presentation).find(
+    (match) => match.matchNumber === matchNumber,
+  );
+}
+
+function slotLabel(slot: string, presentation: GamePresentation) {
+  if (slot.startsWith("W") || slot.startsWith("L")) {
+    const sourceNumber = Number(slot.slice(1));
+    const source = presentedKnockoutMatch(presentation, sourceNumber);
+    if (!source) {
+      return slot.startsWith("W")
+        ? `Winner M${sourceNumber}`
+        : `Loser M${sourceNumber}`;
+    }
+    if (slot.startsWith("W") && source.winnerTeamId) {
+      return teamLabel(source.winnerTeamId);
+    }
+    if (slot.startsWith("L") && source.winnerTeamId) {
+      const loserTeamId =
+        source.winnerTeamId === source.homeTeamId
+          ? source.awayTeamId
+          : source.homeTeamId;
+      return teamLabel(loserTeamId);
+    }
+    if (source.homeTeamId && source.awayTeamId) {
+      return `${teamLabel(source.homeTeamId)} / ${teamLabel(source.awayTeamId)}`;
+    }
+    return slot.startsWith("W")
+      ? `Winner of Match ${sourceNumber}`
+      : `Loser of Match ${sourceNumber}`;
+  }
+  return slot;
+}
+
+function nextWinnerRoute(
+  match: BracketPresentationMatch,
+  presentation: GamePresentation,
+) {
+  const sourceSlot = `W${match.matchNumber}`;
+  const nextTemplate = knockoutBracket.matches.find(
+    (item) => item.homeSlot === sourceSlot || item.awaySlot === sourceSlot,
+  );
+  if (!nextTemplate) return null;
+  const nextMatch = presentedKnockoutMatch(
+    presentation,
+    nextTemplate.matchNumber,
+  );
+  const opponentSlot =
+    nextTemplate.homeSlot === sourceSlot
+      ? nextTemplate.awaySlot
+      : nextTemplate.homeSlot;
+  return {
+    matchNumber: nextTemplate.matchNumber,
+    opponent: slotLabel(opponentSlot, presentation),
+    stage: stageLabel(nextTemplate.stage),
+    targetScoreline: nextMatch ? scoreline(nextMatch) : null,
+  };
+}
+
 function KnockoutBracket({
   presentation,
   selectedTeamId,
@@ -1996,6 +2464,7 @@ function KnockoutBracket({
                       involvesUser={involvesUser}
                       key={match.matchNumber}
                       match={match}
+                      nextInfo={nextWinnerRoute(match, presentation)}
                       resultLabel={resultLabel}
                     />
                   );
@@ -2015,6 +2484,7 @@ function KnockoutBracket({
                 involvesUser={Boolean(userResultLabel(match, selectedTeamId))}
                 key={match.matchNumber}
                 match={match}
+                nextInfo={null}
                 resultLabel={userResultLabel(match, selectedTeamId)}
               />
             ))}
@@ -2028,10 +2498,12 @@ function KnockoutBracket({
 function BracketMatchCard({
   involvesUser,
   match,
+  nextInfo,
   resultLabel,
 }: {
   involvesUser: boolean;
-  match: GamePresentation["knockoutRounds"][string][number];
+  match: BracketPresentationMatch;
+  nextInfo: ReturnType<typeof nextWinnerRoute> | null;
   resultLabel: string | null;
 }) {
   return (
@@ -2042,7 +2514,12 @@ function BracketMatchCard({
           : "relative rounded-3xl border border-white/10 bg-white/[0.04] p-3"
       }
     >
-      <div className="absolute top-1/2 -right-8 hidden h-px w-8 bg-cyan-100/30 xl:block" />
+      {nextInfo ? (
+        <>
+          <div className="absolute top-1/2 -right-8 hidden h-px w-8 bg-cyan-100/40 xl:block" />
+          <div className="absolute top-1/2 -right-8 hidden size-2 -translate-y-1/2 rounded-full bg-cyan-200 xl:block" />
+        </>
+      ) : null}
       <div className="absolute top-1/2 -left-8 hidden h-px w-8 bg-cyan-100/10 xl:block" />
       <div className="flex items-start justify-between gap-2">
         <p className="text-xs font-black tracking-wider text-slate-500 uppercase">
@@ -2077,6 +2554,22 @@ function BracketMatchCard({
       ) : (
         <p className="mt-2 text-xs text-slate-500">Awaiting result</p>
       )}
+
+      {nextInfo ? (
+        <div className="mt-3 rounded-2xl border border-cyan-300/15 bg-cyan-300/10 px-3 py-2">
+          <p className="text-[0.65rem] font-black tracking-wider text-cyan-100 uppercase">
+            Winner line → Match {nextInfo.matchNumber} · {nextInfo.stage}
+          </p>
+          <p className="mt-1 text-xs text-slate-300">
+            Possible next opponent: {nextInfo.opponent}
+          </p>
+          {nextInfo.targetScoreline ? (
+            <p className="mt-1 text-[0.7rem] text-slate-500">
+              Current next slot: {nextInfo.targetScoreline}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 }
