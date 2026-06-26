@@ -50,10 +50,23 @@ type LiveMatchState = {
   pending: AdvanceResult;
   preview: NextMatchPreview;
   result: MatchRecord | null;
-  events: LiveTimelineEvent[];
+  setup: ParsedPrematchTeamSetup;
   minute: number;
+  maxMinute: 90 | 120;
   speed: 0.5 | 1 | 2;
-  status: "RUNNING" | "PAUSED" | "FULLTIME";
+  status: "RUNNING" | "PAUSED" | "BREAK" | "FULLTIME";
+  breakType: "HYDRATION" | "HALFTIME" | null;
+  breakEndsAtMs: number | null;
+  handledHydration: boolean;
+  handledHalftime: boolean;
+  hydrationLevel: 1 | 2 | 3 | 4 | 5;
+  halftimeLevel: 1 | 2 | 3 | 4 | 5;
+  halftimeStrategy:
+    | "BALANCED"
+    | "COUNTER_ATTACK"
+    | "HIGH_PRESS"
+    | "LONG_BALL"
+    | "POSSESSION";
   startedAtMs: number;
   elapsedBeforePauseMs: number;
 };
@@ -63,9 +76,14 @@ type LiveTimelineEvent = {
     | "KICKOFF"
     | "TACTICAL"
     | "GOAL"
+    | "MISSED_SHOT"
+    | "CORNER"
+    | "FOUL"
     | "YELLOW_CARD"
     | "RED_CARD"
+    | "HYDRATION_BREAK"
     | "HALF_TIME"
+    | "EXTRA_TIME_START"
     | "FULL_TIME";
   side: "HOME" | "AWAY" | null;
   text: string;
@@ -185,18 +203,88 @@ function eventMinute(
   );
 }
 
+function attackLevelModifier(level: LiveMatchState["hydrationLevel"]) {
+  return ({ 1: 0.8, 2: 0.9, 3: 1, 4: 1.1, 5: 1.2 } as const)[level];
+}
+
+function strategyModifier(strategy: LiveMatchState["halftimeStrategy"]) {
+  return (
+    {
+      BALANCED: {
+        goals: 1,
+        against: 1,
+        corners: 1,
+        shots: 1,
+        fouls: 1,
+        label: "balanced structure",
+      },
+      COUNTER_ATTACK: {
+        goals: 1.12,
+        against: 1.08,
+        corners: 0.92,
+        shots: 0.95,
+        fouls: 1.04,
+        label: "counter attacks",
+      },
+      HIGH_PRESS: {
+        goals: 1.1,
+        against: 1.12,
+        corners: 1.12,
+        shots: 1.08,
+        fouls: 1.15,
+        label: "high pressing",
+      },
+      LONG_BALL: {
+        goals: 1.08,
+        against: 1.06,
+        corners: 1.15,
+        shots: 1.03,
+        fouls: 1.06,
+        label: "long balls",
+      },
+      POSSESSION: {
+        goals: 1.06,
+        against: 0.9,
+        corners: 1.05,
+        shots: 0.96,
+        fouls: 0.92,
+        label: "possession control",
+      },
+    } as const
+  )[strategy];
+}
+
+function tacticalInfluenceText(level: LiveMatchState["hydrationLevel"]) {
+  if (level === 1) return "full defense: scoring -20%, conceding -20%";
+  if (level === 2) return "defensive: scoring -10%, conceding -10%";
+  if (level === 4) return "attacking: scoring +10%, conceding +10%";
+  if (level === 5) return "full attack: scoring +20%, conceding +20%";
+  return "neutral: no scoring/conceding modifier";
+}
+
 function createLiveMatchEvents({
   preview,
   result,
   setup,
+  hydrationLevel,
+  halftimeLevel,
+  halftimeStrategy,
 }: {
   preview: NextMatchPreview;
   result: MatchRecord | null;
   setup: ParsedPrematchTeamSetup;
+  hydrationLevel: LiveMatchState["hydrationLevel"];
+  halftimeLevel: LiveMatchState["halftimeLevel"];
+  halftimeStrategy: LiveMatchState["halftimeStrategy"];
 }) {
   const random = new NamedRandomStreams(
-    `${result?.seed ?? preview.matchNumber}:${setup.formationId}:${JSON.stringify(setup.tactics)}`,
+    `${result?.seed ?? preview.matchNumber}:${setup.formationId}:${JSON.stringify(setup.tactics)}:${hydrationLevel}:${halftimeLevel}:${halftimeStrategy}`,
   );
+  const maxMinute =
+    result?.winnerTeamId && result.homeGoals === result.awayGoals ? 120 : 90;
+  const hydrationGoalModifier = attackLevelModifier(hydrationLevel);
+  const halftimeGoalModifier = attackLevelModifier(halftimeLevel);
+  const strategy = strategyModifier(halftimeStrategy);
   const events: LiveTimelineEvent[] = [
     {
       minute: 0,
@@ -215,14 +303,32 @@ function createLiveMatchEvents({
       awayScore: 0,
     },
     {
+      minute: 30,
+      type: "HYDRATION_BREAK",
+      side: null,
+      text: `Hydration break. ${tacticalInfluenceText(hydrationLevel)}.`,
+      homeScore: 0,
+      awayScore: 0,
+    },
+    {
       minute: 45,
       type: "HALF_TIME",
       side: null,
-      text: "Half-time. The second half starts automatically in this preview build.",
+      text: `Half-time. ${tacticalInfluenceText(halftimeLevel)} with ${strategy.label}.`,
       homeScore: 0,
       awayScore: 0,
     },
   ];
+  if (maxMinute === 120) {
+    events.push({
+      minute: 90,
+      type: "EXTRA_TIME_START",
+      side: null,
+      text: "Level after 90 minutes. Extra time begins.",
+      homeScore: result?.homeGoals ?? 0,
+      awayScore: result?.awayGoals ?? 0,
+    });
+  }
   if (!result) return events;
 
   const goalSides = [
@@ -239,7 +345,10 @@ function createLiveMatchEvents({
     else awayScore += 1;
     const teamId = side === "HOME" ? result.homeTeamId : result.awayTeamId;
     events.push({
-      minute: eventMinute(random, "goal", index, goalSides.length),
+      minute:
+        maxMinute === 120 && index === goalSides.length - 1
+          ? 96 + Math.floor(random.next(`extra-goal:${index}`) * 20)
+          : eventMinute(random, "goal", index, goalSides.length),
       type: "GOAL",
       side,
       text: `${teamLabel(teamId)} score. ${homeScore}–${awayScore}.`,
@@ -298,8 +407,107 @@ function createLiveMatchEvents({
     });
   }
 
+  const userSideStrength =
+    setup.teamId === result.homeTeamId
+      ? result.prematchOdds.homeWin
+      : result.prematchOdds.awayWin;
+  const opponentStrength =
+    setup.teamId === result.homeTeamId
+      ? result.prematchOdds.awayWin
+      : result.prematchOdds.homeWin;
+  const userSideForEvents =
+    result.homeTeamId === setup.teamId ? ("HOME" as const) : ("AWAY" as const);
+  const opponentSideForEvents =
+    userSideForEvents === "HOME" ? ("AWAY" as const) : ("HOME" as const);
+  const attackModifier =
+    hydrationGoalModifier * 0.35 +
+    halftimeGoalModifier * 0.35 +
+    strategy.goals * 0.3;
+  const userCorners = Math.max(
+    1,
+    Math.round((1 + userSideStrength * 5) * strategy.corners * attackModifier),
+  );
+  const opponentCorners = Math.max(
+    0,
+    Math.round((1 + opponentStrength * 4) / Math.max(0.8, attackModifier)),
+  );
+  const userShots = Math.max(
+    result.homeTeamId === setup.teamId ? result.homeGoals : result.awayGoals,
+    Math.round((3 + userSideStrength * 7) * strategy.shots * attackModifier),
+  );
+  const opponentShots = Math.max(
+    result.homeTeamId === setup.teamId ? result.awayGoals : result.homeGoals,
+    Math.round((3 + opponentStrength * 7) * strategy.against),
+  );
+  const fouls = Math.round((7 + (1 - userSideStrength) * 6) * strategy.fouls);
+
+  Array.from({ length: userCorners }).forEach((_, index) => {
+    events.push({
+      minute: eventMinute(random, "user-corner", index, userCorners),
+      type: "CORNER",
+      side: userSideForEvents,
+      text: `${teamLabel(setup.teamId)} win a corner after attacking pressure.`,
+      homeScore,
+      awayScore,
+    });
+  });
+  Array.from({ length: opponentCorners }).forEach((_, index) => {
+    const opponentId =
+      opponentSideForEvents === "HOME" ? result.homeTeamId : result.awayTeamId;
+    events.push({
+      minute: eventMinute(random, "opponent-corner", index, opponentCorners),
+      type: "CORNER",
+      side: opponentSideForEvents,
+      text: `${teamLabel(opponentId)} win a corner.`,
+      homeScore,
+      awayScore,
+    });
+  });
+  Array.from({ length: Math.max(0, userShots - goalSides.length) }).forEach(
+    (_, index) => {
+      events.push({
+        minute: eventMinute(random, "user-shot", index, userShots),
+        type: "MISSED_SHOT",
+        side: userSideForEvents,
+        text: `${teamLabel(setup.teamId)} miss a chance from open play.`,
+        homeScore,
+        awayScore,
+      });
+    },
+  );
+  Array.from({ length: Math.max(0, opponentShots - goalSides.length) }).forEach(
+    (_, index) => {
+      const opponentId =
+        opponentSideForEvents === "HOME"
+          ? result.homeTeamId
+          : result.awayTeamId;
+      events.push({
+        minute: eventMinute(random, "opponent-shot", index, opponentShots),
+        type: "MISSED_SHOT",
+        side: opponentSideForEvents,
+        text: `${teamLabel(opponentId)} fire wide.`,
+        homeScore,
+        awayScore,
+      });
+    },
+  );
+  Array.from({ length: fouls }).forEach((_, index) => {
+    const side = random.chance(`foul-side:${index}`, 0.56)
+      ? userSideForEvents
+      : opponentSideForEvents;
+    const teamId = side === "HOME" ? result.homeTeamId : result.awayTeamId;
+    events.push({
+      minute: eventMinute(random, "foul", index, fouls),
+      type: "FOUL",
+      side,
+      text: `${teamLabel(teamId)} commit a foul while contesting midfield.`,
+      homeScore,
+      awayScore,
+    });
+  });
+
   events.push({
-    minute: 90,
+    minute: maxMinute,
     type: "FULL_TIME",
     side: null,
     text: `Full-time: ${teamName(result.homeTeamId)} ${result.homeGoals}–${result.awayGoals} ${teamName(result.awayTeamId)}.`,
@@ -313,19 +521,29 @@ function createLiveMatchEvents({
       [
         "KICKOFF",
         "TACTICAL",
+        "CORNER",
+        "MISSED_SHOT",
+        "FOUL",
         "YELLOW_CARD",
         "RED_CARD",
+        "HYDRATION_BREAK",
         "GOAL",
         "HALF_TIME",
+        "EXTRA_TIME_START",
         "FULL_TIME",
       ].indexOf(left.type) -
         [
           "KICKOFF",
           "TACTICAL",
+          "CORNER",
+          "MISSED_SHOT",
+          "FOUL",
           "YELLOW_CARD",
           "RED_CARD",
+          "HYDRATION_BREAK",
           "GOAL",
           "HALF_TIME",
+          "EXTRA_TIME_START",
           "FULL_TIME",
         ].indexOf(right.type),
   );
@@ -454,16 +672,60 @@ export function PlayClient() {
         if (!match || match.status !== "RUNNING") return match;
         const elapsedMs =
           match.elapsedBeforePauseMs + (Date.now() - match.startedAtMs);
-        const minute = Math.min(90, (elapsedMs / 1000) * match.speed);
+        const minute = Math.min(
+          match.maxMinute,
+          (elapsedMs / 1000) * match.speed,
+        );
+        if (!match.handledHydration && minute >= 30) {
+          return {
+            ...match,
+            minute: 30,
+            status: "BREAK",
+            breakType: "HYDRATION",
+            breakEndsAtMs: Date.now() + 5_000,
+            handledHydration: true,
+            elapsedBeforePauseMs: elapsedMs,
+          };
+        }
+        if (!match.handledHalftime && minute >= 45) {
+          return {
+            ...match,
+            minute: 45,
+            status: "BREAK",
+            breakType: "HALFTIME",
+            breakEndsAtMs: Date.now() + 10_000,
+            handledHalftime: true,
+            elapsedBeforePauseMs: elapsedMs,
+          };
+        }
         return {
           ...match,
           minute,
-          status: minute >= 90 ? "FULLTIME" : "RUNNING",
+          status: minute >= match.maxMinute ? "FULLTIME" : "RUNNING",
         };
       });
     }, 250);
     return () => window.clearInterval(timer);
   }, [liveMatch]);
+
+  useEffect(() => {
+    if (liveMatch?.status !== "BREAK" || !liveMatch.breakEndsAtMs) return;
+    const remainingMs = Math.max(0, liveMatch.breakEndsAtMs - Date.now());
+    const timer = window.setTimeout(() => {
+      setLiveMatch((match) =>
+        match?.status === "BREAK"
+          ? {
+              ...match,
+              status: "RUNNING",
+              breakType: null,
+              breakEndsAtMs: null,
+              startedAtMs: Date.now(),
+            }
+          : match,
+      );
+    }, remainingMs);
+    return () => window.clearTimeout(timer);
+  }, [liveMatch?.breakEndsAtMs, liveMatch?.status]);
 
   const userTeam = useMemo(
     () => teamsById.get(selectedTeamId),
@@ -602,19 +864,25 @@ export function PlayClient() {
     }
     const pending = advanceToNextUserMatch(baseState, setup);
     const result = findNewUserMatch(baseState, pending.state) ?? null;
+    const maxMinute =
+      result?.winnerTeamId && result.homeGoals === result.awayGoals ? 120 : 90;
     setLiveMatch({
       baseState,
       pending,
       preview: matchPreview,
       result,
-      events: createLiveMatchEvents({
-        preview: matchPreview,
-        result,
-        setup,
-      }),
+      setup,
       minute: 0,
+      maxMinute,
       speed: 1,
       status: "RUNNING",
+      breakType: null,
+      breakEndsAtMs: null,
+      handledHydration: false,
+      handledHalftime: false,
+      hydrationLevel: 3,
+      halftimeLevel: 3,
+      halftimeStrategy: "BALANCED",
       startedAtMs: Date.now(),
       elapsedBeforePauseMs: 0,
     });
@@ -655,6 +923,24 @@ export function PlayClient() {
         elapsedBeforePauseMs,
       };
     });
+  }
+
+  function setHydrationLevel(level: LiveMatchState["hydrationLevel"]) {
+    setLiveMatch((match) =>
+      match ? { ...match, hydrationLevel: level } : match,
+    );
+  }
+
+  function setHalftimeLevel(level: LiveMatchState["halftimeLevel"]) {
+    setLiveMatch((match) =>
+      match ? { ...match, halftimeLevel: level } : match,
+    );
+  }
+
+  function setHalftimeStrategy(strategy: LiveMatchState["halftimeStrategy"]) {
+    setLiveMatch((match) =>
+      match ? { ...match, halftimeStrategy: strategy } : match,
+    );
   }
 
   function updateFormation(formationId: FormationId) {
@@ -816,6 +1102,9 @@ export function PlayClient() {
               <LiveMatchPanel
                 liveMatch={liveMatch}
                 onFinish={() => void finishLiveMatchNow()}
+                onHalftimeLevelChange={setHalftimeLevel}
+                onHalftimeStrategyChange={setHalftimeStrategy}
+                onHydrationLevelChange={setHydrationLevel}
                 onPause={pauseLiveMatch}
                 onResume={resumeLiveMatch}
                 onSpeedChange={setLiveSpeed}
@@ -1093,26 +1382,64 @@ function PrematchSetupPanel({
 function LiveMatchPanel({
   liveMatch,
   onFinish,
+  onHalftimeLevelChange,
+  onHalftimeStrategyChange,
+  onHydrationLevelChange,
   onPause,
   onResume,
   onSpeedChange,
 }: {
   liveMatch: LiveMatchState;
   onFinish: () => void;
+  onHalftimeLevelChange: (level: LiveMatchState["halftimeLevel"]) => void;
+  onHalftimeStrategyChange: (
+    strategy: LiveMatchState["halftimeStrategy"],
+  ) => void;
+  onHydrationLevelChange: (level: LiveMatchState["hydrationLevel"]) => void;
   onPause: () => void;
   onResume: () => void;
   onSpeedChange: (speed: LiveMatchState["speed"]) => void;
 }) {
   const visibleMinute = Math.floor(liveMatch.minute);
-  const events = liveEventsForMinute(liveMatch.events, visibleMinute);
-  const liveScore = liveScoreAtMinute(liveMatch.events, visibleMinute);
-  const yellowCards = liveMatch.events.filter(
+  const allEvents = createLiveMatchEvents({
+    preview: liveMatch.preview,
+    result: liveMatch.result,
+    setup: liveMatch.setup,
+    hydrationLevel: liveMatch.hydrationLevel,
+    halftimeLevel: liveMatch.halftimeLevel,
+    halftimeStrategy: liveMatch.halftimeStrategy,
+  });
+  const events = liveEventsForMinute(allEvents, visibleMinute);
+  const liveScore = liveScoreAtMinute(allEvents, visibleMinute);
+  const latestImpact = allEvents
+    .filter((event) => event.minute <= visibleMinute)
+    .filter((event) =>
+      ["GOAL", "RED_CARD", "YELLOW_CARD", "CORNER", "MISSED_SHOT"].includes(
+        event.type,
+      ),
+    )
+    .at(-1);
+  const yellowCards = allEvents.filter(
     (event) => event.type === "YELLOW_CARD" && event.minute <= visibleMinute,
   ).length;
-  const redCards = liveMatch.events.filter(
+  const redCards = allEvents.filter(
     (event) => event.type === "RED_CARD" && event.minute <= visibleMinute,
   ).length;
-  const progress = Math.min(100, (liveMatch.minute / 90) * 100);
+  const corners = allEvents.filter(
+    (event) => event.type === "CORNER" && event.minute <= visibleMinute,
+  ).length;
+  const shots = allEvents.filter(
+    (event) =>
+      (event.type === "MISSED_SHOT" || event.type === "GOAL") &&
+      event.minute <= visibleMinute,
+  ).length;
+  const fouls = allEvents.filter(
+    (event) => event.type === "FOUL" && event.minute <= visibleMinute,
+  ).length;
+  const progress = Math.min(
+    100,
+    (liveMatch.minute / liveMatch.maxMinute) * 100,
+  );
 
   return (
     <section className="mt-7 rounded-3xl border border-emerald-300/20 bg-emerald-300/10 p-5">
@@ -1124,7 +1451,8 @@ function LiveMatchPanel({
             {teamLabel(liveMatch.preview.awayTeamId)}
           </h3>
           <p className="mt-1 text-sm text-emerald-100/80">
-            90 match minutes run in 90 real seconds at 1x.
+            {liveMatch.maxMinute} match minutes run in {liveMatch.maxMinute}{" "}
+            real seconds at 1x, excluding hydration and halftime pauses.
           </p>
         </div>
         <div className="rounded-2xl bg-black/20 px-4 py-3 text-right">
@@ -1132,11 +1460,27 @@ function LiveMatchPanel({
             Minute
           </p>
           <p className="text-4xl font-black text-white">
-            {Math.min(90, visibleMinute)}
+            {Math.min(liveMatch.maxMinute, visibleMinute)}
             <span className="text-xl">′</span>
           </p>
         </div>
       </div>
+
+      {latestImpact ? (
+        <MatchMoment
+          event={latestImpact}
+          userTeamId={liveMatch.pending.state.userTeamId}
+        />
+      ) : null}
+
+      {liveMatch.status === "BREAK" ? (
+        <BreakControls
+          liveMatch={liveMatch}
+          onHalftimeLevelChange={onHalftimeLevelChange}
+          onHalftimeStrategyChange={onHalftimeStrategyChange}
+          onHydrationLevelChange={onHydrationLevelChange}
+        />
+      ) : null}
 
       <div className="mt-5 h-3 overflow-hidden rounded-full bg-white/10">
         <div
@@ -1161,6 +1505,9 @@ function LiveMatchPanel({
           </p>
           <p className="mt-1 text-xs text-slate-300">
             🟨 {yellowCards} · 🟥 {redCards}
+          </p>
+          <p className="mt-1 text-xs text-slate-300">
+            Shots {shots} · Corners {corners} · Fouls {fouls}
           </p>
         </div>
         <div className="rounded-2xl bg-white/5 p-4 text-center">
@@ -1223,6 +1570,156 @@ function LiveMatchPanel({
         ))}
       </div>
     </section>
+  );
+}
+
+function MatchMoment({
+  event,
+  userTeamId,
+}: {
+  event: LiveTimelineEvent;
+  userTeamId: string;
+}) {
+  const eventTeam =
+    event.side === "HOME"
+      ? event.text.includes(teamName(userTeamId))
+        ? userTeamId
+        : null
+      : event.side === "AWAY"
+        ? event.text.includes(teamName(userTeamId))
+          ? userTeamId
+          : null
+        : null;
+  const isUserMoment = eventTeam === userTeamId;
+  const style =
+    event.type === "GOAL"
+      ? isUserMoment
+        ? "border-emerald-300/40 bg-emerald-300/20"
+        : "border-rose-300/40 bg-rose-300/20"
+      : event.type === "RED_CARD"
+        ? "border-rose-300/40 bg-rose-300/20"
+        : event.type === "YELLOW_CARD"
+          ? "border-amber-300/40 bg-amber-300/20"
+          : "border-cyan-300/30 bg-cyan-300/10";
+  const title =
+    event.type === "GOAL"
+      ? isUserMoment
+        ? "GOAL FOR YOU"
+        : "OPPONENT GOAL"
+      : event.type === "RED_CARD"
+        ? "RED CARD"
+        : event.type === "YELLOW_CARD"
+          ? "YELLOW CARD"
+          : event.type === "CORNER"
+            ? "CORNER"
+            : "CHANCE";
+
+  return (
+    <div className={`mt-5 rounded-3xl border p-5 ${style}`}>
+      <p className="text-xs font-black tracking-[0.25em] text-white/70 uppercase">
+        {event.minute}′ · {title}
+      </p>
+      <p className="mt-2 text-2xl font-black text-white">{event.text}</p>
+      <div className="mt-4 h-20 rounded-3xl border border-white/10 bg-[radial-gradient(circle_at_center,rgba(255,255,255,.18),transparent_55%),linear-gradient(90deg,rgba(34,197,94,.18),rgba(14,165,233,.12),rgba(244,63,94,.18))]" />
+    </div>
+  );
+}
+
+function BreakControls({
+  liveMatch,
+  onHalftimeLevelChange,
+  onHalftimeStrategyChange,
+  onHydrationLevelChange,
+}: {
+  liveMatch: LiveMatchState;
+  onHalftimeLevelChange: (level: LiveMatchState["halftimeLevel"]) => void;
+  onHalftimeStrategyChange: (
+    strategy: LiveMatchState["halftimeStrategy"],
+  ) => void;
+  onHydrationLevelChange: (level: LiveMatchState["hydrationLevel"]) => void;
+}) {
+  const isHalftime = liveMatch.breakType === "HALFTIME";
+  const breakSeconds = isHalftime ? 10 : 5;
+  const level = isHalftime ? liveMatch.halftimeLevel : liveMatch.hydrationLevel;
+
+  return (
+    <div className="mt-5 rounded-3xl border border-cyan-300/25 bg-cyan-300/10 p-5">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="eyebrow">
+            {isHalftime ? "Half-time team talk" : "Hydration break"}
+          </p>
+          <h4 className="mt-2 text-2xl font-black text-white">
+            Choose the next phase
+          </h4>
+          <p className="mt-2 text-sm text-cyan-50/80">
+            {isHalftime
+              ? "The match pauses for 10 seconds."
+              : "The match pauses for 5 seconds."}{" "}
+            {tacticalInfluenceText(level)}
+          </p>
+        </div>
+        <p className="rounded-full bg-white/10 px-3 py-1 text-sm font-black text-white">
+          {breakSeconds}s pause
+        </p>
+      </div>
+
+      <div className="mt-5">
+        <div className="flex justify-between text-xs font-black tracking-wider text-slate-300 uppercase">
+          <span>1 Full defense</span>
+          <span>3 Neutral</span>
+          <span>5 Full attack</span>
+        </div>
+        <input
+          className="mt-3 w-full accent-cyan-300"
+          max={5}
+          min={1}
+          onChange={(event) =>
+            isHalftime
+              ? onHalftimeLevelChange(
+                  Number(event.target.value) as 1 | 2 | 3 | 4 | 5,
+                )
+              : onHydrationLevelChange(
+                  Number(event.target.value) as 1 | 2 | 3 | 4 | 5,
+                )
+          }
+          step={1}
+          type="range"
+          value={level}
+        />
+      </div>
+
+      {isHalftime ? (
+        <label className="mt-5 block">
+          <span className="text-xs font-black tracking-wider text-slate-400 uppercase">
+            Strategy
+          </span>
+          <select
+            className="mt-2 w-full rounded-2xl border border-white/10 bg-[#0a102b] px-4 py-3 text-white"
+            onChange={(event) =>
+              onHalftimeStrategyChange(
+                event.target.value as LiveMatchState["halftimeStrategy"],
+              )
+            }
+            value={liveMatch.halftimeStrategy}
+          >
+            <option value="BALANCED">Balanced — no modifier</option>
+            <option value="COUNTER_ATTACK">
+              Counter attack — goals +12%, conceded +8%, fewer corners
+            </option>
+            <option value="HIGH_PRESS">
+              High press — goals +10%, conceded +12%, fouls +15%
+            </option>
+            <option value="LONG_BALL">
+              Long ball — corners +15%, goals +8%, conceded +6%
+            </option>
+            <option value="POSSESSION">
+              Possession — conceded -10%, goals +6%, fewer fouls
+            </option>
+          </select>
+        </label>
+      ) : null}
+    </div>
   );
 }
 
@@ -1473,9 +1970,12 @@ function KnockoutBracket({
       ) : null}
 
       <div className="mt-5 overflow-x-auto rounded-3xl border border-white/10 bg-[#080d23]/80 p-4">
-        <div className="grid min-w-[1320px] grid-cols-5 items-start gap-5">
+        <div className="relative grid min-w-[1320px] grid-cols-5 items-start gap-8">
           {stages.map((stage) => (
             <div className="relative" key={stage}>
+              {stage !== "FINAL" ? (
+                <div className="pointer-events-none absolute top-28 -right-4 bottom-14 hidden w-px bg-cyan-100/20 xl:block" />
+              ) : null}
               <div className="sticky top-0 z-10 rounded-2xl border border-white/10 bg-[#11183a] px-4 py-3">
                 <h3 className="text-sm font-black tracking-wider text-white uppercase">
                   {stageLabel(stage)}
@@ -1542,7 +2042,8 @@ function BracketMatchCard({
           : "relative rounded-3xl border border-white/10 bg-white/[0.04] p-3"
       }
     >
-      <div className="absolute top-1/2 -right-5 hidden h-px w-5 bg-cyan-100/20 xl:block" />
+      <div className="absolute top-1/2 -right-8 hidden h-px w-8 bg-cyan-100/30 xl:block" />
+      <div className="absolute top-1/2 -left-8 hidden h-px w-8 bg-cyan-100/10 xl:block" />
       <div className="flex items-start justify-between gap-2">
         <p className="text-xs font-black tracking-wider text-slate-500 uppercase">
           Match {match.matchNumber}
