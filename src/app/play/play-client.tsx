@@ -39,6 +39,7 @@ import {
   saveGame,
 } from "@/domain/game/storage";
 import { prematchProbabilityFromRatings } from "@/domain/probability/model";
+import { NamedRandomStreams } from "@/domain/simulation/random";
 import { tournamentSnapshot } from "@/domain/tournament/data";
 
 type NextMatchPreview = NonNullable<ReturnType<typeof nextUserMatchPreview>>;
@@ -49,11 +50,27 @@ type LiveMatchState = {
   pending: AdvanceResult;
   preview: NextMatchPreview;
   result: MatchRecord | null;
+  events: LiveTimelineEvent[];
   minute: number;
   speed: 0.5 | 1 | 2;
   status: "RUNNING" | "PAUSED" | "FULLTIME";
   startedAtMs: number;
   elapsedBeforePauseMs: number;
+};
+type LiveTimelineEvent = {
+  minute: number;
+  type:
+    | "KICKOFF"
+    | "TACTICAL"
+    | "GOAL"
+    | "YELLOW_CARD"
+    | "RED_CARD"
+    | "HALF_TIME"
+    | "FULL_TIME";
+  side: "HOME" | "AWAY" | null;
+  text: string;
+  homeScore: number;
+  awayScore: number;
 };
 
 const teamsById = new Map(
@@ -145,46 +162,190 @@ function findNewUserMatch(
   );
 }
 
-function liveEventsForMinute(
-  result: MatchRecord | null,
-  minute: number,
-  preview: NextMatchPreview,
+function defensiveRedCardMultiplier(setup: ParsedPrematchTeamSetup) {
+  const formation = formations.find((item) => item.id === setup.formationId);
+  const isDefensiveShape = formation?.family === "defensive";
+  const isDefensivePlan =
+    setup.tactics.mentality === "DEFENSIVE" ||
+    setup.tactics.defensiveLine === "DEEP" ||
+    setup.tactics.pressing === "LOW";
+  return isDefensiveShape || isDefensivePlan ? 1.15 : 1;
+}
+
+function eventMinute(
+  random: NamedRandomStreams,
+  stream: string,
+  index: number,
+  total: number,
 ) {
-  const events = [
+  const windowStart = 8 + Math.floor((index / Math.max(total, 1)) * 70);
+  return Math.min(
+    88,
+    windowStart + Math.floor(random.next(`${stream}:${index}`) * 13),
+  );
+}
+
+function createLiveMatchEvents({
+  preview,
+  result,
+  setup,
+}: {
+  preview: NextMatchPreview;
+  result: MatchRecord | null;
+  setup: ParsedPrematchTeamSetup;
+}) {
+  const random = new NamedRandomStreams(
+    `${result?.seed ?? preview.matchNumber}:${setup.formationId}:${JSON.stringify(setup.tactics)}`,
+  );
+  const events: LiveTimelineEvent[] = [
     {
       minute: 0,
+      type: "KICKOFF",
+      side: null,
       text: `${teamName(preview.homeTeamId)} vs ${teamName(preview.awayTeamId)} kicks off.`,
+      homeScore: 0,
+      awayScore: 0,
     },
     {
-      minute: 15,
-      text: "Both teams are settling into the tactical battle.",
-    },
-    {
-      minute: 30,
-      text: "The manager's setup is shaping the rhythm of the match.",
+      minute: 14,
+      type: "TACTICAL",
+      side: null,
+      text: `${setup.formationId} shape, ${setup.tactics.mentality.toLowerCase()} mentality, ${setup.tactics.pressing.toLowerCase()} press.`,
+      homeScore: 0,
+      awayScore: 0,
     },
     {
       minute: 45,
+      type: "HALF_TIME",
+      side: null,
       text: "Half-time. The second half starts automatically in this preview build.",
-    },
-    {
-      minute: 60,
-      text: "The game opens up as legs get heavier.",
-    },
-    {
-      minute: 75,
-      text: "Final adjustments and late pressure now matter.",
+      homeScore: 0,
+      awayScore: 0,
     },
   ];
-  if (result) {
+  if (!result) return events;
+
+  const goalSides = [
+    ...Array.from({ length: result.homeGoals }, () => "HOME" as const),
+    ...Array.from({ length: result.awayGoals }, () => "AWAY" as const),
+  ].sort(
+    (left, right) =>
+      random.next(`goal-order:${left}`) - random.next(`goal-order:${right}`),
+  );
+  let homeScore = 0;
+  let awayScore = 0;
+  goalSides.forEach((side, index) => {
+    if (side === "HOME") homeScore += 1;
+    else awayScore += 1;
+    const teamId = side === "HOME" ? result.homeTeamId : result.awayTeamId;
     events.push({
-      minute: 90,
-      text: `Full-time: ${teamName(result.homeTeamId)} ${result.homeGoals}–${result.awayGoals} ${teamName(result.awayTeamId)}.`,
+      minute: eventMinute(random, "goal", index, goalSides.length),
+      type: "GOAL",
+      side,
+      text: `${teamLabel(teamId)} score. ${homeScore}–${awayScore}.`,
+      homeScore,
+      awayScore,
+    });
+  });
+
+  const userSide =
+    result.homeTeamId === setup.teamId
+      ? ("HOME" as const)
+      : result.awayTeamId === setup.teamId
+        ? ("AWAY" as const)
+        : null;
+  const redMultiplier = defensiveRedCardMultiplier(setup);
+  const underdogPressure =
+    setup.teamId === result.homeTeamId
+      ? result.prematchOdds.awayWin - result.prematchOdds.homeWin
+      : result.prematchOdds.homeWin - result.prematchOdds.awayWin;
+  const yellowChance = Math.min(
+    0.9,
+    0.42 + Math.max(0, underdogPressure) * 0.35,
+  );
+  const redChance = Math.min(0.18, 0.045 * redMultiplier);
+  if (userSide && random.chance("user-yellow", yellowChance)) {
+    events.push({
+      minute: 22 + Math.floor(random.next("user-yellow-minute") * 55),
+      type: "YELLOW_CARD",
+      side: userSide,
+      text: `${teamLabel(setup.teamId)} receive a yellow card after sustained pressure.`,
+      homeScore,
+      awayScore,
     });
   }
+  if (userSide && random.chance("user-red", redChance)) {
+    events.push({
+      minute: 35 + Math.floor(random.next("user-red-minute") * 42),
+      type: "RED_CARD",
+      side: userSide,
+      text: `${teamLabel(setup.teamId)} are down to ten. Defensive setup raised the red-card risk.`,
+      homeScore,
+      awayScore,
+    });
+  }
+  if (random.chance("opponent-yellow", 0.38)) {
+    const opponentSide = userSide === "HOME" ? "AWAY" : "HOME";
+    const opponentId =
+      opponentSide === "HOME" ? result.homeTeamId : result.awayTeamId;
+    events.push({
+      minute: 18 + Math.floor(random.next("opponent-yellow-minute") * 60),
+      type: "YELLOW_CARD",
+      side: opponentSide,
+      text: `${teamLabel(opponentId)} receive a yellow card.`,
+      homeScore,
+      awayScore,
+    });
+  }
+
+  events.push({
+    minute: 90,
+    type: "FULL_TIME",
+    side: null,
+    text: `Full-time: ${teamName(result.homeTeamId)} ${result.homeGoals}–${result.awayGoals} ${teamName(result.awayTeamId)}.`,
+    homeScore: result.homeGoals,
+    awayScore: result.awayGoals,
+  });
+
+  return events.sort(
+    (left, right) =>
+      left.minute - right.minute ||
+      [
+        "KICKOFF",
+        "TACTICAL",
+        "YELLOW_CARD",
+        "RED_CARD",
+        "GOAL",
+        "HALF_TIME",
+        "FULL_TIME",
+      ].indexOf(left.type) -
+        [
+          "KICKOFF",
+          "TACTICAL",
+          "YELLOW_CARD",
+          "RED_CARD",
+          "GOAL",
+          "HALF_TIME",
+          "FULL_TIME",
+        ].indexOf(right.type),
+  );
+}
+
+function liveScoreAtMinute(events: LiveTimelineEvent[], minute: number) {
+  const scoreEvent = events
+    .filter((event) => event.minute <= minute)
+    .filter((event) => event.type === "GOAL" || event.type === "FULL_TIME")
+    .at(-1);
+  return {
+    home: scoreEvent?.homeScore ?? 0,
+    away: scoreEvent?.awayScore ?? 0,
+  };
+}
+
+function liveEventsForMinute(events: LiveTimelineEvent[], minute: number) {
   return events
     .filter((event) => event.minute <= minute)
-    .slice(-5)
+    .slice(-6)
     .reverse();
 }
 
@@ -446,6 +607,11 @@ export function PlayClient() {
       pending,
       preview: matchPreview,
       result,
+      events: createLiveMatchEvents({
+        preview: matchPreview,
+        result,
+        setup,
+      }),
       minute: 0,
       speed: 1,
       status: "RUNNING",
@@ -938,11 +1104,14 @@ function LiveMatchPanel({
   onSpeedChange: (speed: LiveMatchState["speed"]) => void;
 }) {
   const visibleMinute = Math.floor(liveMatch.minute);
-  const events = liveEventsForMinute(
-    liveMatch.result,
-    visibleMinute,
-    liveMatch.preview,
-  );
+  const events = liveEventsForMinute(liveMatch.events, visibleMinute);
+  const liveScore = liveScoreAtMinute(liveMatch.events, visibleMinute);
+  const yellowCards = liveMatch.events.filter(
+    (event) => event.type === "YELLOW_CARD" && event.minute <= visibleMinute,
+  ).length;
+  const redCards = liveMatch.events.filter(
+    (event) => event.type === "RED_CARD" && event.minute <= visibleMinute,
+  ).length;
   const progress = Math.min(100, (liveMatch.minute / 90) * 100);
 
   return (
@@ -982,9 +1151,7 @@ function LiveMatchPanel({
             {teamName(liveMatch.preview.homeTeamId)}
           </p>
           <p className="mt-2 text-3xl font-black text-white">
-            {liveMatch.status === "FULLTIME" && liveMatch.result
-              ? liveMatch.result.homeGoals
-              : "—"}
+            {liveScore.home}
           </p>
         </div>
         <div className="rounded-2xl bg-white/5 p-4 text-center">
@@ -992,15 +1159,16 @@ function LiveMatchPanel({
           <p className="mt-2 text-lg font-black text-white">
             {liveMatch.status.toLowerCase()}
           </p>
+          <p className="mt-1 text-xs text-slate-300">
+            🟨 {yellowCards} · 🟥 {redCards}
+          </p>
         </div>
         <div className="rounded-2xl bg-white/5 p-4 text-center">
           <p className="text-xs text-slate-400">
             {teamName(liveMatch.preview.awayTeamId)}
           </p>
           <p className="mt-2 text-3xl font-black text-white">
-            {liveMatch.status === "FULLTIME" && liveMatch.result
-              ? liveMatch.result.awayGoals
-              : "—"}
+            {liveScore.away}
           </p>
         </div>
       </div>
@@ -1036,7 +1204,15 @@ function LiveMatchPanel({
       <div className="mt-5 space-y-2">
         {events.map((event) => (
           <p
-            className="rounded-2xl bg-black/20 px-3 py-2 text-sm text-slate-100"
+            className={
+              event.type === "GOAL"
+                ? "rounded-2xl bg-emerald-300/15 px-3 py-2 text-sm text-emerald-50"
+                : event.type === "RED_CARD"
+                  ? "rounded-2xl bg-rose-300/15 px-3 py-2 text-sm text-rose-50"
+                  : event.type === "YELLOW_CARD"
+                    ? "rounded-2xl bg-amber-300/15 px-3 py-2 text-sm text-amber-50"
+                    : "rounded-2xl bg-black/20 px-3 py-2 text-sm text-slate-100"
+            }
             key={`${event.minute}:${event.text}`}
           >
             <span className="mr-2 font-black text-emerald-200">
@@ -1142,10 +1318,11 @@ function GroupStageTables({
             </div>
 
             <div className="mt-4 overflow-x-auto">
-              <table className="w-full min-w-[560px] text-left text-sm">
+              <table className="w-full min-w-[520px] text-left text-sm">
                 <thead className="text-xs tracking-wider text-slate-500 uppercase">
                   <tr>
                     <th className="py-2 pr-3">Team</th>
+                    <th className="px-2 py-2 text-center">Pts</th>
                     <th className="px-2 py-2 text-center">P</th>
                     <th className="px-2 py-2 text-center">W</th>
                     <th className="px-2 py-2 text-center">D</th>
@@ -1153,7 +1330,6 @@ function GroupStageTables({
                     <th className="px-2 py-2 text-center">GF</th>
                     <th className="px-2 py-2 text-center">GA</th>
                     <th className="px-2 py-2 text-center">GD</th>
-                    <th className="px-2 py-2 text-center">Pts</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1171,6 +1347,12 @@ function GroupStageTables({
                           {teamFlag(standing.teamId)}
                         </span>
                         {teamName(standing.teamId)}
+                        <span className="ml-2 rounded-full bg-white/10 px-2 py-0.5 text-[0.65rem] font-black text-white sm:hidden">
+                          {standing.points} pts
+                        </span>
+                      </td>
+                      <td className="px-2 py-2 text-center font-black text-white">
+                        {standing.points}
                       </td>
                       <td className="px-2 py-2 text-center">
                         {standing.played}
@@ -1190,9 +1372,6 @@ function GroupStageTables({
                       </td>
                       <td className="px-2 py-2 text-center">
                         {standing.goalDifference}
-                      </td>
-                      <td className="px-2 py-2 text-center font-black text-white">
-                        {standing.points}
                       </td>
                     </tr>
                   ))}
@@ -1252,9 +1431,23 @@ function KnockoutBracket({
     "ROUND_OF_16",
     "QUARTER_FINAL",
     "SEMI_FINAL",
-    "THIRD_PLACE",
     "FINAL",
   ];
+  const champion = presentation.knockoutRounds.FINAL?.[0]?.winnerTeamId;
+  const stageOffsets: Record<string, string> = {
+    ROUND_OF_32: "pt-0",
+    ROUND_OF_16: "pt-10",
+    QUARTER_FINAL: "pt-24",
+    SEMI_FINAL: "pt-44",
+    FINAL: "pt-64",
+  };
+  const stageGaps: Record<string, string> = {
+    ROUND_OF_32: "space-y-3",
+    ROUND_OF_16: "space-y-10",
+    QUARTER_FINAL: "space-y-24",
+    SEMI_FINAL: "space-y-44",
+    FINAL: "space-y-0",
+  };
 
   return (
     <section>
@@ -1267,8 +1460,20 @@ function KnockoutBracket({
         to follow each round from the Round of 32 through the Final.
       </p>
 
+      {champion ? (
+        <div className="mt-5 rounded-3xl border border-amber-300/30 bg-amber-300/10 p-5">
+          <p className="eyebrow text-amber-100">Champion path</p>
+          <h3 className="mt-2 text-2xl font-black text-white">
+            🏆 {teamLabel(champion)}
+          </h3>
+          <p className="mt-2 text-sm text-amber-100/80">
+            Winners are highlighted in each bracket slot as they advance.
+          </p>
+        </div>
+      ) : null}
+
       <div className="mt-5 overflow-x-auto rounded-3xl border border-white/10 bg-[#080d23]/80 p-4">
-        <div className="grid min-w-[1320px] grid-cols-6 items-start gap-4">
+        <div className="grid min-w-[1320px] grid-cols-5 items-start gap-5">
           {stages.map((stage) => (
             <div className="relative" key={stage}>
               <div className="sticky top-0 z-10 rounded-2xl border border-white/10 bg-[#11183a] px-4 py-3">
@@ -1280,52 +1485,120 @@ function KnockoutBracket({
                 </p>
               </div>
 
-              <div className="mt-4 space-y-3">
+              <div
+                className={`mt-4 ${stageOffsets[stage]} ${stageGaps[stage]}`}
+              >
                 {(presentation.knockoutRounds[stage] ?? []).map((match) => {
                   const resultLabel = userResultLabel(match, selectedTeamId);
                   const involvesUser = Boolean(resultLabel);
                   return (
-                    <div
-                      className={
-                        involvesUser
-                          ? "relative rounded-2xl border border-cyan-300/30 bg-cyan-300/10 p-3 shadow-[0_0_28px_rgba(103,232,249,0.12)]"
-                          : "relative rounded-2xl border border-white/10 bg-white/[0.04] p-3"
-                      }
+                    <BracketMatchCard
+                      involvesUser={involvesUser}
                       key={match.matchNumber}
-                    >
-                      <div className="absolute top-1/2 -right-4 hidden h-px w-4 bg-white/15 xl:block" />
-                      <div className="flex items-start justify-between gap-2">
-                        <p className="text-xs font-black tracking-wider text-slate-500 uppercase">
-                          Match {match.matchNumber}
-                        </p>
-                        {resultLabel ? (
-                          <span
-                            className={`rounded-full px-2 py-1 text-[0.65rem] font-black tracking-wider uppercase ${userResultClass(resultLabel)}`}
-                          >
-                            {resultLabel}
-                          </span>
-                        ) : null}
-                      </div>
-                      <p className="mt-2 text-sm leading-6 font-bold text-slate-100">
-                        {scoreline(match)}
-                      </p>
-                      {match.winnerTeamId ? (
-                        <p className="mt-2 text-xs text-emerald-200">
-                          Winner: {teamLabel(match.winnerTeamId)}
-                        </p>
-                      ) : (
-                        <p className="mt-2 text-xs text-slate-500">
-                          Awaiting result
-                        </p>
-                      )}
-                    </div>
+                      match={match}
+                      resultLabel={resultLabel}
+                    />
                   );
                 })}
               </div>
             </div>
           ))}
         </div>
+
+        <div className="mt-8 rounded-3xl border border-white/10 bg-white/[0.03] p-4">
+          <h3 className="text-sm font-black tracking-wider text-white uppercase">
+            Third place
+          </h3>
+          <div className="mt-3 grid gap-3 sm:grid-cols-2">
+            {(presentation.knockoutRounds.THIRD_PLACE ?? []).map((match) => (
+              <BracketMatchCard
+                involvesUser={Boolean(userResultLabel(match, selectedTeamId))}
+                key={match.matchNumber}
+                match={match}
+                resultLabel={userResultLabel(match, selectedTeamId)}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </section>
+  );
+}
+
+function BracketMatchCard({
+  involvesUser,
+  match,
+  resultLabel,
+}: {
+  involvesUser: boolean;
+  match: GamePresentation["knockoutRounds"][string][number];
+  resultLabel: string | null;
+}) {
+  return (
+    <div
+      className={
+        involvesUser
+          ? "relative rounded-3xl border border-cyan-300/30 bg-cyan-300/10 p-3 shadow-[0_0_28px_rgba(103,232,249,0.12)]"
+          : "relative rounded-3xl border border-white/10 bg-white/[0.04] p-3"
+      }
+    >
+      <div className="absolute top-1/2 -right-5 hidden h-px w-5 bg-cyan-100/20 xl:block" />
+      <div className="flex items-start justify-between gap-2">
+        <p className="text-xs font-black tracking-wider text-slate-500 uppercase">
+          Match {match.matchNumber}
+        </p>
+        {resultLabel ? (
+          <span
+            className={`rounded-full px-2 py-1 text-[0.65rem] font-black tracking-wider uppercase ${userResultClass(resultLabel)}`}
+          >
+            {resultLabel}
+          </span>
+        ) : null}
+      </div>
+
+      <div className="mt-3 overflow-hidden rounded-2xl border border-white/10">
+        <BracketTeamRow
+          goals={match.homeGoals}
+          isWinner={match.winnerTeamId === match.homeTeamId}
+          teamId={match.homeTeamId}
+        />
+        <BracketTeamRow
+          goals={match.awayGoals}
+          isWinner={match.winnerTeamId === match.awayTeamId}
+          teamId={match.awayTeamId}
+        />
+      </div>
+
+      {match.winnerTeamId ? (
+        <p className="mt-2 text-xs font-bold text-emerald-200">
+          {teamLabel(match.winnerTeamId)} advances →
+        </p>
+      ) : (
+        <p className="mt-2 text-xs text-slate-500">Awaiting result</p>
+      )}
+    </div>
+  );
+}
+
+function BracketTeamRow({
+  goals,
+  isWinner,
+  teamId,
+}: {
+  goals: number | null;
+  isWinner: boolean;
+  teamId: string | null;
+}) {
+  return (
+    <div
+      className={
+        isWinner
+          ? "flex items-center justify-between gap-3 bg-emerald-300/15 px-3 py-2 text-emerald-50"
+          : "flex items-center justify-between gap-3 border-t border-white/10 bg-black/10 px-3 py-2 text-slate-300 first:border-t-0"
+      }
+    >
+      <span className="truncate text-sm font-bold">{teamLabel(teamId)}</span>
+      <span className="font-black text-white">{goals ?? "—"}</span>
+    </div>
   );
 }

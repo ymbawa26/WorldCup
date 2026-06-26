@@ -149,6 +149,7 @@ test("play flow advances by selected-team match and manages saves", async ({
   await expect(
     page.getByText(/90 match minutes run in 90 real seconds/i),
   ).toBeVisible();
+  await expect(page.getByText(/🟨 0 · 🟥 0/)).toBeVisible();
   await page.getByRole("button", { name: /finish match now/i }).click();
   await expect(
     page.getByText("Your match was played. The rest of the world caught up.", {
@@ -168,6 +169,9 @@ test("play flow advances by selected-team match and manages saves", async ({
   await expect(page.getByRole("heading", { name: "Group A" })).toBeVisible();
   await expect(
     page.getByRole("columnheader", { name: "GF" }).first(),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("columnheader", { name: "Pts" }).first(),
   ).toBeVisible();
   await expect(
     page.getByRole("columnheader", { name: "GA" }).first(),
@@ -204,6 +208,9 @@ test("play flow advances by selected-team match and manages saves", async ({
   await expect(
     page.getByRole("heading", { name: "Round of 32" }),
   ).toBeVisible();
+  await page.getByRole("button", { name: /start live match/i }).click();
+  await page.getByRole("button", { name: /finish match now/i }).click();
+  await expect(page.getByText(/advances/i).first()).toBeVisible();
 
   await page.getByRole("button", { name: /manual save/i }).click();
   await expect(page.getByText(/manual save complete/i)).toBeVisible();
