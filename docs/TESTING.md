@@ -47,3 +47,7 @@ and the missing-player-data report.
 Selected-lineup rating tests validate the active matchday rating schema,
 starter-dominant strength changes, smaller bench influence, duplicate-player
 rejection, and the exactly-one-goalkeeper rule.
+Formation tests validate the required formation catalog, automatic legal
+matchday setup, invalid setup rejection, bounded tactical modifiers, and
+prematch probability recalculation from formation/tactic changes. Data
+validation also checks formation slot structure and matchup references.

@@ -130,6 +130,9 @@ test("play flow advances by selected-team match and manages saves", async ({
   await page.goto("/play");
 
   await page.getByLabel("Country").selectOption("mexico");
+  await page.getByLabel("Formation").selectOption("3-4-3");
+  await page.getByLabel("Mentality").selectOption("ATTACKING");
+  await expect(page.getByText("Auto-selected XI")).toBeVisible();
   await expect(page.getByLabel("Seed")).toHaveCount(0);
   await page.getByRole("button", { name: /^new tournament/i }).click();
 
@@ -142,6 +145,9 @@ test("play flow advances by selected-team match and manages saves", async ({
   await expect(page.getByText("Next: Mexico vs Korea Republic")).toBeVisible();
   await expect(
     page.getByRole("heading", { name: /updated tables and results/i }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Odds include your current formation and tactical setup."),
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: "Group A" })).toBeVisible();
   await expect(

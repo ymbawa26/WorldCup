@@ -85,32 +85,32 @@ Exit condition:
 
 ## Stage 5 — Prematch lineup, formations, and tactical setup
 
-- [ ] Add `data/formations.json` with at least:
-  - [ ] `4-3-3`
-  - [ ] `4-2-3-1`
-  - [ ] `4-4-2`
-  - [ ] `4-1-4-1`
-  - [ ] `4-3-2-1`
-  - [ ] `3-4-3`
-  - [ ] `3-4-2-1`
-  - [ ] `3-5-2`
-  - [ ] `5-3-2`
-  - [ ] `5-4-1`
-- [ ] Add `data/formation-matchups.json`.
-- [ ] Add Zod schemas for formation definitions and matchup modifiers.
-- [ ] Add lineup validation:
-  - [ ] exactly eleven starters;
-  - [ ] exactly one goalkeeper;
-  - [ ] no duplicates;
-  - [ ] required slots filled;
-  - [ ] unavailable players rejected;
-  - [ ] bench rules enforced;
-  - [ ] out-of-position warnings.
-- [ ] Add prematch lineup/tactics UI before match start.
-- [ ] Add captain, penalty taker, free-kick taker, and corner takers.
-- [ ] Add mentality, pressing, line, tempo, and width controls.
-- [ ] Recalculate prematch probabilities when lineup or formation changes.
-- [ ] Document formation assumptions in `docs/FORMATION_MODEL.md`.
+- [x] Add `data/formations.json` with at least:
+  - [x] `4-3-3`
+  - [x] `4-2-3-1`
+  - [x] `4-4-2`
+  - [x] `4-1-4-1`
+  - [x] `4-3-2-1`
+  - [x] `3-4-3`
+  - [x] `3-4-2-1`
+  - [x] `3-5-2`
+  - [x] `5-3-2`
+  - [x] `5-4-1`
+- [x] Add `data/formation-matchups.json`.
+- [x] Add Zod schemas for formation definitions and matchup modifiers.
+- [x] Add lineup validation:
+  - [x] exactly eleven starters;
+  - [x] exactly one goalkeeper;
+  - [x] no duplicates;
+  - [x] required slots filled;
+  - [x] unavailable players rejected;
+  - [x] bench rules enforced;
+  - [x] out-of-position warnings.
+- [x] Add prematch lineup/tactics UI before match start.
+- [x] Add captain, penalty taker, free-kick taker, and corner takers.
+- [x] Add mentality, pressing, line, tempo, and width controls.
+- [x] Recalculate prematch probabilities when lineup or formation changes.
+- [x] Document formation assumptions in `docs/FORMATION_MODEL.md`.
 
 Exit condition:
 

@@ -6,6 +6,7 @@ import { validateRatingDataset } from "../src/domain/ratings/validation";
 import { probabilityCalibrationReport } from "../src/domain/probability/data";
 import { sampleMatchSimulation } from "../src/domain/simulation/data";
 import { validateMatchSimulation } from "../src/domain/simulation/validation";
+import { validateFormationDataset } from "../src/domain/formations/validation";
 
 async function main() {
   const report = validateTournamentData();
@@ -29,6 +30,12 @@ async function main() {
   if (!probabilityCalibrationReport.passed) {
     throw new Error("Probability calibration report failed");
   }
+  const formations = validateFormationDataset();
+  if (!formations.passed) {
+    throw new Error(
+      `Formation validation failed: ${formations.failures.join(", ")}`,
+    );
+  }
   console.info(`Tournament data validation passed: ${JSON.stringify(report)}`);
   console.info(
     `Squad data validation passed: ${JSON.stringify(squads.totals)}`,
@@ -39,6 +46,9 @@ async function main() {
   console.info("Simulation sample validation passed");
   console.info(
     `Probability calibration validation passed: ${probabilityCalibrationReport.bands.length} bands`,
+  );
+  console.info(
+    `Formation validation passed: ${JSON.stringify(formations.totals)}`,
   );
 }
 

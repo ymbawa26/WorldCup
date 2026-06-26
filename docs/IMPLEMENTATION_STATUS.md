@@ -2,11 +2,11 @@
 
 **Last updated:** 2026-06-25
 
-**Current phase:** Match engine remediation Stage 4 complete
+**Current phase:** Match engine remediation Stage 5 complete
 
-**Next eligible phase:** Match engine remediation Stage 5 — Prematch lineup, formations, and tactical setup
+**Next eligible phase:** Match engine remediation Stage 6 — In-match management
 
-**Overall product status:** Tested tournament model, official 1,248-player squad dataset, independent estimated ratings, selected-lineup active team ratings, deterministic headless match simulation, live match clock domain, backend probability/calibration layer, and playable selected-team tournament flow
+**Overall product status:** Tested tournament model, official 1,248-player squad dataset, independent estimated ratings, selected-lineup active team ratings, formation-aware prematch setup, deterministic headless match simulation, live match clock domain, backend probability/calibration layer, and playable selected-team tournament flow
 
 ## Phase summary
 
@@ -594,3 +594,45 @@ rather than only from default generated lineups.
 
 Stage 5 should add formation definitions, lineup validation by formation slots,
 tactical controls, and prematch probability updates.
+
+## Match engine remediation Stage 5 — Prematch formations and tactics
+
+### Completed scope
+
+- Added `data/formations.json` with the 10 required formations and 11 tactical
+  slots per formation.
+- Added `data/formation-matchups.json` with bounded formation-family matchup
+  modifiers.
+- Added formation schemas, data loading, validation, and prematch setup services
+  under `src/domain/formations/`.
+- Added automatic formation-aware starting XI selection, bench selection,
+  captain, penalty taker, free-kick taker, and corner taker assignments.
+- Added setup validation for 11 starters, exactly one goalkeeper, duplicates,
+  unavailable players, bench overlap, set-piece assignments, and
+  out-of-position warnings.
+- Connected selected setup ratings to prematch probability recalculation for the
+  user's next managed match.
+- Added a compact `/play` prematch setup panel for formation, mentality,
+  pressing, defensive line, tempo, width, auto-selected XI, and set-piece roles.
+- Added formation validation to `npm run validate:data`.
+- Documented assumptions in `docs/FORMATION_MODEL.md`.
+
+### Gate evidence
+
+- Unit tests validate the formation catalog, automatic legal setups, invalid
+  setup rejection, bounded tactical effects, and probability recalculation.
+- The full check gate includes formation data validation.
+
+### Remaining limitations
+
+- The UI auto-selects the XI for the chosen formation; manual player swapping is
+  deferred to the full lineup screen.
+- Only the user's next managed match uses the selected setup override.
+  Background matches continue to use default automatic setups.
+- In-match substitutions and tactical changes are Stage 6.
+
+### Next stage
+
+Stage 6 should preserve live match state, add substitution commands, allow
+formation/tactical changes at legal in-match moments, and recalculate active
+ratings after each change.

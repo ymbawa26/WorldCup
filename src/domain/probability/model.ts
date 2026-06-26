@@ -12,6 +12,11 @@ import {
 
 const MAX_GOALS = 10;
 
+type ProbabilityTeam = Pick<
+  TeamRating,
+  "teamId" | "strengths" | "confidenceScore" | "uncertainty"
+>;
+
 function clamp(value: number, min: number, max: number) {
   return Math.max(min, Math.min(max, value));
 }
@@ -51,7 +56,7 @@ function getTournamentTeam(teamId: string) {
   return team;
 }
 
-function weightedQuality(team: TeamRating) {
+function weightedQuality(team: ProbabilityTeam) {
   const tournamentTeam = getTournamentTeam(team.teamId);
   const ratingQuality =
     team.strengths.attack * 0.16 +
@@ -75,8 +80,8 @@ function weightedQuality(team: TeamRating) {
 }
 
 export function estimateExpectedGoals(
-  home: TeamRating,
-  away: TeamRating,
+  home: ProbabilityTeam,
+  away: ProbabilityTeam,
   options: {
     minutesRemaining?: number;
     homeRedCards?: number;
@@ -161,12 +166,19 @@ export function prematchProbability(
 ): PrematchProbability {
   const home = getTeam(homeTeamId);
   const away = getTeam(awayTeamId);
+  return prematchProbabilityFromRatings(home, away);
+}
+
+export function prematchProbabilityFromRatings(
+  home: ProbabilityTeam,
+  away: ProbabilityTeam,
+): PrematchProbability {
   const expectedGoals = estimateExpectedGoals(home, away);
   const scoreMatrix = buildScoreMatrix(expectedGoals.home, expectedGoals.away);
   return {
     modelVersion: PROBABILITY_MODEL_VERSION,
-    homeTeamId,
-    awayTeamId,
+    homeTeamId: home.teamId,
+    awayTeamId: away.teamId,
     expectedGoals,
     outcomes: outcomesFromMatrix(scoreMatrix),
     scoreMatrix,

@@ -11,6 +11,18 @@ import {
 import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { squadByTeamId } from "@/domain/data-ingestion/data";
+import {
+  activeTeamRatingFromSetup,
+  defaultPrematchTeamSetup,
+  listFormations,
+  setupWithFormation,
+  validatePrematchTeamSetup,
+} from "@/domain/formations/service";
+import type {
+  FormationId,
+  ParsedPrematchTeamSetup,
+} from "@/domain/formations/schema";
 import {
   advanceToNextUserMatch,
   createTournamentGame,
@@ -25,6 +37,7 @@ import {
   resetSave,
   saveGame,
 } from "@/domain/game/storage";
+import { prematchProbabilityFromRatings } from "@/domain/probability/model";
 import { tournamentSnapshot } from "@/domain/tournament/data";
 
 type NextMatchPreview = NonNullable<ReturnType<typeof nextUserMatchPreview>>;
@@ -33,6 +46,10 @@ type GamePresentation = ReturnType<typeof gamePresentation>;
 const teamsById = new Map(
   tournamentSnapshot.teams.map((team) => [team.id, team]),
 );
+const playersById = new Map(
+  [...squadByTeamId.values()].flat().map((player) => [player.id, player]),
+);
+const formations = listFormations();
 
 function teamName(teamId: string | null | undefined) {
   return teamId ? (teamsById.get(teamId)?.name ?? teamId) : "—";
@@ -51,8 +68,41 @@ function teamLabel(teamId: string | null | undefined) {
   return `${flag ? `${flag} ` : ""}${teamName(teamId)}`;
 }
 
+function playerName(playerId: string | null | undefined) {
+  return playerId ? (playersById.get(playerId)?.displayName ?? playerId) : "—";
+}
+
 function percent(value: number) {
   return `${Math.round(value * 100)}%`;
+}
+
+function adjustedOddsForNextMatch(
+  nextMatch: NextMatchPreview | null,
+  setup: ParsedPrematchTeamSetup,
+) {
+  if (
+    !nextMatch ||
+    (nextMatch.homeTeamId !== setup.teamId &&
+      nextMatch.awayTeamId !== setup.teamId)
+  ) {
+    return nextMatch?.odds ?? null;
+  }
+  const opponentTeamId =
+    nextMatch.homeTeamId === setup.teamId
+      ? nextMatch.awayTeamId
+      : nextMatch.homeTeamId;
+  const opponentSetup = defaultPrematchTeamSetup(opponentTeamId, "4-3-3");
+  const userRating = activeTeamRatingFromSetup(
+    setup,
+    opponentSetup.formationId,
+  );
+  const opponentRating = activeTeamRatingFromSetup(
+    opponentSetup,
+    setup.formationId,
+  );
+  return nextMatch.homeTeamId === setup.teamId
+    ? prematchProbabilityFromRatings(userRating, opponentRating).outcomes
+    : prematchProbabilityFromRatings(opponentRating, userRating).outcomes;
 }
 
 function scoreline(match: {
@@ -130,6 +180,9 @@ export function PlayClient() {
     null,
   );
   const [nextMatch, setNextMatch] = useState<NextMatchPreview | null>(null);
+  const [prematchSetup, setPrematchSetup] = useState<ParsedPrematchTeamSetup>(
+    () => defaultPrematchTeamSetup("united-states"),
+  );
   const [exportText, setExportText] = useState("");
   const [importText, setImportText] = useState("");
   const [message, setMessage] = useState("Choose a nation to begin.");
@@ -140,6 +193,7 @@ export function PlayClient() {
       setSavedState(save);
       setCurrentState(save);
       setSelectedTeamId(save.userTeamId);
+      setPrematchSetup(defaultPrematchTeamSetup(save.userTeamId));
       setNextMatch(nextUserMatchPreview(save));
       setMessage("Saved tournament found. Continue or start fresh.");
     });
@@ -172,12 +226,21 @@ export function PlayClient() {
     () => (currentState ? gamePresentation(currentState) : null),
     [currentState],
   );
+  const adjustedOdds = useMemo(
+    () => adjustedOddsForNextMatch(nextMatch, prematchSetup),
+    [nextMatch, prematchSetup],
+  );
+  const setupValidation = useMemo(
+    () => validatePrematchTeamSetup(prematchSetup),
+    [prematchSetup],
+  );
 
   async function persistNext(next: ReturnType<typeof advanceToNextUserMatch>) {
     setCurrentState(next.state);
     setSavedState(next.state);
     setSelectedTeamId(next.state.userTeamId);
     setNextMatch(next.nextMatch);
+    setPrematchSetup(defaultPrematchTeamSetup(next.state.userTeamId));
     await saveGame(next.state);
     setMessage(
       next.state.status === "COMPLETE"
@@ -191,13 +254,13 @@ export function PlayClient() {
       seed: randomTournamentSeed(),
       userTeamId: teamId,
     });
-    await persistNext(advanceToNextUserMatch(created));
+    await persistNext(advanceToNextUserMatch(created, prematchSetup));
   }
 
   async function continueSaved() {
     const state = currentState ?? savedState;
     if (!state) return;
-    await persistNext(advanceToNextUserMatch(state));
+    await persistNext(advanceToNextUserMatch(state, prematchSetup));
   }
 
   async function manualSave() {
@@ -220,6 +283,7 @@ export function PlayClient() {
       setSavedState(state);
       setCurrentState(state);
       setSelectedTeamId(state.userTeamId);
+      setPrematchSetup(defaultPrematchTeamSetup(state.userTeamId));
       setNextMatch(nextUserMatchPreview(state));
       setMessage("Save imported. Continue when ready.");
     } catch {
@@ -232,9 +296,32 @@ export function PlayClient() {
     setSavedState(null);
     setCurrentState(null);
     setNextMatch(null);
+    setPrematchSetup(defaultPrematchTeamSetup(selectedTeamId));
     setExportText("");
     setImportText("");
     setMessage("Save reset. Start a new tournament when ready.");
+  }
+
+  function selectTeam(teamId: string) {
+    setSelectedTeamId(teamId);
+    setPrematchSetup(defaultPrematchTeamSetup(teamId));
+  }
+
+  function updateFormation(formationId: FormationId) {
+    setPrematchSetup((setup) => setupWithFormation(setup, formationId));
+  }
+
+  function updateTactic<K extends keyof ParsedPrematchTeamSetup["tactics"]>(
+    key: K,
+    value: ParsedPrematchTeamSetup["tactics"][K],
+  ) {
+    setPrematchSetup((setup) => ({
+      ...setup,
+      tactics: {
+        ...setup.tactics,
+        [key]: value,
+      },
+    }));
   }
 
   return (
@@ -260,7 +347,7 @@ export function PlayClient() {
               </span>
               <select
                 className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white"
-                onChange={(event) => setSelectedTeamId(event.target.value)}
+                onChange={(event) => selectTeam(event.target.value)}
                 value={selectedTeamId}
               >
                 {tournamentSnapshot.teams.map((team) => (
@@ -275,13 +362,26 @@ export function PlayClient() {
               </select>
             </label>
 
+            <PrematchSetupPanel
+              onFormationChange={updateFormation}
+              onTacticChange={updateTactic}
+              setup={prematchSetup}
+              validation={setupValidation}
+            />
+
             <div className="mt-7 flex flex-wrap gap-3">
-              <Button onClick={() => void startTournament()} size="large">
+              <Button
+                disabled={!setupValidation.passed}
+                onClick={() => void startTournament()}
+                size="large"
+              >
                 <Play aria-hidden="true" className="size-4" />
                 New tournament
               </Button>
               <Button
-                disabled={!currentState && !savedState}
+                disabled={
+                  (!currentState && !savedState) || !setupValidation.passed
+                }
                 onClick={() => void continueSaved()}
                 size="large"
                 variant="secondary"
@@ -336,13 +436,13 @@ export function PlayClient() {
                       {teamName(nextMatch.homeTeamId)}
                     </p>
                     <p className="text-2xl font-black text-white">
-                      {percent(nextMatch.odds.homeWin)}
+                      {percent(adjustedOdds?.homeWin ?? nextMatch.odds.homeWin)}
                     </p>
                   </div>
                   <div>
                     <p className="text-xs text-slate-400">Draw</p>
                     <p className="text-2xl font-black text-white">
-                      {percent(nextMatch.odds.draw)}
+                      {percent(adjustedOdds?.draw ?? nextMatch.odds.draw)}
                     </p>
                   </div>
                   <div>
@@ -350,10 +450,13 @@ export function PlayClient() {
                       {teamName(nextMatch.awayTeamId)}
                     </p>
                     <p className="text-2xl font-black text-white">
-                      {percent(nextMatch.odds.awayWin)}
+                      {percent(adjustedOdds?.awayWin ?? nextMatch.odds.awayWin)}
                     </p>
                   </div>
                 </div>
+                <p className="mt-3 text-xs text-cyan-100/80">
+                  Odds include your current formation and tactical setup.
+                </p>
               </div>
             ) : null}
 
@@ -450,6 +553,209 @@ export function PlayClient() {
         </details>
       </div>
     </div>
+  );
+}
+
+function PrematchSetupPanel({
+  onFormationChange,
+  onTacticChange,
+  setup,
+  validation,
+}: {
+  onFormationChange: (formationId: FormationId) => void;
+  onTacticChange: <K extends keyof ParsedPrematchTeamSetup["tactics"]>(
+    key: K,
+    value: ParsedPrematchTeamSetup["tactics"][K],
+  ) => void;
+  setup: ParsedPrematchTeamSetup;
+  validation: ReturnType<typeof validatePrematchTeamSetup>;
+}) {
+  const formation = formations.find(
+    (candidate) => candidate.id === setup.formationId,
+  );
+  const starters = setup.starterIds ?? [];
+  const setPieces = setup.setPieces;
+
+  return (
+    <section className="mt-8 rounded-3xl border border-white/10 bg-white/[0.03] p-5">
+      <div>
+        <p className="eyebrow">Prematch setup</p>
+        <h2 className="mt-2 text-2xl font-black text-white">
+          Formation and tactics
+        </h2>
+        <p className="mt-2 text-sm leading-6 text-slate-400">
+          These choices affect your next match odds and simulation. The engine
+          keeps the formulas in the background.
+        </p>
+      </div>
+
+      <label className="mt-5 block">
+        <span className="text-xs font-black tracking-wider text-slate-500 uppercase">
+          Formation
+        </span>
+        <select
+          className="mt-2 w-full rounded-2xl border border-white/10 bg-[#0a102b] px-4 py-3 text-white"
+          onChange={(event) =>
+            onFormationChange(event.target.value as FormationId)
+          }
+          value={setup.formationId}
+        >
+          {formations.map((option) => (
+            <option key={option.id} value={option.id}>
+              {option.name} · {option.description}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+        <TacticSelect
+          label="Mentality"
+          onChange={(value) =>
+            onTacticChange(
+              "mentality",
+              value as ParsedPrematchTeamSetup["tactics"]["mentality"],
+            )
+          }
+          options={["DEFENSIVE", "BALANCED", "ATTACKING"]}
+          value={setup.tactics.mentality}
+        />
+        <TacticSelect
+          label="Pressing"
+          onChange={(value) =>
+            onTacticChange(
+              "pressing",
+              value as ParsedPrematchTeamSetup["tactics"]["pressing"],
+            )
+          }
+          options={["LOW", "MEDIUM", "HIGH"]}
+          value={setup.tactics.pressing}
+        />
+        <TacticSelect
+          label="Defensive line"
+          onChange={(value) =>
+            onTacticChange(
+              "defensiveLine",
+              value as ParsedPrematchTeamSetup["tactics"]["defensiveLine"],
+            )
+          }
+          options={["DEEP", "STANDARD", "HIGH"]}
+          value={setup.tactics.defensiveLine}
+        />
+        <TacticSelect
+          label="Tempo"
+          onChange={(value) =>
+            onTacticChange(
+              "tempo",
+              value as ParsedPrematchTeamSetup["tactics"]["tempo"],
+            )
+          }
+          options={["SLOW", "BALANCED", "FAST"]}
+          value={setup.tactics.tempo}
+        />
+        <TacticSelect
+          label="Width"
+          onChange={(value) =>
+            onTacticChange(
+              "width",
+              value as ParsedPrematchTeamSetup["tactics"]["width"],
+            )
+          }
+          options={["NARROW", "BALANCED", "WIDE"]}
+          value={setup.tactics.width}
+        />
+      </div>
+
+      {formation ? (
+        <div className="mt-5 rounded-2xl bg-white/5 p-4">
+          <p className="text-xs font-black tracking-wider text-slate-500 uppercase">
+            Auto-selected XI
+          </p>
+          <div className="mt-3 grid gap-2 sm:grid-cols-2">
+            {formation.slots.map((slot, index) => (
+              <p className="text-sm text-slate-200" key={slot.id}>
+                <span className="mr-2 rounded-full bg-cyan-300/10 px-2 py-1 text-[0.65rem] font-black text-cyan-100">
+                  {slot.label}
+                </span>
+                {playerName(starters[index])}
+              </p>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
+      {setPieces ? (
+        <div className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+          {[
+            ["Captain", setPieces.captainId],
+            ["Penalty taker", setPieces.penaltyTakerId],
+            ["Free kicks", setPieces.freeKickTakerId],
+            ["Corners", setPieces.cornerTakerId],
+          ].map(([label, playerId]) => (
+            <div className="rounded-2xl bg-white/5 p-3" key={label}>
+              <p className="text-xs font-black tracking-wider text-slate-500 uppercase">
+                {label}
+              </p>
+              <p className="mt-1 font-bold text-slate-100">
+                {playerName(playerId)}
+              </p>
+            </div>
+          ))}
+        </div>
+      ) : null}
+
+      {!validation.passed || validation.warnings.length > 0 ? (
+        <div className="mt-4 space-y-2">
+          {validation.issues.map((issue) => (
+            <p
+              className="rounded-2xl bg-rose-300/10 px-3 py-2 text-sm text-rose-100"
+              key={issue}
+            >
+              {issue}
+            </p>
+          ))}
+          {validation.warnings.slice(0, 3).map((warning) => (
+            <p
+              className="rounded-2xl bg-amber-300/10 px-3 py-2 text-sm text-amber-100"
+              key={warning}
+            >
+              {warning}
+            </p>
+          ))}
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
+function TacticSelect({
+  label,
+  onChange,
+  options,
+  value,
+}: {
+  label: string;
+  onChange: (value: string) => void;
+  options: string[];
+  value: string;
+}) {
+  return (
+    <label className="block">
+      <span className="text-xs font-black tracking-wider text-slate-500 uppercase">
+        {label}
+      </span>
+      <select
+        className="mt-2 w-full rounded-2xl border border-white/10 bg-[#0a102b] px-3 py-2 text-sm text-white"
+        onChange={(event) => onChange(event.target.value)}
+        value={value}
+      >
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option.toLowerCase().replaceAll("_", " ")}
+          </option>
+        ))}
+      </select>
+    </label>
   );
 }
 

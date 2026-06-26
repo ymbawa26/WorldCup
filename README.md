@@ -89,6 +89,7 @@ npm run test:e2e
 - [Player data pipeline](docs/PLAYER_DATA_PIPELINE.md)
 - [Rating model](docs/RATING_MODEL.md)
 - [Selected-lineup team rating model](docs/TEAM_RATING_MODEL.md)
+- [Formation model](docs/FORMATION_MODEL.md)
 - [Simulation engine](docs/SIMULATION_ENGINE.md)
 - [Match timing](docs/MATCH_TIMING.md)
 - [Probability model](docs/PROBABILITY_MODEL.md)

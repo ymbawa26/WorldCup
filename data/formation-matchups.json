@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "dataVersion": "2026.06.25-formation-matchups-v1",
+  "defaultModifier": {
+    "attack": 0,
+    "midfield": 0,
+    "defense": 0,
+    "goalkeeping": 0,
+    "setPieces": 0,
+    "pressing": 0,
+    "counterattacking": 0
+  },
+  "modifiers": [
+    {
+      "formationId": "4-3-3",
+      "againstFamily": "defensive",
+      "attack": -1,
+      "midfield": 1,
+      "defense": 0,
+      "goalkeeping": 0,
+      "setPieces": 1,
+      "pressing": 1,
+      "counterattacking": 0
+    },
+    {
+      "formationId": "4-2-3-1",
+      "againstFamily": "aggressive",
+      "attack": 0,
+      "midfield": 1,
+      "defense": 1,
+      "goalkeeping": 0,
+      "setPieces": 0,
+      "pressing": 0,
+      "counterattacking": 1
+    },
+    {
+      "formationId": "4-4-2",
+      "againstFamily": "control",
+      "attack": 1,
+      "midfield": -1,
+      "defense": 0,
+      "goalkeeping": 0,
+      "setPieces": 1,
+      "pressing": 0,
+      "counterattacking": 1
+    },
+    {
+      "formationId": "4-1-4-1",
+      "againstFamily": "direct",
+      "attack": -1,
+      "midfield": 1,
+      "defense": 1,
+      "goalkeeping": 0,
+      "setPieces": 0,
+      "pressing": 1,
+      "counterattacking": 0
+    },
+    {
+      "formationId": "4-3-2-1",
+      "againstFamily": "balanced",
+      "attack": 0,
+      "midfield": 1,
+      "defense": 0,
+      "goalkeeping": 0,
+      "setPieces": 0,
+      "pressing": 0,
+      "counterattacking": -1
+    },
+    {
+      "formationId": "3-4-3",
+      "againstFamily": "defensive",
+      "attack": 1,
+      "midfield": 0,
+      "defense": -1,
+      "goalkeeping": 0,
+      "setPieces": 0,
+      "pressing": 1,
+      "counterattacking": 1
+    },
+    {
+      "formationId": "3-4-2-1",
+      "againstFamily": "balanced",
+      "attack": 1,
+      "midfield": 0,
+      "defense": 0,
+      "goalkeeping": 0,
+      "setPieces": 0,
+      "pressing": 1,
+      "counterattacking": 0
+    },
+    {
+      "formationId": "3-5-2",
+      "againstFamily": "control",
+      "attack": 0,
+      "midfield": 1,
+      "defense": 0,
+      "goalkeeping": 0,
+      "setPieces": 1,
+      "pressing": 0,
+      "counterattacking": -1
+    },
+    {
+      "formationId": "5-3-2",
+      "againstFamily": "aggressive",
+      "attack": -1,
+      "midfield": 0,
+      "defense": 2,
+      "goalkeeping": 0,
+      "setPieces": 0,
+      "pressing": -1,
+      "counterattacking": 1
+    },
+    {
+      "formationId": "5-4-1",
+      "againstFamily": "aggressive",
+      "attack": -2,
+      "midfield": 0,
+      "defense": 2,
+      "goalkeeping": 0,
+      "setPieces": 1,
+      "pressing": -1,
+      "counterattacking": 1
+    }
+  ]
+}

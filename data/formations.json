@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "dataVersion": "2026.06.25-formations-v1",
+  "formations": [
+    {
+      "id": "4-3-3",
+      "name": "4-3-3",
+      "family": "balanced",
+      "description": "Balanced front three with one holding midfielder.",
+      "slots": [
+        { "id": "gk", "label": "GK", "role": "GK", "line": "goalkeeper" },
+        { "id": "rb", "label": "RB", "role": "FB", "line": "defense" },
+        { "id": "rcb", "label": "RCB", "role": "CB", "line": "defense" },
+        { "id": "lcb", "label": "LCB", "role": "CB", "line": "defense" },
+        { "id": "lb", "label": "LB", "role": "FB", "line": "defense" },
+        { "id": "dm", "label": "DM", "role": "DM", "line": "midfield" },
+        { "id": "rcm", "label": "RCM", "role": "CM", "line": "midfield" },
+        { "id": "lcm", "label": "LCM", "role": "CM", "line": "midfield" },
+        { "id": "rw", "label": "RW", "role": "WG", "line": "attack" },
+        { "id": "st", "label": "ST", "role": "ST", "line": "attack" },
+        { "id": "lw", "label": "LW", "role": "WG", "line": "attack" }
+      ]
+    },
+    {
+      "id": "4-2-3-1",
+      "name": "4-2-3-1",
+      "family": "balanced",
+      "description": "Double pivot behind three creators and one striker.",
+      "slots": [
+        { "id": "gk", "label": "GK", "role": "GK", "line": "goalkeeper" },
+        { "id": "rb", "label": "RB", "role": "FB", "line": "defense" },
+        { "id": "rcb", "label": "RCB", "role": "CB", "line": "defense" },
+        { "id": "lcb", "label": "LCB", "role": "CB", "line": "defense" },
+        { "id": "lb", "label": "LB", "role": "FB", "line": "defense" },
+        { "id": "rdm", "label": "RDM", "role": "DM", "line": "midfield" },
+        { "id": "ldm", "label": "LDM", "role": "DM", "line": "midfield" },
+        { "id": "ram", "label": "RAM", "role": "AM", "line": "attack" },
+        { "id": "am", "label": "AM", "role": "AM", "line": "attack" },
+        { "id": "lam", "label": "LAM", "role": "WG", "line": "attack" },
+        { "id": "st", "label": "ST", "role": "ST", "line": "attack" }
+      ]
+    },
+    {
+      "id": "4-4-2",
+      "name": "4-4-2",
+      "family": "direct",
+      "description": "Two banks of four with a strike partnership.",
+      "slots": [
+        { "id": "gk", "label": "GK", "role": "GK", "line": "goalkeeper" },
+        { "id": "rb", "label": "RB", "role": "FB", "line": "defense" },
+        { "id": "rcb", "label": "RCB", "role": "CB", "line": "defense" },
+        { "id": "lcb", "label": "LCB", "role": "CB", "line": "defense" },
+        { "id": "lb", "label": "LB", "role": "FB", "line": "defense" },
+        { "id": "rm", "label": "RM", "role": "WG", "line": "midfield" },
+        { "id": "rcm", "label": "RCM", "role": "CM", "line": "midfield" },
+        { "id": "lcm", "label": "LCM", "role": "CM", "line": "midfield" },
+        { "id": "lm", "label": "LM", "role": "WG", "line": "midfield" },
+        { "id": "rst", "label": "RST", "role": "ST", "line": "attack" },
+        { "id": "lst", "label": "LST", "role": "ST", "line": "attack" }
+      ]
+    },
+    {
+      "id": "4-1-4-1",
+      "name": "4-1-4-1",
+      "family": "control",
+      "description": "Midfield-heavy shape with one screening midfielder.",
+      "slots": [
+        { "id": "gk", "label": "GK", "role": "GK", "line": "goalkeeper" },
+        { "id": "rb", "label": "RB", "role": "FB", "line": "defense" },
+        { "id": "rcb", "label": "RCB", "role": "CB", "line": "defense" },
+        { "id": "lcb", "label": "LCB", "role": "CB", "line": "defense" },
+        { "id": "lb", "label": "LB", "role": "FB", "line": "defense" },
+        { "id": "dm", "label": "DM", "role": "DM", "line": "midfield" },
+        { "id": "rm", "label": "RM", "role": "WG", "line": "midfield" },
+        { "id": "rcm", "label": "RCM", "role": "CM", "line": "midfield" },
+        { "id": "lcm", "label": "LCM", "role": "CM", "line": "midfield" },
+        { "id": "lm", "label": "LM", "role": "WG", "line": "midfield" },
+        { "id": "st", "label": "ST", "role": "ST", "line": "attack" }
+      ]
+    },
+    {
+      "id": "4-3-2-1",
+      "name": "4-3-2-1",
+      "family": "control",
+      "description": "Narrow midfield and two creators behind one forward.",
+      "slots": [
+        { "id": "gk", "label": "GK", "role": "GK", "line": "goalkeeper" },
+        { "id": "rb", "label": "RB", "role": "FB", "line": "defense" },
+        { "id": "rcb", "label": "RCB", "role": "CB", "line": "defense" },
+        { "id": "lcb", "label": "LCB", "role": "CB", "line": "defense" },
+        { "id": "lb", "label": "LB", "role": "FB", "line": "defense" },
+        { "id": "rcm", "label": "RCM", "role": "CM", "line": "midfield" },
+        { "id": "cm", "label": "CM", "role": "DM", "line": "midfield" },
+        { "id": "lcm", "label": "LCM", "role": "CM", "line": "midfield" },
+        { "id": "ram", "label": "RAM", "role": "AM", "line": "attack" },
+        { "id": "lam", "label": "LAM", "role": "AM", "line": "attack" },
+        { "id": "st", "label": "ST", "role": "ST", "line": "attack" }
+      ]
+    },
+    {
+      "id": "3-4-3",
+      "name": "3-4-3",
+      "family": "aggressive",
+      "description": "Back three with wingbacks and a front three.",
+      "slots": [
+        { "id": "gk", "label": "GK", "role": "GK", "line": "goalkeeper" },
+        { "id": "rcb", "label": "RCB", "role": "CB", "line": "defense" },
+        { "id": "cb", "label": "CB", "role": "CB", "line": "defense" },
+        { "id": "lcb", "label": "LCB", "role": "CB", "line": "defense" },
+        { "id": "rwb", "label": "RWB", "role": "FB", "line": "midfield" },
+        { "id": "rcm", "label": "RCM", "role": "CM", "line": "midfield" },
+        { "id": "lcm", "label": "LCM", "role": "CM", "line": "midfield" },
+        { "id": "lwb", "label": "LWB", "role": "FB", "line": "midfield" },
+        { "id": "rw", "label": "RW", "role": "WG", "line": "attack" },
+        { "id": "st", "label": "ST", "role": "ST", "line": "attack" },
+        { "id": "lw", "label": "LW", "role": "WG", "line": "attack" }
+      ]
+    },
+    {
+      "id": "3-4-2-1",
+      "name": "3-4-2-1",
+      "family": "aggressive",
+      "description": "Back three with two inside forwards behind a striker.",
+      "slots": [
+        { "id": "gk", "label": "GK", "role": "GK", "line": "goalkeeper" },
+        { "id": "rcb", "label": "RCB", "role": "CB", "line": "defense" },
+        { "id": "cb", "label": "CB", "role": "CB", "line": "defense" },
+        { "id": "lcb", "label": "LCB", "role": "CB", "line": "defense" },
+        { "id": "rwb", "label": "RWB", "role": "FB", "line": "midfield" },
+        { "id": "rcm", "label": "RCM", "role": "CM", "line": "midfield" },
+        { "id": "lcm", "label": "LCM", "role": "CM", "line": "midfield" },
+        { "id": "lwb", "label": "LWB", "role": "FB", "line": "midfield" },
+        { "id": "ram", "label": "RAM", "role": "AM", "line": "attack" },
+        { "id": "lam", "label": "LAM", "role": "AM", "line": "attack" },
+        { "id": "st", "label": "ST", "role": "ST", "line": "attack" }
+      ]
+    },
+    {
+      "id": "3-5-2",
+      "name": "3-5-2",
+      "family": "control",
+      "description": "Central overload with two strikers.",
+      "slots": [
+        { "id": "gk", "label": "GK", "role": "GK", "line": "goalkeeper" },
+        { "id": "rcb", "label": "RCB", "role": "CB", "line": "defense" },
+        { "id": "cb", "label": "CB", "role": "CB", "line": "defense" },
+        { "id": "lcb", "label": "LCB", "role": "CB", "line": "defense" },
+        { "id": "rwb", "label": "RWB", "role": "FB", "line": "midfield" },
+        { "id": "rcm", "label": "RCM", "role": "CM", "line": "midfield" },
+        { "id": "dm", "label": "DM", "role": "DM", "line": "midfield" },
+        { "id": "lcm", "label": "LCM", "role": "CM", "line": "midfield" },
+        { "id": "lwb", "label": "LWB", "role": "FB", "line": "midfield" },
+        { "id": "rst", "label": "RST", "role": "ST", "line": "attack" },
+        { "id": "lst", "label": "LST", "role": "ST", "line": "attack" }
+      ]
+    },
+    {
+      "id": "5-3-2",
+      "name": "5-3-2",
+      "family": "defensive",
+      "description": "Five defenders, three central midfielders, two forwards.",
+      "slots": [
+        { "id": "gk", "label": "GK", "role": "GK", "line": "goalkeeper" },
+        { "id": "rwb", "label": "RWB", "role": "FB", "line": "defense" },
+        { "id": "rcb", "label": "RCB", "role": "CB", "line": "defense" },
+        { "id": "cb", "label": "CB", "role": "CB", "line": "defense" },
+        { "id": "lcb", "label": "LCB", "role": "CB", "line": "defense" },
+        { "id": "lwb", "label": "LWB", "role": "FB", "line": "defense" },
+        { "id": "rcm", "label": "RCM", "role": "CM", "line": "midfield" },
+        { "id": "cm", "label": "CM", "role": "DM", "line": "midfield" },
+        { "id": "lcm", "label": "LCM", "role": "CM", "line": "midfield" },
+        { "id": "rst", "label": "RST", "role": "ST", "line": "attack" },
+        { "id": "lst", "label": "LST", "role": "ST", "line": "attack" }
+      ]
+    },
+    {
+      "id": "5-4-1",
+      "name": "5-4-1",
+      "family": "defensive",
+      "description": "Compact block with one outlet striker.",
+      "slots": [
+        { "id": "gk", "label": "GK", "role": "GK", "line": "goalkeeper" },
+        { "id": "rwb", "label": "RWB", "role": "FB", "line": "defense" },
+        { "id": "rcb", "label": "RCB", "role": "CB", "line": "defense" },
+        { "id": "cb", "label": "CB", "role": "CB", "line": "defense" },
+        { "id": "lcb", "label": "LCB", "role": "CB", "line": "defense" },
+        { "id": "lwb", "label": "LWB", "role": "FB", "line": "defense" },
+        { "id": "rm", "label": "RM", "role": "WG", "line": "midfield" },
+        { "id": "rcm", "label": "RCM", "role": "CM", "line": "midfield" },
+        { "id": "lcm", "label": "LCM", "role": "CM", "line": "midfield" },
+        { "id": "lm", "label": "LM", "role": "WG", "line": "midfield" },
+        { "id": "st", "label": "ST", "role": "ST", "line": "attack" }
+      ]
+    }
+  ]
+}

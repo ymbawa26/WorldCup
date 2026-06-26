@@ -10,7 +10,16 @@ import {
   buildGroupStandings,
   type CompletedGroupMatch,
 } from "../tournament/standings";
-import { prematchProbability } from "../probability/model";
+import {
+  prematchProbability,
+  prematchProbabilityFromRatings,
+} from "../probability/model";
+import type { PrematchProbability } from "../probability/schema";
+import {
+  activeTeamRatingFromSetup,
+  defaultPrematchTeamSetup,
+} from "../formations/service";
+import type { PrematchTeamSetup } from "../formations/schema";
 import { NamedRandomStreams } from "../simulation/random";
 
 import {
@@ -51,8 +60,13 @@ function weightedRecordFromProbability(input: {
   homeTeamId: string;
   awayTeamId: string;
   knockout?: boolean;
+  userSetup?: PrematchTeamSetup | null;
 }): MatchRecord {
-  const probability = prematchProbability(input.homeTeamId, input.awayTeamId);
+  const probability = probabilityForMatch({
+    homeTeamId: input.homeTeamId,
+    awayTeamId: input.awayTeamId,
+    userSetup: input.userSetup,
+  });
   const random = new NamedRandomStreams(input.seed);
   const roll = random.next("scoreline");
   let cumulative = 0;
@@ -93,6 +107,34 @@ function weightedRecordFromProbability(input: {
     prematchOdds: probability.outcomes,
     modelFactors: [...MATCHUP_FACTORS],
   };
+}
+
+function probabilityForMatch(input: {
+  homeTeamId: string;
+  awayTeamId: string;
+  userSetup?: PrematchTeamSetup | null;
+}): PrematchProbability {
+  const setup = input.userSetup;
+  if (
+    !setup ||
+    (setup.teamId !== input.homeTeamId && setup.teamId !== input.awayTeamId)
+  ) {
+    return prematchProbability(input.homeTeamId, input.awayTeamId);
+  }
+  const opponentTeamId =
+    setup.teamId === input.homeTeamId ? input.awayTeamId : input.homeTeamId;
+  const opponentSetup = defaultPrematchTeamSetup(opponentTeamId, "4-3-3");
+  const userRating = activeTeamRatingFromSetup(
+    setup,
+    opponentSetup.formationId,
+  );
+  const opponentRating = activeTeamRatingFromSetup(
+    opponentSetup,
+    setup.formationId,
+  );
+  return setup.teamId === input.homeTeamId
+    ? prematchProbabilityFromRatings(userRating, opponentRating)
+    : prematchProbabilityFromRatings(opponentRating, userRating);
 }
 
 function groupStandingsFromMatches(groupMatches: MatchRecord[]) {
@@ -182,6 +224,7 @@ export function simulateGroupStage(state: TournamentGameState) {
 function simulateKnockoutMatch(
   state: TournamentGameState,
   match: RoundOf32Match,
+  userSetup?: PrematchTeamSetup | null,
 ): MatchRecord {
   return weightedRecordFromProbability({
     seed: `${state.seed}:knockout:${match.matchNumber}`,
@@ -190,6 +233,7 @@ function simulateKnockoutMatch(
     homeTeamId: match.homeTeamId,
     awayTeamId: match.awayTeamId,
     knockout: true,
+    userSetup,
   });
 }
 
@@ -200,13 +244,18 @@ function hasTeam(
   return match.homeTeamId === teamId || match.awayTeamId === teamId;
 }
 
-function groupMatchRecord(state: TournamentGameState, fixture: GroupFixture) {
+function groupMatchRecord(
+  state: TournamentGameState,
+  fixture: GroupFixture,
+  userSetup?: PrematchTeamSetup | null,
+) {
   return weightedRecordFromProbability({
     seed: `${state.seed}:group:${fixture.matchNumber}`,
     matchNumber: fixture.matchNumber,
     stage: "GROUP",
     homeTeamId: fixture.homeTeamId,
     awayTeamId: fixture.awayTeamId,
+    userSetup,
   });
 }
 
@@ -394,7 +443,10 @@ export function nextUserMatchPreview(state: TournamentGameState) {
   };
 }
 
-export function advanceToNextUserMatch(state: TournamentGameState) {
+export function advanceToNextUserMatch(
+  state: TournamentGameState,
+  userSetup?: PrematchTeamSetup | null,
+) {
   let nextState = state;
   const playedGroupNumbers = new Set(
     nextState.groupMatches.map((match) => match.matchNumber),
@@ -408,7 +460,7 @@ export function advanceToNextUserMatch(state: TournamentGameState) {
   if (nextUserFixture) {
     let groupMatches = addGroupRecord(
       nextState.groupMatches,
-      groupMatchRecord(nextState, nextUserFixture),
+      groupMatchRecord(nextState, nextUserFixture, userSetup),
     );
     const followingUserFixture = tournamentSnapshot.fixtures.find(
       (fixture) =>
@@ -484,7 +536,11 @@ export function advanceToNextUserMatch(state: TournamentGameState) {
     }
     const involvesUser = hasTeam(match, nextState.userTeamId);
     if (involvesUser && playedUserMatchThisAdvance) break;
-    const record = simulateKnockoutMatch(nextState, match);
+    const record = simulateKnockoutMatch(
+      nextState,
+      match,
+      involvesUser ? userSetup : null,
+    );
     knockoutMatches = upsertKnockoutRecord(knockoutMatches, record);
     resolved = completedKnockoutByNumber({ ...nextState, knockoutMatches });
     if (involvesUser) {
