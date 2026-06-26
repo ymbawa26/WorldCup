@@ -8,7 +8,7 @@ import {
   Save,
   Upload,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { squadByTeamId } from "@/domain/data-ingestion/data";
@@ -30,6 +30,7 @@ import {
   nextUserMatchPreview,
 } from "@/domain/game/engine";
 import type { TournamentGameState } from "@/domain/game/schema";
+import type { MatchRecord } from "@/domain/game/schema";
 import {
   exportSave,
   importSave,
@@ -42,6 +43,18 @@ import { tournamentSnapshot } from "@/domain/tournament/data";
 
 type NextMatchPreview = NonNullable<ReturnType<typeof nextUserMatchPreview>>;
 type GamePresentation = ReturnType<typeof gamePresentation>;
+type AdvanceResult = ReturnType<typeof advanceToNextUserMatch>;
+type LiveMatchState = {
+  baseState: TournamentGameState;
+  pending: AdvanceResult;
+  preview: NextMatchPreview;
+  result: MatchRecord | null;
+  minute: number;
+  speed: 0.5 | 1 | 2;
+  status: "RUNNING" | "PAUSED" | "FULLTIME";
+  startedAtMs: number;
+  elapsedBeforePauseMs: number;
+};
 
 const teamsById = new Map(
   tournamentSnapshot.teams.map((team) => [team.id, team]),
@@ -103,6 +116,76 @@ function adjustedOddsForNextMatch(
   return nextMatch.homeTeamId === setup.teamId
     ? prematchProbabilityFromRatings(userRating, opponentRating).outcomes
     : prematchProbabilityFromRatings(opponentRating, userRating).outcomes;
+}
+
+function setupForTeamWithSamePlan(
+  teamId: string,
+  setup: ParsedPrematchTeamSetup,
+) {
+  return {
+    ...defaultPrematchTeamSetup(teamId, setup.formationId),
+    tactics: setup.tactics,
+  };
+}
+
+function findNewUserMatch(
+  before: TournamentGameState,
+  after: TournamentGameState,
+) {
+  const beforeKeys = new Set(
+    [...before.groupMatches, ...before.knockoutMatches].map(
+      (match) => `${match.stage}:${match.matchNumber}`,
+    ),
+  );
+  return [...after.groupMatches, ...after.knockoutMatches].find(
+    (match) =>
+      !beforeKeys.has(`${match.stage}:${match.matchNumber}`) &&
+      (match.homeTeamId === after.userTeamId ||
+        match.awayTeamId === after.userTeamId),
+  );
+}
+
+function liveEventsForMinute(
+  result: MatchRecord | null,
+  minute: number,
+  preview: NextMatchPreview,
+) {
+  const events = [
+    {
+      minute: 0,
+      text: `${teamName(preview.homeTeamId)} vs ${teamName(preview.awayTeamId)} kicks off.`,
+    },
+    {
+      minute: 15,
+      text: "Both teams are settling into the tactical battle.",
+    },
+    {
+      minute: 30,
+      text: "The manager's setup is shaping the rhythm of the match.",
+    },
+    {
+      minute: 45,
+      text: "Half-time. The second half starts automatically in this preview build.",
+    },
+    {
+      minute: 60,
+      text: "The game opens up as legs get heavier.",
+    },
+    {
+      minute: 75,
+      text: "Final adjustments and late pressure now matter.",
+    },
+  ];
+  if (result) {
+    events.push({
+      minute: 90,
+      text: `Full-time: ${teamName(result.homeTeamId)} ${result.homeGoals}–${result.awayGoals} ${teamName(result.awayTeamId)}.`,
+    });
+  }
+  return events
+    .filter((event) => event.minute <= minute)
+    .slice(-5)
+    .reverse();
 }
 
 function scoreline(match: {
@@ -173,6 +256,7 @@ function randomTournamentSeed() {
 
 export function PlayClient() {
   const [selectedTeamId, setSelectedTeamId] = useState("united-states");
+  const userSelectedTeamRef = useRef(false);
   const [currentState, setCurrentState] = useState<TournamentGameState | null>(
     null,
   );
@@ -183,6 +267,7 @@ export function PlayClient() {
   const [prematchSetup, setPrematchSetup] = useState<ParsedPrematchTeamSetup>(
     () => defaultPrematchTeamSetup("united-states"),
   );
+  const [liveMatch, setLiveMatch] = useState<LiveMatchState | null>(null);
   const [exportText, setExportText] = useState("");
   const [importText, setImportText] = useState("");
   const [message, setMessage] = useState("Choose a nation to begin.");
@@ -192,12 +277,32 @@ export function PlayClient() {
       if (!save) return;
       setSavedState(save);
       setCurrentState(save);
-      setSelectedTeamId(save.userTeamId);
-      setPrematchSetup(defaultPrematchTeamSetup(save.userTeamId));
+      if (!userSelectedTeamRef.current) {
+        setSelectedTeamId(save.userTeamId);
+        setPrematchSetup(defaultPrematchTeamSetup(save.userTeamId));
+      }
       setNextMatch(nextUserMatchPreview(save));
       setMessage("Saved tournament found. Continue or start fresh.");
     });
   }, []);
+
+  useEffect(() => {
+    if (!liveMatch || liveMatch.status !== "RUNNING") return;
+    const timer = window.setInterval(() => {
+      setLiveMatch((match) => {
+        if (!match || match.status !== "RUNNING") return match;
+        const elapsedMs =
+          match.elapsedBeforePauseMs + (Date.now() - match.startedAtMs);
+        const minute = Math.min(90, (elapsedMs / 1000) * match.speed);
+        return {
+          ...match,
+          minute,
+          status: minute >= 90 ? "FULLTIME" : "RUNNING",
+        };
+      });
+    }, 250);
+    return () => window.clearInterval(timer);
+  }, [liveMatch]);
 
   const userTeam = useMemo(
     () => teamsById.get(selectedTeamId),
@@ -235,32 +340,49 @@ export function PlayClient() {
     [prematchSetup],
   );
 
-  async function persistNext(next: ReturnType<typeof advanceToNextUserMatch>) {
+  const persistNext = useCallback(async (next: AdvanceResult) => {
     setCurrentState(next.state);
     setSavedState(next.state);
     setSelectedTeamId(next.state.userTeamId);
     setNextMatch(next.nextMatch);
-    setPrematchSetup(defaultPrematchTeamSetup(next.state.userTeamId));
+    setPrematchSetup((setup) =>
+      setupForTeamWithSamePlan(next.state.userTeamId, setup),
+    );
     await saveGame(next.state);
     setMessage(
       next.state.status === "COMPLETE"
         ? "Tournament complete. Autosave updated."
         : "Your match was played. The rest of the world caught up.",
     );
-  }
+  }, []);
+
+  const finishLiveMatchNow = useCallback(async () => {
+    const match = liveMatch;
+    if (!match) return;
+    setLiveMatch(null);
+    await persistNext(match.pending);
+  }, [liveMatch, persistNext]);
+
+  useEffect(() => {
+    if (liveMatch?.status !== "FULLTIME") return;
+    const timer = window.setTimeout(() => {
+      void finishLiveMatchNow();
+    }, 700);
+    return () => window.clearTimeout(timer);
+  }, [finishLiveMatchNow, liveMatch?.status]);
 
   async function startTournament(teamId = selectedTeamId) {
     const created = createTournamentGame({
       seed: randomTournamentSeed(),
       userTeamId: teamId,
     });
-    await persistNext(advanceToNextUserMatch(created, prematchSetup));
+    startLiveMatch(created, prematchSetup);
   }
 
   async function continueSaved() {
     const state = currentState ?? savedState;
     if (!state) return;
-    await persistNext(advanceToNextUserMatch(state, prematchSetup));
+    startLiveMatch(state, prematchSetup);
   }
 
   async function manualSave() {
@@ -303,8 +425,70 @@ export function PlayClient() {
   }
 
   function selectTeam(teamId: string) {
+    userSelectedTeamRef.current = true;
     setSelectedTeamId(teamId);
     setPrematchSetup(defaultPrematchTeamSetup(teamId));
+  }
+
+  function startLiveMatch(
+    baseState: TournamentGameState,
+    setup: ParsedPrematchTeamSetup,
+  ) {
+    const matchPreview = nextUserMatchPreview(baseState);
+    if (!matchPreview) {
+      void persistNext(advanceToNextUserMatch(baseState, setup));
+      return;
+    }
+    const pending = advanceToNextUserMatch(baseState, setup);
+    const result = findNewUserMatch(baseState, pending.state) ?? null;
+    setLiveMatch({
+      baseState,
+      pending,
+      preview: matchPreview,
+      result,
+      minute: 0,
+      speed: 1,
+      status: "RUNNING",
+      startedAtMs: Date.now(),
+      elapsedBeforePauseMs: 0,
+    });
+    setMessage("Live match started. The tournament will update at full-time.");
+  }
+
+  function pauseLiveMatch() {
+    setLiveMatch((match) => {
+      if (!match || match.status !== "RUNNING") return match;
+      return {
+        ...match,
+        status: "PAUSED",
+        elapsedBeforePauseMs:
+          match.elapsedBeforePauseMs + (Date.now() - match.startedAtMs),
+      };
+    });
+  }
+
+  function resumeLiveMatch() {
+    setLiveMatch((match) =>
+      match && match.status === "PAUSED"
+        ? { ...match, status: "RUNNING", startedAtMs: Date.now() }
+        : match,
+    );
+  }
+
+  function setLiveSpeed(speed: LiveMatchState["speed"]) {
+    setLiveMatch((match) => {
+      if (!match) return match;
+      const elapsedBeforePauseMs =
+        match.status === "RUNNING"
+          ? match.elapsedBeforePauseMs + (Date.now() - match.startedAtMs)
+          : match.elapsedBeforePauseMs;
+      return {
+        ...match,
+        speed,
+        startedAtMs: Date.now(),
+        elapsedBeforePauseMs,
+      };
+    });
   }
 
   function updateFormation(formationId: FormationId) {
@@ -371,7 +555,7 @@ export function PlayClient() {
 
             <div className="mt-7 flex flex-wrap gap-3">
               <Button
-                disabled={!setupValidation.passed}
+                disabled={!setupValidation.passed || Boolean(liveMatch)}
                 onClick={() => void startTournament()}
                 size="large"
               >
@@ -380,13 +564,15 @@ export function PlayClient() {
               </Button>
               <Button
                 disabled={
-                  (!currentState && !savedState) || !setupValidation.passed
+                  (!currentState && !savedState) ||
+                  !setupValidation.passed ||
+                  Boolean(liveMatch)
                 }
                 onClick={() => void continueSaved()}
                 size="large"
                 variant="secondary"
               >
-                Play next match
+                Start live match
               </Button>
             </div>
             <p aria-live="polite" className="mt-4 text-sm text-cyan-200">
@@ -458,6 +644,16 @@ export function PlayClient() {
                   Odds include your current formation and tactical setup.
                 </p>
               </div>
+            ) : null}
+
+            {liveMatch ? (
+              <LiveMatchPanel
+                liveMatch={liveMatch}
+                onFinish={() => void finishLiveMatchNow()}
+                onPause={pauseLiveMatch}
+                onResume={resumeLiveMatch}
+                onSpeedChange={setLiveSpeed}
+              />
             ) : null}
 
             {latestUserMatch ? (
@@ -724,6 +920,132 @@ function PrematchSetupPanel({
           ))}
         </div>
       ) : null}
+    </section>
+  );
+}
+
+function LiveMatchPanel({
+  liveMatch,
+  onFinish,
+  onPause,
+  onResume,
+  onSpeedChange,
+}: {
+  liveMatch: LiveMatchState;
+  onFinish: () => void;
+  onPause: () => void;
+  onResume: () => void;
+  onSpeedChange: (speed: LiveMatchState["speed"]) => void;
+}) {
+  const visibleMinute = Math.floor(liveMatch.minute);
+  const events = liveEventsForMinute(
+    liveMatch.result,
+    visibleMinute,
+    liveMatch.preview,
+  );
+  const progress = Math.min(100, (liveMatch.minute / 90) * 100);
+
+  return (
+    <section className="mt-7 rounded-3xl border border-emerald-300/20 bg-emerald-300/10 p-5">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p className="eyebrow">Live match simulation</p>
+          <h3 className="mt-2 text-2xl font-black text-white">
+            {teamLabel(liveMatch.preview.homeTeamId)} vs{" "}
+            {teamLabel(liveMatch.preview.awayTeamId)}
+          </h3>
+          <p className="mt-1 text-sm text-emerald-100/80">
+            90 match minutes run in 90 real seconds at 1x.
+          </p>
+        </div>
+        <div className="rounded-2xl bg-black/20 px-4 py-3 text-right">
+          <p className="text-xs font-black tracking-wider text-emerald-100/70 uppercase">
+            Minute
+          </p>
+          <p className="text-4xl font-black text-white">
+            {Math.min(90, visibleMinute)}
+            <span className="text-xl">′</span>
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-5 h-3 overflow-hidden rounded-full bg-white/10">
+        <div
+          className="h-full rounded-full bg-emerald-300 transition-all"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+
+      <div className="mt-5 grid gap-3 sm:grid-cols-3">
+        <div className="rounded-2xl bg-white/5 p-4 text-center">
+          <p className="text-xs text-slate-400">
+            {teamName(liveMatch.preview.homeTeamId)}
+          </p>
+          <p className="mt-2 text-3xl font-black text-white">
+            {liveMatch.status === "FULLTIME" && liveMatch.result
+              ? liveMatch.result.homeGoals
+              : "—"}
+          </p>
+        </div>
+        <div className="rounded-2xl bg-white/5 p-4 text-center">
+          <p className="text-xs text-slate-400">State</p>
+          <p className="mt-2 text-lg font-black text-white">
+            {liveMatch.status.toLowerCase()}
+          </p>
+        </div>
+        <div className="rounded-2xl bg-white/5 p-4 text-center">
+          <p className="text-xs text-slate-400">
+            {teamName(liveMatch.preview.awayTeamId)}
+          </p>
+          <p className="mt-2 text-3xl font-black text-white">
+            {liveMatch.status === "FULLTIME" && liveMatch.result
+              ? liveMatch.result.awayGoals
+              : "—"}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-5 flex flex-wrap gap-2">
+        {liveMatch.status === "PAUSED" ? (
+          <Button onClick={onResume} variant="secondary">
+            Resume
+          </Button>
+        ) : (
+          <Button
+            disabled={liveMatch.status !== "RUNNING"}
+            onClick={onPause}
+            variant="secondary"
+          >
+            Pause
+          </Button>
+        )}
+        {[0.5, 1, 2].map((speed) => (
+          <Button
+            key={speed}
+            onClick={() => onSpeedChange(speed as LiveMatchState["speed"])}
+            variant={liveMatch.speed === speed ? "primary" : "secondary"}
+          >
+            {speed}x
+          </Button>
+        ))}
+        <Button onClick={onFinish} variant="secondary">
+          Finish match now
+        </Button>
+      </div>
+
+      <div className="mt-5 space-y-2">
+        {events.map((event) => (
+          <p
+            className="rounded-2xl bg-black/20 px-3 py-2 text-sm text-slate-100"
+            key={`${event.minute}:${event.text}`}
+          >
+            <span className="mr-2 font-black text-emerald-200">
+              {event.minute}′
+            </span>
+            {event.text}
+          </p>
+        ))}
+      </div>
     </section>
   );
 }
