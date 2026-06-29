@@ -463,7 +463,7 @@ function createLiveMatchEvents({
       minute: 35 + Math.floor(random.next("user-red-minute") * 42),
       type: "RED_CARD",
       side: userSide,
-      text: `${teamLabel(setup.teamId)} are down to ten. Defensive setup raised the red-card risk.`,
+      text: `${teamLabel(setup.teamId)} are down to ten after a late challenge.`,
       homeScore,
       awayScore,
     });
@@ -607,7 +607,7 @@ function createLiveMatchEvents({
       minute: 24 + Math.floor(random.next("penalty-minute") * 58),
       type: "PENALTY",
       side,
-      text: `${teamLabel(teamId)} have a penalty shot moment. The keeper keeps it out.`,
+      text: `${teamLabel(teamId)} step up from the spot, but the keeper saves it.`,
       homeScore,
       awayScore,
     });
@@ -908,8 +908,8 @@ export function PlayClient() {
     await saveGame(next.state);
     setMessage(
       next.state.status === "COMPLETE"
-        ? "Tournament complete. Autosave updated."
-        : "Your match was played. The rest of the world caught up.",
+        ? "Tournament complete. Your save is up to date."
+        : "Result confirmed. The next fixture is ready.",
     );
   }, []);
 
@@ -946,14 +946,14 @@ export function PlayClient() {
     if (!currentState) return;
     await saveGame(currentState);
     setSavedState(currentState);
-    setMessage("Manual save complete.");
+    setMessage("Saved.");
   }
 
   function exportCurrentSave() {
     const state = currentState ?? savedState;
     if (!state) return;
     setExportText(exportSave(state));
-    setMessage("Export generated.");
+    setMessage("Save code ready.");
   }
 
   async function importCurrentSave() {
@@ -964,9 +964,9 @@ export function PlayClient() {
       setSelectedTeamId(state.userTeamId);
       setPrematchSetup(defaultPrematchTeamSetup(state.userTeamId));
       setNextMatch(nextUserMatchPreview(state));
-      setMessage("Save imported. Continue when ready.");
+      setMessage("Save loaded. Continue when ready.");
     } catch {
-      setMessage("Import rejected: invalid or unsupported save.");
+      setMessage("That save code could not be loaded.");
     }
   }
 
@@ -978,7 +978,7 @@ export function PlayClient() {
     setPrematchSetup(defaultPrematchTeamSetup(selectedTeamId));
     setExportText("");
     setImportText("");
-    setMessage("Save reset. Start a new tournament when ready.");
+    setMessage("Save cleared. Start a new tournament when ready.");
   }
 
   function selectTeam(teamId: string) {
@@ -1023,7 +1023,7 @@ export function PlayClient() {
       startedAtMs: Date.now(),
       elapsedBeforePauseMs: 0,
     });
-    setMessage("Live match started. The tournament will update at full-time.");
+    setMessage("Match started. Your tournament updates after full-time.");
   }
 
   function pauseLiveMatch() {
@@ -1152,12 +1152,11 @@ export function PlayClient() {
           <section className="rounded-3xl border border-white/10 bg-[#0a102b]/90 p-6 sm:p-8">
             <p className="eyebrow">New tournament</p>
             <h1 className="mt-3 text-4xl font-black tracking-tight text-white sm:text-5xl">
-              Choose your nation. Simulate the world.
+              Choose your nation. Chase the World Cup.
             </h1>
             <p className="mt-4 leading-7 text-slate-300">
-              Your tournament now moves at your team&apos;s pace: play your next
-              match, then the rest of the world catches up in the background.
-              Randomness is generated privately for every run.
+              Take charge of one country, set the match plan, and play from
+              fixture to fixture. Every run has its own tournament story.
             </p>
 
             <label className="mt-8 block">
@@ -1207,7 +1206,7 @@ export function PlayClient() {
                 size="large"
                 variant="secondary"
               >
-                Start live match
+                Continue tournament
               </Button>
             </div>
             <p aria-live="polite" className="mt-4 text-sm text-cyan-200">
@@ -1216,7 +1215,7 @@ export function PlayClient() {
           </section>
 
           <section className="rounded-3xl border border-white/10 bg-[#0a102b]/90 p-6 sm:p-8">
-            <p className="eyebrow">Tournament result</p>
+            <p className="eyebrow">Tournament status</p>
             <h2 className="mt-2 text-3xl font-black text-white">
               {champion
                 ? `${teamName(champion)} are champions`
@@ -1276,7 +1275,7 @@ export function PlayClient() {
                   </div>
                 </div>
                 <p className="mt-3 text-xs text-cyan-100/80">
-                  Odds include your current formation and tactical setup.
+                  Your match plan is already reflected in these chances.
                 </p>
               </div>
             ) : null}
@@ -1300,7 +1299,7 @@ export function PlayClient() {
                 <div className="flex items-center gap-3 text-emerald-200">
                   <CheckCircle2 aria-hidden="true" className="size-5" />
                   <strong>
-                    Match {latestUserMatch.matchNumber} autosaved ·{" "}
+                    Match {latestUserMatch.matchNumber} saved ·{" "}
                     {teamName(latestUserMatch.homeTeamId)}{" "}
                     {latestUserMatch.homeGoals}–{latestUserMatch.awayGoals}{" "}
                     {teamName(latestUserMatch.awayTeamId)}
@@ -1319,7 +1318,7 @@ export function PlayClient() {
                         : `${teamName(
                             selectedTeamId,
                           )} did not reach the knockout rounds.`
-                    : "Background fixtures were simulated up to your next match."}
+                    : "The schedule has advanced to your next fixture."}
                 </p>
               </div>
             ) : null}
@@ -1360,11 +1359,11 @@ export function PlayClient() {
 
         <details className="mt-8 rounded-3xl border border-white/10 bg-[#0a102b]/90 p-6">
           <summary className="cursor-pointer text-xl font-black text-white">
-            Save transfer
+            Move your save
           </summary>
           <section className="mt-6 grid gap-6 lg:grid-cols-2">
             <article>
-              <h2 className="text-xl font-black text-white">Exported save</h2>
+              <h2 className="text-xl font-black text-white">Copy save code</h2>
               <textarea
                 className="mt-4 min-h-52 w-full rounded-2xl border border-white/10 bg-white/5 p-4 font-mono text-xs text-slate-200"
                 readOnly
@@ -1372,11 +1371,11 @@ export function PlayClient() {
               />
             </article>
             <article>
-              <h2 className="text-xl font-black text-white">Import save</h2>
+              <h2 className="text-xl font-black text-white">Load save code</h2>
               <textarea
                 className="mt-4 min-h-52 w-full rounded-2xl border border-white/10 bg-white/5 p-4 font-mono text-xs text-slate-200"
                 onChange={(event) => setImportText(event.target.value)}
-                placeholder="Paste exported save JSON here"
+                placeholder="Paste your save code here"
                 value={importText}
               />
               <Button className="mt-4" onClick={() => void importCurrentSave()}>
@@ -1419,8 +1418,8 @@ function PrematchSetupPanel({
           Formation and tactics
         </h2>
         <p className="mt-2 text-sm leading-6 text-slate-400">
-          These choices affect your next match odds and simulation. The engine
-          keeps the formulas in the background.
+          Pick the shape, tempo, and set-piece roles you want to trust in the
+          next match.
         </p>
       </div>
 
@@ -1639,14 +1638,14 @@ function LiveMatchPanel({
     <section className="mt-7 rounded-3xl border border-emerald-300/20 bg-emerald-300/10 p-5">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="eyebrow">Live match simulation</p>
+          <p className="eyebrow">Live match</p>
           <h3 className="mt-2 text-2xl font-black text-white">
             {teamLabel(liveMatch.preview.homeTeamId)} vs{" "}
             {teamLabel(liveMatch.preview.awayTeamId)}
           </h3>
           <p className="mt-1 text-sm text-emerald-100/80">
-            {liveMatch.maxMinute} match minutes run in {liveMatch.maxMinute}{" "}
-            real seconds at 1x, excluding hydration and halftime pauses.
+            At 1x, match minutes move one-for-one with real seconds. Breaks
+            pause the clock.
           </p>
         </div>
         <div className="rounded-2xl bg-black/20 px-4 py-3 text-right">
@@ -1942,8 +1941,8 @@ function MatchPitchScreen({
             </div>
           </div>
           <p className="mt-4 text-xs leading-5 text-slate-400">
-            Possession moves during the match and quietly nudges chance quality,
-            corners, and pressure without deciding the result by itself.
+            Possession shifts with momentum, pressure, and your tactical
+            choices.
           </p>
         </div>
       </div>
@@ -2041,8 +2040,8 @@ function BreakControls({
           </h4>
           <p className="mt-2 text-sm text-cyan-50/80">
             {isHalftime
-              ? "The match pauses for 15 seconds unless you finish your team talk first."
-              : "The match pauses for 10 seconds unless you pick your posture first."}{" "}
+              ? "You have 15 seconds for the team talk, or less if you choose quickly."
+              : "You have 10 seconds to adjust the tempo, or less if you choose quickly."}{" "}
             {tacticalInfluenceText(level)}
           </p>
         </div>
@@ -2421,8 +2420,8 @@ function KnockoutBracket({
         Tournament bracket
       </h2>
       <p className="mt-2 max-w-2xl text-sm text-slate-400">
-        Groups are now decided, so the bracket takes priority. Scroll sideways
-        to follow each round from the Round of 32 through the Final.
+        Follow the winner lines from left to right to see who can meet in the
+        next round.
       </p>
 
       {champion ? (
@@ -2432,7 +2431,7 @@ function KnockoutBracket({
             🏆 {teamLabel(champion)}
           </h3>
           <p className="mt-2 text-sm text-amber-100/80">
-            Winners are highlighted in each bracket slot as they advance.
+            The winning path is highlighted through the bracket.
           </p>
         </div>
       ) : null}
@@ -2565,7 +2564,7 @@ function BracketMatchCard({
           </p>
           {nextInfo.targetScoreline ? (
             <p className="mt-1 text-[0.7rem] text-slate-500">
-              Current next slot: {nextInfo.targetScoreline}
+              Next slot: {nextInfo.targetScoreline}
             </p>
           ) : null}
         </div>
