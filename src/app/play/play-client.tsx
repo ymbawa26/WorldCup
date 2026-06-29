@@ -29,6 +29,13 @@ import {
   gamePresentation,
   nextUserMatchPreview,
 } from "@/domain/game/engine";
+import {
+  getTeamIdentity,
+  penaltyShootoutForMatch,
+  postMatchReview,
+  squadCondition,
+  tournamentNews,
+} from "@/domain/game/enrichment";
 import type { TournamentGameState } from "@/domain/game/schema";
 import type { MatchRecord } from "@/domain/game/schema";
 import {
@@ -70,6 +77,7 @@ type LiveMatchState = {
     | "HIGH_PRESS"
     | "LONG_BALL"
     | "POSSESSION";
+  substitutionIds: string[];
   startedAtMs: number;
   elapsedBeforePauseMs: number;
 };
@@ -344,6 +352,7 @@ function createLiveMatchEvents({
   hydrationLevel,
   halftimeLevel,
   halftimeStrategy,
+  substitutionCount,
 }: {
   preview: NextMatchPreview;
   result: MatchRecord | null;
@@ -351,6 +360,7 @@ function createLiveMatchEvents({
   hydrationLevel: LiveMatchState["hydrationLevel"];
   halftimeLevel: LiveMatchState["halftimeLevel"];
   halftimeStrategy: LiveMatchState["halftimeStrategy"];
+  substitutionCount: number;
 }) {
   const random = new NamedRandomStreams(
     `${result?.seed ?? preview.matchNumber}:${setup.formationId}:${JSON.stringify(setup.tactics)}:${hydrationLevel}:${halftimeLevel}:${halftimeStrategy}`,
@@ -360,6 +370,8 @@ function createLiveMatchEvents({
   const hydrationGoalModifier = attackLevelModifier(hydrationLevel);
   const halftimeGoalModifier = attackLevelModifier(halftimeLevel);
   const strategy = strategyModifier(halftimeStrategy);
+  const identity = getTeamIdentity(setup.teamId);
+  const freshLegsModifier = 1 + Math.min(3, substitutionCount) * 0.035;
   const events: LiveTimelineEvent[] = [
     {
       minute: 0,
@@ -516,7 +528,9 @@ function createLiveMatchEvents({
       (1 + userSideStrength * 5) *
         strategy.corners *
         attackModifier *
-        userPossessionImpact,
+        userPossessionImpact *
+        identity.attackingBias *
+        freshLegsModifier,
     ),
   );
   const opponentCorners = Math.max(
@@ -536,7 +550,9 @@ function createLiveMatchEvents({
       (3 + userSideStrength * 7) *
         strategy.shots *
         attackModifier *
-        userPossessionImpact,
+        userPossessionImpact *
+        identity.attackingBias *
+        freshLegsModifier,
     ),
   );
   const opponentShots = Math.max(
@@ -865,6 +881,10 @@ export function PlayClient() {
     () => teamsById.get(selectedTeamId),
     [selectedTeamId],
   );
+  const userIdentity = getTeamIdentity(selectedTeamId);
+  const userCondition = currentState
+    ? squadCondition(currentState, selectedTeamId)
+    : null;
   const champion = currentState?.championTeamId;
   const userKnockoutRecord = currentState?.knockoutMatches.find(
     (match) =>
@@ -888,6 +908,7 @@ export function PlayClient() {
     () => (currentState ? gamePresentation(currentState) : null),
     [currentState],
   );
+  const isOpeningScreen = !currentState && !savedState && !liveMatch;
   const adjustedOdds = useMemo(
     () => adjustedOddsForNextMatch(nextMatch, prematchSetup),
     [nextMatch, prematchSetup],
@@ -1020,6 +1041,7 @@ export function PlayClient() {
       hydrationLevel: 3,
       halftimeLevel: 3,
       halftimeStrategy: "BALANCED",
+      substitutionIds: [],
       startedAtMs: Date.now(),
       elapsedBeforePauseMs: 0,
     });
@@ -1126,6 +1148,16 @@ export function PlayClient() {
     });
   }
 
+  function addLiveSubstitution(playerId: string) {
+    setLiveMatch((match) => {
+      if (!match || match.substitutionIds.includes(playerId)) return match;
+      return {
+        ...match,
+        substitutionIds: [...match.substitutionIds, playerId].slice(0, 5),
+      };
+    });
+  }
+
   function updateFormation(formationId: FormationId) {
     setPrematchSetup((setup) => setupWithFormation(setup, formationId));
   }
@@ -1148,7 +1180,13 @@ export function PlayClient() {
       <div className="hero-glow absolute inset-0 -z-20" />
       <div className="pitch-grid absolute inset-0 -z-10 opacity-30" />
       <div className="mx-auto max-w-[1440px]">
-        <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
+        <div
+          className={
+            isOpeningScreen
+              ? "mx-auto max-w-2xl"
+              : "grid gap-8 lg:grid-cols-[0.85fr_1.15fr]"
+          }
+        >
           <section className="rounded-3xl border border-white/10 bg-[#0a102b]/90 p-6 sm:p-8">
             <p className="eyebrow">New tournament</p>
             <h1 className="mt-3 text-4xl font-black tracking-tight text-white sm:text-5xl">
@@ -1180,12 +1218,14 @@ export function PlayClient() {
               </select>
             </label>
 
-            <PrematchSetupPanel
-              onFormationChange={updateFormation}
-              onTacticChange={updateTactic}
-              setup={prematchSetup}
-              validation={setupValidation}
-            />
+            {!isOpeningScreen ? (
+              <PrematchSetupPanel
+                onFormationChange={updateFormation}
+                onTacticChange={updateTactic}
+                setup={prematchSetup}
+                validation={setupValidation}
+              />
+            ) : null}
 
             <div className="mt-7 flex flex-wrap gap-3">
               <Button
@@ -1196,158 +1236,227 @@ export function PlayClient() {
                 <Play aria-hidden="true" className="size-4" />
                 New tournament
               </Button>
-              <Button
-                disabled={
-                  (!currentState && !savedState) ||
-                  !setupValidation.passed ||
-                  Boolean(liveMatch)
-                }
-                onClick={() => void continueSaved()}
-                size="large"
-                variant="secondary"
-              >
-                Continue tournament
-              </Button>
+              {!isOpeningScreen ? (
+                <Button
+                  disabled={
+                    (!currentState && !savedState) ||
+                    !setupValidation.passed ||
+                    Boolean(liveMatch)
+                  }
+                  onClick={() => void continueSaved()}
+                  size="large"
+                  variant="secondary"
+                >
+                  Continue tournament
+                </Button>
+              ) : null}
             </div>
             <p aria-live="polite" className="mt-4 text-sm text-cyan-200">
               {message}
             </p>
           </section>
 
-          <section className="rounded-3xl border border-white/10 bg-[#0a102b]/90 p-6 sm:p-8">
-            <p className="eyebrow">Tournament status</p>
-            <h2 className="mt-2 text-3xl font-black text-white">
-              {champion
-                ? `${teamName(champion)} are champions`
-                : nextMatch
-                  ? `Next: ${teamName(nextMatch.homeTeamId)} vs ${teamName(
-                      nextMatch.awayTeamId,
-                    )}`
-                  : "Awaiting kickoff"}
-            </h2>
-            <div className="mt-7 grid gap-4 sm:grid-cols-3">
-              {[
-                ["Your nation", userTeam?.name ?? "—"],
-                ["Champion", teamName(champion)],
-                ["Matches played", String(matchesPlayed)],
-              ].map(([label, value]) => (
-                <div className="rounded-2xl bg-white/5 p-4" key={label}>
+          {!isOpeningScreen ? (
+            <section className="rounded-3xl border border-white/10 bg-[#0a102b]/90 p-6 sm:p-8">
+              <p className="eyebrow">Tournament status</p>
+              <h2 className="mt-2 text-3xl font-black text-white">
+                {champion
+                  ? `${teamName(champion)} are champions`
+                  : nextMatch
+                    ? `Next: ${teamName(nextMatch.homeTeamId)} vs ${teamName(
+                        nextMatch.awayTeamId,
+                      )}`
+                    : "Awaiting kickoff"}
+              </h2>
+              <div className="mt-7 grid gap-4 sm:grid-cols-3">
+                {[
+                  ["Your nation", userTeam?.name ?? "—"],
+                  ["Champion", teamName(champion)],
+                  ["Matches played", String(matchesPlayed)],
+                ].map(([label, value]) => (
+                  <div className="rounded-2xl bg-white/5 p-4" key={label}>
+                    <p className="text-xs font-black tracking-wider text-slate-500 uppercase">
+                      {label}
+                    </p>
+                    <p className="mt-2 text-lg font-black text-white">
+                      {value}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-5 grid gap-4 lg:grid-cols-2">
+                <article className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
                   <p className="text-xs font-black tracking-wider text-slate-500 uppercase">
-                    {label}
+                    Team identity
                   </p>
-                  <p className="mt-2 text-lg font-black text-white">{value}</p>
-                </div>
-              ))}
-            </div>
+                  <h3 className="mt-2 text-lg font-black text-white">
+                    {userIdentity.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-300">
+                    {userIdentity.temperament}
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {userIdentity.strengths.map((strength) => (
+                      <span
+                        className="rounded-full bg-cyan-300/10 px-3 py-1 text-xs font-bold text-cyan-100"
+                        key={strength}
+                      >
+                        {strength}
+                      </span>
+                    ))}
+                  </div>
+                </article>
 
-            {nextMatch ? (
-              <div className="mt-7 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-5">
-                <p className="text-xs font-black tracking-wider text-cyan-100 uppercase">
-                  Match {nextMatch.matchNumber} ·{" "}
-                  {nextMatch.stage.replaceAll("_", " ")}
-                </p>
-                <h3 className="mt-2 text-xl font-black text-white">
-                  {teamName(nextMatch.homeTeamId)} vs{" "}
-                  {teamName(nextMatch.awayTeamId)}
-                </h3>
-                <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                  <div>
-                    <p className="text-xs text-slate-400">
-                      {teamName(nextMatch.homeTeamId)}
+                <article className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                  <p className="text-xs font-black tracking-wider text-slate-500 uppercase">
+                    Squad condition
+                  </p>
+                  <h3 className="mt-2 text-lg font-black text-white">
+                    {userCondition?.label ?? "Fresh"}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-300">
+                    Fatigue builds through the tournament. Injuries can appear
+                    as minutes stack up, especially in demanding styles.
+                  </p>
+                  {userCondition?.injuries.length ? (
+                    <p className="mt-3 rounded-2xl bg-rose-300/10 px-3 py-2 text-xs text-rose-100">
+                      Fitness concern: {userCondition.injuries.join(", ")}
                     </p>
-                    <p className="text-2xl font-black text-white">
-                      {percent(adjustedOdds?.homeWin ?? nextMatch.odds.homeWin)}
+                  ) : (
+                    <p className="mt-3 rounded-2xl bg-emerald-300/10 px-3 py-2 text-xs text-emerald-100">
+                      No major injury concerns.
                     </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-400">Draw</p>
-                    <p className="text-2xl font-black text-white">
-                      {percent(adjustedOdds?.draw ?? nextMatch.odds.draw)}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-400">
-                      {teamName(nextMatch.awayTeamId)}
-                    </p>
-                    <p className="text-2xl font-black text-white">
-                      {percent(adjustedOdds?.awayWin ?? nextMatch.odds.awayWin)}
-                    </p>
-                  </div>
-                </div>
-                <p className="mt-3 text-xs text-cyan-100/80">
-                  Your match plan is already reflected in these chances.
-                </p>
+                  )}
+                </article>
               </div>
-            ) : null}
 
-            {liveMatch ? (
-              <LiveMatchPanel
-                liveMatch={liveMatch}
-                nowMs={nowMs}
-                onFinish={() => void finishLiveMatchNow()}
-                onHalftimeLevelChange={setHalftimeLevel}
-                onHalftimeStrategyChange={setHalftimeStrategy}
-                onHydrationLevelChange={setHydrationLevel}
-                onPause={pauseLiveMatch}
-                onResume={resumeLiveMatch}
-                onSpeedChange={setLiveSpeed}
-              />
-            ) : null}
-
-            {latestUserMatch ? (
-              <div className="mt-7 rounded-2xl border border-emerald-300/20 bg-emerald-300/10 p-5">
-                <div className="flex items-center gap-3 text-emerald-200">
-                  <CheckCircle2 aria-hidden="true" className="size-5" />
-                  <strong>
-                    Match {latestUserMatch.matchNumber} saved ·{" "}
-                    {teamName(latestUserMatch.homeTeamId)}{" "}
-                    {latestUserMatch.homeGoals}–{latestUserMatch.awayGoals}{" "}
-                    {teamName(latestUserMatch.awayTeamId)}
-                  </strong>
+              {nextMatch ? (
+                <div className="mt-7 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-5">
+                  <p className="text-xs font-black tracking-wider text-cyan-100 uppercase">
+                    Match {nextMatch.matchNumber} ·{" "}
+                    {nextMatch.stage.replaceAll("_", " ")}
+                  </p>
+                  <h3 className="mt-2 text-xl font-black text-white">
+                    {teamName(nextMatch.homeTeamId)} vs{" "}
+                    {teamName(nextMatch.awayTeamId)}
+                  </h3>
+                  <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                    <div>
+                      <p className="text-xs text-slate-400">
+                        {teamName(nextMatch.homeTeamId)}
+                      </p>
+                      <p className="text-2xl font-black text-white">
+                        {percent(
+                          adjustedOdds?.homeWin ?? nextMatch.odds.homeWin,
+                        )}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-400">Draw</p>
+                      <p className="text-2xl font-black text-white">
+                        {percent(adjustedOdds?.draw ?? nextMatch.odds.draw)}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-400">
+                        {teamName(nextMatch.awayTeamId)}
+                      </p>
+                      <p className="text-2xl font-black text-white">
+                        {percent(
+                          adjustedOdds?.awayWin ?? nextMatch.odds.awayWin,
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="mt-3 text-xs text-cyan-100/80">
+                    Your match plan is already reflected in these chances.
+                  </p>
                 </div>
-                <p className="mt-3 leading-7 text-slate-300">
-                  {currentState?.status === "COMPLETE"
-                    ? champion === selectedTeamId
-                      ? `${teamName(selectedTeamId)} won the tournament.`
-                      : userKnockoutRecord
-                        ? `${teamName(
-                            selectedTeamId,
-                          )} were knocked out in Match ${
-                            userKnockoutRecord.matchNumber
-                          }.`
-                        : `${teamName(
-                            selectedTeamId,
-                          )} did not reach the knockout rounds.`
-                    : "The schedule has advanced to your next fixture."}
-                </p>
-              </div>
-            ) : null}
+              ) : null}
 
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Button
-                disabled={!currentState}
-                onClick={() => void manualSave()}
-              >
-                <Save aria-hidden="true" className="size-4" />
-                Manual save
-              </Button>
-              <Button
-                disabled={!currentState && !savedState}
-                onClick={exportCurrentSave}
-                variant="secondary"
-              >
-                <Download aria-hidden="true" className="size-4" />
-                Export
-              </Button>
-              <Button
-                onClick={() => void resetCurrentSave()}
-                variant="secondary"
-              >
-                <RotateCcw aria-hidden="true" className="size-4" />
-                Reset
-              </Button>
-            </div>
-          </section>
+              {liveMatch ? (
+                <LiveMatchPanel
+                  liveMatch={liveMatch}
+                  nowMs={nowMs}
+                  onFinish={() => void finishLiveMatchNow()}
+                  onHalftimeLevelChange={setHalftimeLevel}
+                  onHalftimeStrategyChange={setHalftimeStrategy}
+                  onHydrationLevelChange={setHydrationLevel}
+                  onPause={pauseLiveMatch}
+                  onResume={resumeLiveMatch}
+                  onSpeedChange={setLiveSpeed}
+                  onSubstitution={addLiveSubstitution}
+                />
+              ) : null}
+
+              {latestUserMatch ? (
+                <div className="mt-7 rounded-2xl border border-emerald-300/20 bg-emerald-300/10 p-5">
+                  <div className="flex items-center gap-3 text-emerald-200">
+                    <CheckCircle2 aria-hidden="true" className="size-5" />
+                    <strong>
+                      Match {latestUserMatch.matchNumber} saved ·{" "}
+                      {teamName(latestUserMatch.homeTeamId)}{" "}
+                      {latestUserMatch.homeGoals}–{latestUserMatch.awayGoals}{" "}
+                      {teamName(latestUserMatch.awayTeamId)}
+                    </strong>
+                  </div>
+                  <p className="mt-3 leading-7 text-slate-300">
+                    {currentState?.status === "COMPLETE"
+                      ? champion === selectedTeamId
+                        ? `${teamName(selectedTeamId)} won the tournament.`
+                        : userKnockoutRecord
+                          ? `${teamName(
+                              selectedTeamId,
+                            )} were knocked out in Match ${
+                              userKnockoutRecord.matchNumber
+                            }.`
+                          : `${teamName(
+                              selectedTeamId,
+                            )} did not reach the knockout rounds.`
+                      : "The schedule has advanced to your next fixture."}
+                  </p>
+                </div>
+              ) : null}
+
+              {latestUserMatch ? (
+                <PostMatchReviewPanel
+                  match={latestUserMatch}
+                  nextMatch={nextMatch}
+                  userTeamId={selectedTeamId}
+                />
+              ) : null}
+
+              {currentState ? (
+                <TournamentNewsFeed state={currentState} />
+              ) : null}
+
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Button
+                  disabled={!currentState}
+                  onClick={() => void manualSave()}
+                >
+                  <Save aria-hidden="true" className="size-4" />
+                  Manual save
+                </Button>
+                <Button
+                  disabled={!currentState && !savedState}
+                  onClick={exportCurrentSave}
+                  variant="secondary"
+                >
+                  <Download aria-hidden="true" className="size-4" />
+                  Export
+                </Button>
+                <Button
+                  onClick={() => void resetCurrentSave()}
+                  variant="secondary"
+                >
+                  <RotateCcw aria-hidden="true" className="size-4" />
+                  Reset
+                </Button>
+              </div>
+            </section>
+          ) : null}
         </div>
 
         {presentation ? (
@@ -1387,6 +1496,113 @@ export function PlayClient() {
         </details>
       </div>
     </div>
+  );
+}
+
+function PostMatchReviewPanel({
+  match,
+  nextMatch,
+  userTeamId,
+}: {
+  match: MatchRecord;
+  nextMatch: NextMatchPreview | null;
+  userTeamId: string;
+}) {
+  const review = postMatchReview(match, userTeamId, nextMatch);
+  const shootout = penaltyShootoutForMatch(match);
+
+  return (
+    <section className="mt-7 rounded-3xl border border-white/10 bg-white/[0.045] p-5">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p className="eyebrow">Post-match report</p>
+          <h3 className="mt-2 text-2xl font-black text-white">
+            {review.headline}
+          </h3>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">
+            {review.why}
+          </p>
+        </div>
+        <div className="rounded-2xl bg-emerald-300/10 px-5 py-4 text-center">
+          <p className="text-xs font-black tracking-wider text-emerald-100 uppercase">
+            Rating
+          </p>
+          <p className="mt-1 text-4xl font-black text-white">
+            {review.rating.toFixed(1)}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-5 grid gap-3 md:grid-cols-3">
+        {review.keyMoments.map((moment) => (
+          <p
+            className="rounded-2xl border border-white/10 bg-black/15 px-4 py-3 text-sm text-slate-200"
+            key={moment}
+          >
+            {moment}
+          </p>
+        ))}
+      </div>
+
+      <p className="mt-4 rounded-2xl bg-cyan-300/10 px-4 py-3 text-sm font-bold text-cyan-100">
+        {review.nextOpponentText}
+      </p>
+
+      {shootout ? <PenaltyShootoutPanel shootout={shootout} /> : null}
+    </section>
+  );
+}
+
+function PenaltyShootoutPanel({
+  shootout,
+}: {
+  shootout: NonNullable<ReturnType<typeof penaltyShootoutForMatch>>;
+}) {
+  return (
+    <div className="mt-5 rounded-3xl border border-amber-300/20 bg-amber-300/10 p-4">
+      <p className="text-xs font-black tracking-wider text-amber-100 uppercase">
+        Penalty shootout
+      </p>
+      <p className="mt-2 text-lg font-black text-white">{shootout.summary}</p>
+      <div className="mt-4 flex flex-wrap gap-2">
+        {shootout.kicks.map((kick) => (
+          <span
+            className={
+              kick.scored
+                ? "rounded-full bg-emerald-300/15 px-3 py-1 text-xs font-black text-emerald-100"
+                : "rounded-full bg-rose-300/15 px-3 py-1 text-xs font-black text-rose-100"
+            }
+            key={kick.index}
+          >
+            {teamName(kick.teamId)} {kick.scored ? "✓" : "×"}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TournamentNewsFeed({ state }: { state: TournamentGameState }) {
+  const items = tournamentNews(state);
+  if (!items.length) return null;
+
+  return (
+    <section className="mt-7 rounded-3xl border border-white/10 bg-[#080d23]/80 p-5">
+      <p className="eyebrow">Tournament news</p>
+      <h3 className="mt-2 text-2xl font-black text-white">
+        Around the tournament
+      </h3>
+      <div className="mt-4 grid gap-3">
+        {items.map((item) => (
+          <p
+            className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-slate-200"
+            key={item}
+          >
+            {item}
+          </p>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -1572,6 +1788,7 @@ function LiveMatchPanel({
   onPause,
   onResume,
   onSpeedChange,
+  onSubstitution,
 }: {
   liveMatch: LiveMatchState;
   nowMs: number;
@@ -1584,6 +1801,7 @@ function LiveMatchPanel({
   onPause: () => void;
   onResume: () => void;
   onSpeedChange: (speed: LiveMatchState["speed"]) => void;
+  onSubstitution: (playerId: string) => void;
 }) {
   const visibleMinute = Math.floor(liveMatch.minute);
   const allEvents = createLiveMatchEvents({
@@ -1593,6 +1811,7 @@ function LiveMatchPanel({
     hydrationLevel: liveMatch.hydrationLevel,
     halftimeLevel: liveMatch.halftimeLevel,
     halftimeStrategy: liveMatch.halftimeStrategy,
+    substitutionCount: liveMatch.substitutionIds.length,
   });
   const events = liveEventsForMinute(allEvents, visibleMinute);
   const liveScore = liveScoreAtMinute(allEvents, visibleMinute);
@@ -1633,6 +1852,9 @@ function LiveMatchPanel({
     (liveMatch.minute / liveMatch.maxMinute) * 100,
   );
   const possession = livePossessionAtMinute(liveMatch, visibleMinute);
+  const shootout = liveMatch.result
+    ? penaltyShootoutForMatch(liveMatch.result)
+    : null;
 
   return (
     <section className="mt-7 rounded-3xl border border-emerald-300/20 bg-emerald-300/10 p-5">
@@ -1683,6 +1905,7 @@ function LiveMatchPanel({
           onHalftimeLevelChange={onHalftimeLevelChange}
           onHalftimeStrategyChange={onHalftimeStrategyChange}
           onHydrationLevelChange={onHydrationLevelChange}
+          onSubstitution={onSubstitution}
         />
       ) : null}
 
@@ -1726,6 +1949,10 @@ function LiveMatchPanel({
           </p>
         </div>
       </div>
+
+      {shootout && liveMatch.status === "FULLTIME" ? (
+        <PenaltyShootoutPanel shootout={shootout} />
+      ) : null}
 
       <div className="mt-5 flex flex-wrap gap-2">
         {liveMatch.status === "PAUSED" ? (
@@ -1887,15 +2114,24 @@ function MatchPitchScreen({
             />
           ))}
 
+          {event?.type === "MISSED_SHOT" || event?.type === "PENALTY" ? (
+            <div
+              className="absolute top-1/2 h-1 -translate-y-1/2 animate-pulse rounded-full bg-amber-200/80 shadow-[0_0_24px_rgba(251,191,36,0.8)]"
+              style={{
+                left: isHomeAction ? "55%" : "18%",
+                width: "27%",
+              }}
+            />
+          ) : null}
           <div
-            className={`absolute size-8 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-white text-center text-lg leading-7 transition-all duration-500 ${glow}`}
+            className={`absolute size-8 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-white text-center text-lg leading-7 transition-all duration-500 ${event ? "animate-bounce" : ""} ${glow}`}
             style={{ left: `${ballLeft}%`, top: `${ballTop}%` }}
           >
             ⚽
           </div>
           {event?.type === "GOAL" ? (
             <div
-              className="absolute top-1/2 -translate-y-1/2 rounded-full bg-emerald-300/90 px-3 py-1 text-xs font-black text-emerald-950"
+              className="absolute top-1/2 -translate-y-1/2 animate-pulse rounded-full bg-emerald-300/90 px-3 py-1 text-xs font-black text-emerald-950 shadow-[0_0_44px_rgba(52,211,153,0.85)]"
               style={{ [isHomeAction ? "right" : "left"]: "18px" }}
             >
               GOAL
@@ -1903,7 +2139,7 @@ function MatchPitchScreen({
           ) : null}
           {event?.type === "YELLOW_CARD" || event?.type === "RED_CARD" ? (
             <div
-              className={`absolute top-[48%] left-1/2 h-12 w-8 -translate-x-1/2 rounded-md ${
+              className={`absolute top-[48%] left-1/2 h-12 w-8 -translate-x-1/2 animate-bounce rounded-md ${
                 event.type === "RED_CARD" ? "bg-rose-500" : "bg-amber-300"
               }`}
             />
@@ -2010,6 +2246,7 @@ function BreakControls({
   onHalftimeLevelChange,
   onHalftimeStrategyChange,
   onHydrationLevelChange,
+  onSubstitution,
 }: {
   liveMatch: LiveMatchState;
   nowMs: number;
@@ -2018,6 +2255,7 @@ function BreakControls({
     strategy: LiveMatchState["halftimeStrategy"],
   ) => void;
   onHydrationLevelChange: (level: LiveMatchState["hydrationLevel"]) => void;
+  onSubstitution: (playerId: string) => void;
 }) {
   const isHalftime = liveMatch.breakType === "HALFTIME";
   const breakSeconds = isHalftime ? 15 : 10;
@@ -2027,6 +2265,9 @@ function BreakControls({
   const level = isHalftime ? liveMatch.halftimeLevel : liveMatch.hydrationLevel;
   const halftimeReady =
     liveMatch.halftimeLevelChosen && liveMatch.halftimeStrategyChosen;
+  const benchOptions = (liveMatch.setup.benchPlayerIds ?? [])
+    .filter((playerId) => !liveMatch.substitutionIds.includes(playerId))
+    .slice(0, 5);
 
   return (
     <div className="mt-5 rounded-3xl border border-cyan-300/25 bg-cyan-300/10 p-5">
@@ -2116,6 +2357,46 @@ function BreakControls({
           </select>
         </label>
       ) : null}
+
+      <div className="mt-5 rounded-2xl border border-white/10 bg-black/15 p-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <p className="text-xs font-black tracking-wider text-slate-400 uppercase">
+              Substitutions
+            </p>
+            <p className="mt-1 text-sm text-slate-300">
+              Fresh legs can lift the pressure late in the match.
+            </p>
+          </div>
+          <p className="rounded-full bg-white/10 px-3 py-1 text-xs font-black text-white">
+            {liveMatch.substitutionIds.length}/5 used
+          </p>
+        </div>
+        {liveMatch.substitutionIds.length ? (
+          <p className="mt-3 text-xs text-cyan-100">
+            On: {liveMatch.substitutionIds.map(playerName).join(", ")}
+          </p>
+        ) : null}
+        <div className="mt-3 flex flex-wrap gap-2">
+          {benchOptions.length ? (
+            benchOptions.map((playerId) => (
+              <Button
+                className="min-h-9 px-3 text-xs"
+                disabled={liveMatch.substitutionIds.length >= 5}
+                key={playerId}
+                onClick={() => onSubstitution(playerId)}
+                variant="secondary"
+              >
+                Bring on {playerName(playerId)}
+              </Button>
+            ))
+          ) : (
+            <p className="text-xs text-slate-500">
+              No bench options available.
+            </p>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

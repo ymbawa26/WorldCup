@@ -131,40 +131,36 @@ test("play flow advances by selected-team match and manages saves", async ({
 
   await page.getByLabel("Country").selectOption("mexico");
   await expect(page.getByLabel("Country")).toHaveValue("mexico");
-  await page.getByLabel("Formation").selectOption("3-4-3");
-  await page.getByLabel("Mentality").selectOption("ATTACKING");
-  await expect(page.getByText("Auto-selected XI")).toBeVisible();
+  await expect(page.getByLabel("Formation")).toHaveCount(0);
   await expect(page.getByLabel("Seed")).toHaveCount(0);
   await page.getByRole("button", { name: /^new tournament/i }).click();
 
   await expect(
-    page.getByText(
-      "Live match started. The tournament will update at full-time.",
-      {
-        exact: true,
-      },
-    ),
-  ).toBeVisible();
-  await expect(page.getByText("Live match simulation")).toBeVisible();
-  await expect(
-    page.getByText(/90 match minutes run in 90 real seconds/i),
-  ).toBeVisible();
-  await expect(page.getByText(/🟨 0 · 🟥 0/)).toBeVisible();
-  await page.getByRole("button", { name: /finish match now/i }).click();
-  await expect(
-    page.getByText("Your match was played. The rest of the world caught up.", {
+    page.getByText("Match started. Your tournament updates after full-time.", {
       exact: true,
     }),
   ).toBeVisible();
+  await expect(page.getByText("Live match", { exact: true })).toBeVisible();
+  await expect(page.getByText(/match minutes move one-for-one/i)).toBeVisible();
+  await expect(page.getByText(/🟨 0 · 🟥 0/)).toBeVisible();
+  await page.getByRole("button", { name: /finish match now/i }).click();
+  await expect(
+    page.getByText("Result confirmed. The next fixture is ready.", {
+      exact: true,
+    }),
+  ).toBeVisible();
+  await page.getByLabel("Formation").selectOption("3-4-3");
+  await page.getByLabel("Mentality").selectOption("ATTACKING");
+  await expect(page.getByText("Auto-selected XI")).toBeVisible();
   await expect(page.getByLabel("Formation")).toHaveValue("3-4-3");
   await expect(page.getByLabel("Mentality")).toHaveValue("ATTACKING");
-  await expect(page.getByText("Match 1 autosaved")).toBeVisible();
+  await expect(page.getByText("Match 1 saved")).toBeVisible();
   await expect(page.getByText("Next: Mexico vs Korea Republic")).toBeVisible();
   await expect(
     page.getByRole("heading", { name: /updated tables and results/i }),
   ).toBeVisible();
   await expect(
-    page.getByText("Odds include your current formation and tactical setup."),
+    page.getByText("Your match plan is already reflected in these chances."),
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: "Group A" })).toBeVisible();
   await expect(
@@ -183,12 +179,12 @@ test("play flow advances by selected-team match and manages saves", async ({
     page.getByRole("button", { name: /play next match/i }),
   ).toHaveCount(0);
   await expect(
-    page.getByRole("button", { name: /start live match/i }),
+    page.getByRole("button", { name: /continue tournament/i }),
   ).toBeEnabled();
 
-  await page.getByRole("button", { name: /start live match/i }).click();
+  await page.getByRole("button", { name: /continue tournament/i }).click();
   await page.getByRole("button", { name: /finish match now/i }).click();
-  await expect(page.getByText("Match 28 autosaved")).toBeVisible();
+  await expect(page.getByText("Match 28 saved")).toBeVisible();
   await expect(page.getByText(/Match 28.*Mexico/).last()).toBeVisible();
 
   for (let attempt = 0; attempt < 6; attempt += 1) {
@@ -199,7 +195,7 @@ test("play flow advances by selected-team match and manages saves", async ({
     ) {
       break;
     }
-    await page.getByRole("button", { name: /start live match/i }).click();
+    await page.getByRole("button", { name: /continue tournament/i }).click();
     await page.getByRole("button", { name: /finish match now/i }).click();
   }
   await expect(
@@ -208,29 +204,27 @@ test("play flow advances by selected-team match and manages saves", async ({
   await expect(
     page.getByRole("heading", { name: "Round of 32" }),
   ).toBeVisible();
-  await page.getByRole("button", { name: /start live match/i }).click();
+  await page.getByRole("button", { name: /continue tournament/i }).click();
   await page.getByRole("button", { name: /finish match now/i }).click();
   await expect(page.getByText(/advances/i).first()).toBeVisible();
 
   await page.getByRole("button", { name: /manual save/i }).click();
-  await expect(page.getByText(/manual save complete/i)).toBeVisible();
+  await expect(page.getByText(/^saved\.$/i)).toBeVisible();
 
-  await page.getByText("Save transfer").click();
+  await page.getByText("Move your save").click();
   await page.getByRole("button", { name: /^export/i }).click();
   const exported = await page.locator("textarea").first().inputValue();
   expect(exported).toContain('"schemaVersion": 2');
   expect(exported).toContain('"prematchOdds"');
 
-  await page
-    .getByPlaceholder("Paste exported save JSON here")
-    .fill("{bad json");
+  await page.getByPlaceholder("Paste your save code here").fill("{bad json");
   await page.getByRole("button", { name: /^import/i }).click();
-  await expect(page.getByText(/import rejected/i)).toBeVisible();
+  await expect(page.getByText(/could not be loaded/i)).toBeVisible();
 
-  await page.getByPlaceholder("Paste exported save JSON here").fill(exported);
+  await page.getByPlaceholder("Paste your save code here").fill(exported);
   await page.getByRole("button", { name: /^import/i }).click();
-  await expect(page.getByText(/save imported/i)).toBeVisible();
+  await expect(page.getByText(/save loaded/i)).toBeVisible();
 
   await page.getByRole("button", { name: /^reset/i }).click();
-  await expect(page.getByText(/save reset/i)).toBeVisible();
+  await expect(page.getByText(/save cleared/i)).toBeVisible();
 });
