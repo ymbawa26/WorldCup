@@ -592,16 +592,16 @@ export function postMatchReview(
         : `${teamName(userTeamId)} leave with a point.`,
     keyMoments: [
       `${teamName(userTeamId)} finished with ${userGoals} goal${userGoals === 1 ? "" : "s"}.`,
-      `${teamName(opponentId)} created enough pressure to score ${opponentGoals}.`,
+      `${teamName(opponentId)} scored ${opponentGoals}.`,
       odds < 0.38
-        ? "The result came against the pre-match balance."
-        : "The result stayed close to the pre-match balance.",
+        ? "The result beat the pre-match balance."
+        : "The result matched the pre-match balance.",
     ],
     why: userWin
-      ? "You protected the decisive phases and converted enough pressure into goals."
+      ? "You managed the key phases and finished enough chances."
       : userLoss
-        ? "The opponent won the most valuable moments: box entries, transitions, or late pressure."
-        : "Neither side separated clearly enough in chance quality.",
+        ? "The opponent won the key moments."
+        : "Neither side separated clearly.",
     nextOpponentText: nextOpponent
       ? `Next up: ${teamName(nextOpponent)}.`
       : "No next fixture is available yet.",

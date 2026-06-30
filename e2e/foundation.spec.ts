@@ -14,7 +14,7 @@ test("foundation shell is navigable and responsive", async ({ page }) => {
 
   await page.getByRole("link", { name: "Methodology" }).first().click();
   await expect(
-    page.getByRole("heading", { name: /a model you can interrogate/i }),
+    page.getByRole("heading", { name: /^methodology\./i }),
   ).toBeVisible();
 
   await page.setViewportSize({ width: 390, height: 844 });
@@ -136,16 +136,18 @@ test("play flow advances by selected-team match and manages saves", async ({
   await page.getByRole("button", { name: /^new tournament/i }).click();
 
   await expect(
-    page.getByText("Match started. Your tournament updates after full-time.", {
+    page.getByText("Match started.", {
       exact: true,
     }),
   ).toBeVisible();
   await expect(page.getByText("Live match", { exact: true })).toBeVisible();
-  await expect(page.getByText(/match minutes move one-for-one/i)).toBeVisible();
+  await expect(
+    page.getByText(/one match minute equals one second/i),
+  ).toBeVisible();
   await expect(page.getByText(/🟨 0 · 🟥 0/)).toBeVisible();
   await page.getByRole("button", { name: /finish match now/i }).click();
   await expect(
-    page.getByText("Result confirmed. The next fixture is ready.", {
+    page.getByText("Result confirmed. Next fixture ready.", {
       exact: true,
     }),
   ).toBeVisible();
@@ -160,7 +162,7 @@ test("play flow advances by selected-team match and manages saves", async ({
     page.getByRole("heading", { name: /updated tables and results/i }),
   ).toBeVisible();
   await expect(
-    page.getByText("Your match plan is already reflected in these chances."),
+    page.getByText("Chances reflect your current plan."),
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: "Group A" })).toBeVisible();
   await expect(

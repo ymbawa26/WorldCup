@@ -271,11 +271,11 @@ function strategyModifier(strategy: LiveMatchState["halftimeStrategy"]) {
 }
 
 function tacticalInfluenceText(level: LiveMatchState["hydrationLevel"]) {
-  if (level === 1) return "Protect the box and slow the tempo.";
-  if (level === 2) return "Stay compact but keep an outlet forward.";
-  if (level === 4) return "Push higher and hunt the next chance.";
-  if (level === 5) return "Commit numbers forward and accept the risk.";
-  return "Keep the shape balanced.";
+  if (level === 1) return "Protect the box.";
+  if (level === 2) return "Stay compact.";
+  if (level === 4) return "Push higher.";
+  if (level === 5) return "Commit forward.";
+  return "Keep balance.";
 }
 
 function baseHomePossession({
@@ -465,7 +465,7 @@ function createLiveMatchEvents({
       minute: 22 + Math.floor(random.next("user-yellow-minute") * 55),
       type: "YELLOW_CARD",
       side: userSide,
-      text: `${teamLabel(setup.teamId)} receive a yellow card after sustained pressure.`,
+      text: `${teamLabel(setup.teamId)} receive a yellow card.`,
       homeScore,
       awayScore,
     });
@@ -475,7 +475,7 @@ function createLiveMatchEvents({
       minute: 35 + Math.floor(random.next("user-red-minute") * 42),
       type: "RED_CARD",
       side: userSide,
-      text: `${teamLabel(setup.teamId)} are down to ten after a late challenge.`,
+      text: `${teamLabel(setup.teamId)} are down to ten.`,
       homeScore,
       awayScore,
     });
@@ -568,7 +568,7 @@ function createLiveMatchEvents({
       minute: eventMinute(random, "user-corner", index, userCorners),
       type: "CORNER",
       side: userSideForEvents,
-      text: `${teamLabel(setup.teamId)} win a corner after attacking pressure.`,
+      text: `${teamLabel(setup.teamId)} win a corner.`,
       homeScore,
       awayScore,
     });
@@ -623,7 +623,7 @@ function createLiveMatchEvents({
       minute: 24 + Math.floor(random.next("penalty-minute") * 58),
       type: "PENALTY",
       side,
-      text: `${teamLabel(teamId)} step up from the spot, but the keeper saves it.`,
+      text: `${teamLabel(teamId)} have a penalty saved.`,
       homeScore,
       awayScore,
     });
@@ -638,7 +638,7 @@ function createLiveMatchEvents({
       minute: eventMinute(random, "foul", index, fouls),
       type: "FOUL",
       side,
-      text: `${teamLabel(teamId)} commit a foul while contesting midfield.`,
+      text: `${teamLabel(teamId)} commit a midfield foul.`,
       homeScore,
       awayScore,
     });
@@ -802,7 +802,7 @@ export function PlayClient() {
         setPrematchSetup(defaultPrematchTeamSetup(save.userTeamId));
       }
       setNextMatch(nextUserMatchPreview(save));
-      setMessage("Saved tournament found. Continue or start fresh.");
+      setMessage("Saved tournament found.");
     });
   }, []);
 
@@ -929,8 +929,8 @@ export function PlayClient() {
     await saveGame(next.state);
     setMessage(
       next.state.status === "COMPLETE"
-        ? "Tournament complete. Your save is up to date."
-        : "Result confirmed. The next fixture is ready.",
+        ? "Tournament complete."
+        : "Result confirmed. Next fixture ready.",
     );
   }, []);
 
@@ -999,7 +999,7 @@ export function PlayClient() {
     setPrematchSetup(defaultPrematchTeamSetup(selectedTeamId));
     setExportText("");
     setImportText("");
-    setMessage("Save cleared. Start a new tournament when ready.");
+    setMessage("Save cleared.");
   }
 
   function selectTeam(teamId: string) {
@@ -1045,7 +1045,7 @@ export function PlayClient() {
       startedAtMs: Date.now(),
       elapsedBeforePauseMs: 0,
     });
-    setMessage("Match started. Your tournament updates after full-time.");
+    setMessage("Match started.");
   }
 
   function pauseLiveMatch() {
@@ -1190,11 +1190,10 @@ export function PlayClient() {
           <section className="rounded-3xl border border-white/10 bg-[#0a102b]/90 p-6 sm:p-8">
             <p className="eyebrow">New tournament</p>
             <h1 className="mt-3 text-4xl font-black tracking-tight text-white sm:text-5xl">
-              Choose your nation. Chase the World Cup.
+              Choose your nation.
             </h1>
             <p className="mt-4 leading-7 text-slate-300">
-              Take charge of one country, set the match plan, and play from
-              fixture to fixture. Every run has its own tournament story.
+              Pick a country. Play the tournament one match at a time.
             </p>
 
             <label className="mt-8 block">
@@ -1293,9 +1292,6 @@ export function PlayClient() {
                   <h3 className="mt-2 text-lg font-black text-white">
                     {userIdentity.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-300">
-                    {userIdentity.temperament}
-                  </p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {userIdentity.strengths.map((strength) => (
                       <span
@@ -1315,10 +1311,6 @@ export function PlayClient() {
                   <h3 className="mt-2 text-lg font-black text-white">
                     {userCondition?.label ?? "Fresh"}
                   </h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-300">
-                    Fatigue builds through the tournament. Injuries can appear
-                    as minutes stack up, especially in demanding styles.
-                  </p>
                   {userCondition?.injuries.length ? (
                     <p className="mt-3 rounded-2xl bg-rose-300/10 px-3 py-2 text-xs text-rose-100">
                       Fitness concern: {userCondition.injuries.join(", ")}
@@ -1370,7 +1362,7 @@ export function PlayClient() {
                     </div>
                   </div>
                   <p className="mt-3 text-xs text-cyan-100/80">
-                    Your match plan is already reflected in these chances.
+                    Chances reflect your current plan.
                   </p>
                 </div>
               ) : null}
@@ -1414,7 +1406,7 @@ export function PlayClient() {
                           : `${teamName(
                               selectedTeamId,
                             )} did not reach the knockout rounds.`
-                      : "The schedule has advanced to your next fixture."}
+                      : "Next fixture ready."}
                   </p>
                 </div>
               ) : null}
@@ -1634,8 +1626,7 @@ function PrematchSetupPanel({
           Formation and tactics
         </h2>
         <p className="mt-2 text-sm leading-6 text-slate-400">
-          Pick the shape, tempo, and set-piece roles you want to trust in the
-          next match.
+          Set the shape, tempo, and set-piece roles.
         </p>
       </div>
 
@@ -1866,8 +1857,7 @@ function LiveMatchPanel({
             {teamLabel(liveMatch.preview.awayTeamId)}
           </h3>
           <p className="mt-1 text-sm text-emerald-100/80">
-            At 1x, match minutes move one-for-one with real seconds. Breaks
-            pause the clock.
+            At 1x, one match minute equals one second.
           </p>
         </div>
         <div className="rounded-2xl bg-black/20 px-4 py-3 text-right">
@@ -2081,7 +2071,7 @@ function MatchPitchScreen({
           </p>
           <p className="mt-1 text-sm text-slate-300">
             {minute}′ · {liveStatus.toLowerCase()} ·{" "}
-            {event?.text ?? "Both teams are feeling each other out."}
+            {event?.text ?? "Opening phase."}
           </p>
         </div>
         <p className="rounded-full bg-white/10 px-3 py-1 text-sm font-black text-white">
@@ -2177,8 +2167,7 @@ function MatchPitchScreen({
             </div>
           </div>
           <p className="mt-4 text-xs leading-5 text-slate-400">
-            Possession shifts with momentum, pressure, and your tactical
-            choices.
+            Possession follows match state.
           </p>
         </div>
       </div>
@@ -2281,8 +2270,8 @@ function BreakControls({
           </h4>
           <p className="mt-2 text-sm text-cyan-50/80">
             {isHalftime
-              ? "You have 15 seconds for the team talk, or less if you choose quickly."
-              : "You have 10 seconds to adjust the tempo, or less if you choose quickly."}{" "}
+              ? "15 seconds, or choose now."
+              : "10 seconds, or choose now."}{" "}
             {tacticalInfluenceText(level)}
           </p>
         </div>
@@ -2348,9 +2337,7 @@ function BreakControls({
             <option value="HIGH_PRESS">
               High press — squeeze the opponent high up the pitch
             </option>
-            <option value="LONG_BALL">
-              Long ball — go direct and force second-ball pressure
-            </option>
+            <option value="LONG_BALL">Long ball — go direct</option>
             <option value="POSSESSION">
               Possession — control rhythm and reduce chaos
             </option>
@@ -2364,9 +2351,7 @@ function BreakControls({
             <p className="text-xs font-black tracking-wider text-slate-400 uppercase">
               Substitutions
             </p>
-            <p className="mt-1 text-sm text-slate-300">
-              Fresh legs can lift the pressure late in the match.
-            </p>
+            <p className="mt-1 text-sm text-slate-300">Fresh legs matter.</p>
           </div>
           <p className="rounded-full bg-white/10 px-3 py-1 text-xs font-black text-white">
             {liveMatch.substitutionIds.length}/5 used
@@ -2701,8 +2686,7 @@ function KnockoutBracket({
         Tournament bracket
       </h2>
       <p className="mt-2 max-w-2xl text-sm text-slate-400">
-        Follow the winner lines from left to right to see who can meet in the
-        next round.
+        Follow the winner lines into the next round.
       </p>
 
       {champion ? (
@@ -2712,7 +2696,7 @@ function KnockoutBracket({
             🏆 {teamLabel(champion)}
           </h3>
           <p className="mt-2 text-sm text-amber-100/80">
-            The winning path is highlighted through the bracket.
+            The winning path is highlighted.
           </p>
         </div>
       ) : null}
@@ -2841,7 +2825,7 @@ function BracketMatchCard({
             Winner line → Match {nextInfo.matchNumber} · {nextInfo.stage}
           </p>
           <p className="mt-1 text-xs text-slate-300">
-            Possible next opponent: {nextInfo.opponent}
+            Next opponent: {nextInfo.opponent}
           </p>
           {nextInfo.targetScoreline ? (
             <p className="mt-1 text-[0.7rem] text-slate-500">
